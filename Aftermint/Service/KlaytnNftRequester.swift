@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum NftDataStorage {
+    case https
+    case ipfs
+}
+
 class KlaytnNftRequester {
     private static let TOKEN_URL__GET_NFTS_BY_OWNER_ADDRESS__PARAMS_2 = "https://th-api.klaytnapi.com/v2/contract/nft/%@/owner/%@"
     private static let TOKEN_HEADER__KEY__CHAIN_ID = "x-chain-id"
@@ -132,9 +137,9 @@ class KlaytnNftRequester {
     }
     
     // MARK: - for Moono
-    public static func requestToGetMoonoNfts(
-        walletAddress: String,
-        nftsHandler: @escaping ([MoonoNft]) -> Void
+    public static func requestToGetMoonoNftsDemo(storageType: NftDataStorage,
+                                                 walletAddress: String,
+                                                 completion: @escaping ([MoonoNft]) -> Void
     ) -> Bool {
         return requestToGetNfts(
             contractAddress: KlaytnNftRequester.CONTRACT_ADDRESS__MOONO,
@@ -145,18 +150,27 @@ class KlaytnNftRequester {
                 return
             }
             
-            requestToGetMoonoNfts(rawNfts: rawNfts) { moonoNfts in
-                return nftsHandler(moonoNfts)
+            var moonoNft: [MoonoNft] = []
+            
+            requestToGetMoonoNftsDemo(storageType: storageType, rawNfts: rawNfts) { lists in
+              
+                lists.forEach { (item, metadata: MoonoNftMetadata) in
+                  
+                    moonoNft.append(createMoonoNft(rawNft: item, metadata: metadata))
+                }
+
             }
+            completion(moonoNft)
         }
     }
     
-    public static func requestToGetMoonoNfts(
+    public static func requestToGetMoonoNftsDemo<T:Decodable>(
+        storageType: NftDataStorage,
         rawNfts: KlaytnNfts,
-        nftsHandler: @escaping ([MoonoNft]) -> Void
+        completion: @escaping ([(KlaytnNft, T)]) -> Void
     ) {
-        var moonoNfts: [MoonoNft] = []
-        var taskCount = rawNfts.items.count
+        var taskCount = rawNfts.items.count - 1 //TODO: <WARNING!> Change Hardcoded Number (1)
+        var moonoNfts: [(KlaytnNft, T)] = []
         
         let taskLock = NSRecursiveLock()
         let dispatchQueue = DispatchQueue.global(qos: .utility)
@@ -166,34 +180,15 @@ class KlaytnNftRequester {
             taskCount -= 1
             taskLock.unlock()
         }
-        
+     
         rawNfts.items.forEach { rawItem in
             
-            guard let tokenUri = rawItem.tokenUri, !tokenUri.isEmpty else {
-                discountTaskSafely()
-                LLog.w("Token uri found to be nil")
-                return
-            }
-            
-            let convertedTokenUri = tokenUri.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
-     
-            _ = requestSimple(urlToken: convertedTokenUri) { data, response, error in
+            self.requestToGetData(storageType: storageType,
+                                  rawNft: rawItem) { data in
                 dispatchQueue.async {
-                    guard processResponse(data: data, response: response, error: error),
-                          let data = data else {
-                        discountTaskSafely()
-                        LLog.w("Invalid result.")
-                        return
-                    }
-                    
-                    guard let metadata = convertTo(type: MoonoNftMetadata.self, data: data) else {
-                        discountTaskSafely()
-                        LLog.w("metadata is nil.")
-                        return
-                    }
-                    
+                    guard let metadata = convertTo(type: T.self, data: data) else { return }
                     taskLock.lock()
-                    moonoNfts.append(createMoonoNft(rawNft: rawItem, metadata: metadata))
+                    moonoNfts.append((rawItem, metadata))
                     discountTaskSafely()
                     taskLock.unlock()
                 }
@@ -208,10 +203,40 @@ class KlaytnNftRequester {
             taskLock.unlock()
         }
         
-        nftsHandler(moonoNfts)
+        completion(moonoNfts)
         taskLock.unlock()
     }
     
+    private static func requestToGetData(
+        storageType: NftDataStorage,
+        rawNft: KlaytnNft,
+        completion: @escaping (Data) -> Void
+    ) {
+        
+            guard var tokenUri = rawNft.tokenUri, !tokenUri.isEmpty else {
+                LLog.w("Token uri found to be nil")
+                return
+            }
+            
+            switch storageType {
+            case .https:
+                break
+            case .ipfs:
+                tokenUri = tokenUri.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
+            }
+            
+            _ = requestSimple(urlToken: tokenUri, completionHandler: { data, response, error in
+
+                    guard processResponse(data: data, response: response, error: error),
+                          let data = data else {
+                        LLog.w("Invalid result.")
+                        return
+                    }
+                    completion(data)
+            })
+
+    }
+
     private static func createMoonoNft(rawNft: KlaytnNft, metadata: MoonoNftMetadata) -> MoonoNft {
         
         let imageMetadata = metadata.image

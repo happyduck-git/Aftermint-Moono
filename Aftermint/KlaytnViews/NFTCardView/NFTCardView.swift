@@ -233,7 +233,10 @@ extension NFTCardView {
         
         let tempAddress: String = K.Wallet.temporaryAddress
 
-        self.viewModel.getNftCardCellViewModels(of: tempAddress) { result in
+        self.viewModel.getNftCardCellViewModelsDemo(
+            of: tempAddress,
+            ofType: .ipfs
+        ) { result in
             switch result {
             case .success(let viewModels):
                 self.viewModel.nftCardCellViewModel.value = viewModels
@@ -241,6 +244,19 @@ extension NFTCardView {
                 print("Failed -- \(#function) --- \(failure)")
             }
         }
+         
+        
+        //OG
+    
+//        self.viewModel.getNftCardCellViewModels(of: tempAddress) { result in
+//            switch result {
+//            case .success(let viewModels):
+//                self.viewModel.nftCardCellViewModel.value = viewModels
+//            case .failure(let failure):
+//                print("Failed -- \(#function) --- \(failure)")
+//            }
+//        }
+       
         
     }
     

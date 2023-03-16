@@ -27,7 +27,8 @@ class NFTCardViewModel {
     }
     
     
-    func getNftCardCellViewModels(of wallet: String, completion: @escaping (Result<[NftCardCellViewModel], Error>) ->()) {
+    func getNftCardCellViewModels(of wallet: String,
+                                  completion: @escaping (Result<[NftCardCellViewModel], Error>) ->()) {
         
         _ = KlaytnNftRequester.requestToGetMoonoNfts(walletAddress: wallet,
                                                      nftsHandler: {
@@ -49,6 +50,34 @@ class NFTCardViewModel {
             return
         })
         
+        completion(.failure(NFTCardError.cardFetchError))
+    }
+    
+    //Demo:
+    func getNftCardCellViewModelsDemo(of wallet: String,
+                                      ofType: NftDataStorage,
+                                      completion: @escaping (Result<[NftCardCellViewModel], Error>) -> ()) {
+        
+        _ = KlaytnNftRequester.requestToGetMoonoNftsDemo(storageType: ofType,
+                                                         walletAddress: wallet,
+                                                         completion: {
+            
+            let viewModels = $0.map { nft in
+                let viewModel: NftCardCellViewModel = NftCardCellViewModel(accDesc: nft.traits.accessories,
+                                                                           backgroundDesc: nft.traits.background,
+                                                                           bodyDesc: nft.traits.body,
+                                                                           dayDesc: nft.traits.day,
+                                                                           effectDesc: nft.traits.accessories,
+                                                                           expressionDesc: nft.traits.expression,
+                                                                           hairDesc: nft.traits.hair,
+                                                                           name: nft.name,
+                                                                           updatedAt: nft.updateAt,
+                                                                           imageUrl: nft.imageUrl)
+                return viewModel
+            }
+            completion(.success(viewModels))
+            return
+        })
         completion(.failure(NFTCardError.cardFetchError))
     }
     
