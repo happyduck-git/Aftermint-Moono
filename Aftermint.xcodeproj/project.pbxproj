@@ -386,6 +386,14 @@
 		9300BB6929C8280100C67A29 /* NftCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB6829C8280100C67A29 /* NftCollection.swift */; };
 		9300BB6F29C8320D00C67A29 /* MoonoGameSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB6E29C8320D00C67A29 /* MoonoGameSceneViewModel.swift */; };
 		9300BB7629C840FD00C67A29 /* MoonoMockMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */; };
+		9300BBA729CD37CE00C67A29 /* AftermintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BBA629CD37CE00C67A29 /* AftermintTests.swift */; };
+		9300BBAE29CD3B8500C67A29 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBAD29CD3B8500C67A29 /* FirebaseFirestore */; };
+		9300BBB029CD3BC200C67A29 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBAF29CD3BC200C67A29 /* FirebaseAppCheck */; };
+		9300BBB229CD3BC800C67A29 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBB129CD3BC800C67A29 /* FirebaseAuth */; };
+		9300BBB429CD3BE200C67A29 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBB329CD3BE200C67A29 /* FirebaseStorage */; };
+		9300BBB629CD3C1A00C67A29 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBB529CD3C1A00C67A29 /* RxCocoa */; };
+		9300BBB829CD3C2C00C67A29 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBB729CD3C2C00C67A29 /* FSCalendar */; };
+		9300BBBA29CD3C4100C67A29 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BBB929CD3C4100C67A29 /* FirebaseRemoteConfig */; };
 		93199EF12989EDE1008D532B /* KASConnectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93199EF02989EDE1008D532B /* KASConnectService.swift */; };
 		93199EF4298A06A4008D532B /* KasWalletRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93199EF3298A06A4008D532B /* KasWalletRepository.swift */; };
 		932977862987990700C76AB5 /* LoginViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932977852987990700C76AB5 /* LoginViewReactor.swift */; };
@@ -425,6 +433,16 @@
 		93C32FC529BB004400DB3CB3 /* NftCardCellPropertyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */; };
 		93FA0FE5298C960D00F3B2E3 /* BellyGomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA0FE4298C960D00F3B2E3 /* BellyGomFont.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9300BBA829CD37CE00C67A29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3619AF07297908F90051C387 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3619AF0E297908F90051C387;
+			remoteInfo = Aftermint;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		240121A929A7B49200F60BDA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -788,6 +806,8 @@
 		9300BB6E29C8320D00C67A29 /* MoonoGameSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoGameSceneViewModel.swift; sourceTree = "<group>"; };
 		9300BB7429C8382300C67A29 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoMockMetaData.swift; sourceTree = "<group>"; };
+		9300BBA429CD37CE00C67A29 /* AftermintTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AftermintTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9300BBA629CD37CE00C67A29 /* AftermintTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AftermintTests.swift; sourceTree = "<group>"; };
 		93199EF02989EDE1008D532B /* KASConnectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KASConnectService.swift; sourceTree = "<group>"; };
 		93199EF3298A06A4008D532B /* KasWalletRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KasWalletRepository.swift; sourceTree = "<group>"; };
 		932977852987990700C76AB5 /* LoginViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewReactor.swift; sourceTree = "<group>"; };
@@ -856,6 +876,20 @@
 				24097B7C29913E9000F92366 /* Pulley in Frameworks */,
 				3619B20429790B0E0051C387 /* Then in Frameworks */,
 				9300BB5C29C820C900C67A29 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9300BBA129CD37CE00C67A29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9300BBB029CD3BC200C67A29 /* FirebaseAppCheck in Frameworks */,
+				9300BBB829CD3C2C00C67A29 /* FSCalendar in Frameworks */,
+				9300BBB429CD3BE200C67A29 /* FirebaseStorage in Frameworks */,
+				9300BBBA29CD3C4100C67A29 /* FirebaseRemoteConfig in Frameworks */,
+				9300BBB629CD3C1A00C67A29 /* RxCocoa in Frameworks */,
+				9300BBB229CD3BC800C67A29 /* FirebaseAuth in Frameworks */,
+				9300BBAE29CD3B8500C67A29 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +1002,7 @@
 			children = (
 				3619AF2629790AC50051C387 /* mojitok-nft */,
 				3619AF11297908F90051C387 /* Aftermint */,
+				9300BBA529CD37CE00C67A29 /* AftermintTests */,
 				3619AF10297908F90051C387 /* Products */,
 				3619B21D297911EC0051C387 /* Frameworks */,
 				24097B772991379700F92366 /* Recovered References */,
@@ -978,6 +1013,7 @@
 			isa = PBXGroup;
 			children = (
 				3619AF0F297908F90051C387 /* Aftermint.app */,
+				9300BBA429CD37CE00C67A29 /* AftermintTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2215,6 +2251,14 @@
 			path = DEV;
 			sourceTree = "<group>";
 		};
+		9300BBA529CD37CE00C67A29 /* AftermintTests */ = {
+			isa = PBXGroup;
+			children = (
+				9300BBA629CD37CE00C67A29 /* AftermintTests.swift */,
+			);
+			path = AftermintTests;
+			sourceTree = "<group>";
+		};
 		93199EF2298A0685008D532B /* Repository */ = {
 			isa = PBXGroup;
 			children = (
@@ -2417,6 +2461,33 @@
 			productReference = 3619AF0F297908F90051C387 /* Aftermint.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9300BBA329CD37CE00C67A29 /* AftermintTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9300BBAA29CD37CE00C67A29 /* Build configuration list for PBXNativeTarget "AftermintTests" */;
+			buildPhases = (
+				9300BBA029CD37CE00C67A29 /* Sources */,
+				9300BBA129CD37CE00C67A29 /* Frameworks */,
+				9300BBA229CD37CE00C67A29 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9300BBA929CD37CE00C67A29 /* PBXTargetDependency */,
+			);
+			name = AftermintTests;
+			packageProductDependencies = (
+				9300BBAD29CD3B8500C67A29 /* FirebaseFirestore */,
+				9300BBAF29CD3BC200C67A29 /* FirebaseAppCheck */,
+				9300BBB129CD3BC800C67A29 /* FirebaseAuth */,
+				9300BBB329CD3BE200C67A29 /* FirebaseStorage */,
+				9300BBB529CD3C1A00C67A29 /* RxCocoa */,
+				9300BBB729CD3C2C00C67A29 /* FSCalendar */,
+				9300BBB929CD3C4100C67A29 /* FirebaseRemoteConfig */,
+			);
+			productName = AftermintTests;
+			productReference = 9300BBA429CD37CE00C67A29 /* AftermintTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2429,6 +2500,10 @@
 				TargetAttributes = {
 					3619AF0E297908F90051C387 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					9300BBA329CD37CE00C67A29 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 3619AF0E297908F90051C387;
 					};
 				};
 			};
@@ -2463,6 +2538,7 @@
 			projectRoot = "";
 			targets = (
 				3619AF0E297908F90051C387 /* Aftermint */,
+				9300BBA329CD37CE00C67A29 /* AftermintTests */,
 			);
 		};
 /* End PBXProject section */
@@ -2498,6 +2574,13 @@
 				93A4B7AB298C9E3200146FD8 /* NanumSquareRoundOTF-R.otf in Resources */,
 				3619B1E929790AC60051C387 /* Icon_Clock.png in Resources */,
 				3619B1EE29790AC60051C387 /* Roboto-Medium.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9300BBA229CD37CE00C67A29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2902,7 +2985,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9300BBA029CD37CE00C67A29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9300BBA729CD37CE00C67A29 /* AftermintTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9300BBA929CD37CE00C67A29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3619AF0E297908F90051C387 /* Aftermint */;
+			targetProxy = 9300BBA829CD37CE00C67A29 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3619AF1D297908FA0051C387 /* LaunchScreen.storyboard */ = {
@@ -3089,6 +3188,44 @@
 			};
 			name = Release;
 		};
+		9300BBAB29CD37CE00C67A29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AN6C493LXF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.platfarm.AftermintTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aftermint.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aftermint";
+			};
+			name = Debug;
+		};
+		9300BBAC29CD37CE00C67A29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AN6C493LXF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.platfarm.AftermintTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aftermint.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aftermint";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3106,6 +3243,15 @@
 			buildConfigurations = (
 				3619AF24297908FA0051C387 /* Debug */,
 				3619AF25297908FA0051C387 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9300BBAA29CD37CE00C67A29 /* Build configuration list for PBXNativeTarget "AftermintTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9300BBAB29CD37CE00C67A29 /* Debug */,
+				9300BBAC29CD37CE00C67A29 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3340,6 +3486,41 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		9300BBAD29CD3B8500C67A29 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		9300BBAF29CD3BC200C67A29 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		9300BBB129CD3BC800C67A29 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		9300BBB329CD3BE200C67A29 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		9300BBB529CD3C1A00C67A29 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B20629790B3B0051C387 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		9300BBB729CD3C2C00C67A29 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 93A4B8182991CFC100146FD8 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
+		9300BBB929CD3C4100C67A29 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
 		};
 		93A4B8192991CFC100146FD8 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -7,7 +7,11 @@
 
 import UIKit.UIImage
 
-final class LeaderBoardTableViewCellListViewModel {
+protocol LeaderBoardTableViewCellListViewModelProtocol {
+    var viewModelList: Box<[LeaderBoardTableViewCellViewModel]> { get set }
+}
+
+final class LeaderBoardTableViewCellListViewModel: LeaderBoardTableViewCellListViewModelProtocol {
     
     var viewModelList: Box<[LeaderBoardTableViewCellViewModel]>  = Box([])
     let fireStoreRepository = FirestoreRepository.shared
