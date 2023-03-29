@@ -6,23 +6,18 @@
 //
 
 import UIKit
-import ReactorKit
-import RxSwift
-import RxCocoa
 
-class StartViewController: UIViewController, View {
+class StartViewController: UIViewController {
     
-    var disposeBag: DisposeBag = DisposeBag()
-    
-    // MARK: - Init
-    init(reactor: StartViewReactor) {
-        super.init(nibName: nil, bundle: nil)
-        self.reactor = reactor
+    // MARK: - Dependency
+    struct Dependency {
+        let mainTabBarViewControllerDependency: KlaytnTabViewController.Dependency
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let mainTabBarViewControllerDependency: KlaytnTabViewController.Dependency
+    private let lottieViewControllerDependency: LottieViewController.Dependency
+    private let bookmarkVCDependency: BookmarkViewController.Dependency
+    private let calendarVCDependency: CalendarViewController.Dependency
     
     // MARK: - UI Elements
     private let walletConnectImageView: UIImageView = {
@@ -64,13 +59,31 @@ class StartViewController: UIViewController, View {
         return label
     }()
     
-    lazy var startButton: UIButton = {
+    private lazy var startButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "start_button"), for: .normal)
+        button.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    // MARK: - Init
+    init(mainTabBarViewControllerDependency: KlaytnTabViewController.Dependency,
+         lottieViewControllerDependency: LottieViewController.Dependency,
+         bookmarkVCDependency: BookmarkViewController.Dependency,
+         calendarVCDependency: CalendarViewController.Dependency
+    ) {
+        self.mainTabBarViewControllerDependency = mainTabBarViewControllerDependency
+        self.lottieViewControllerDependency = lottieViewControllerDependency
+        self.bookmarkVCDependency = bookmarkVCDependency
+        self.calendarVCDependency = calendarVCDependency
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -83,19 +96,21 @@ class StartViewController: UIViewController, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("StartVC will apear")
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("StartVC will disapear")
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        UIView.animate(withDuration: 0.1,
+                       delay: 0.0,
+                       options: .curveEaseOut) {
+            self.walletConnectImageView.alpha = 0.0
+            self.mainTitle.alpha = 0.0
+            self.subTitle.alpha = 0.0
+        }
     }
-    
-    deinit {
-        print("Deinit called")
-    }
+
     // MARK: - Set UI & Layout
     private func setUI() {
         
@@ -132,30 +147,23 @@ class StartViewController: UIViewController, View {
         mainTitle.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
     
-    private func pushToHomeVC() {
-        let vc = KlaytnTabViewController()
+    // MARK: - Private Function
+//    private func pushToHomeVC() {
+//        let vc = KlaytnTabViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+//    }
+    
+    @objc private func startButtonTapped() {
+        let vc = KlaytnTabViewController(
+            vm: mainTabBarViewControllerDependency.leaderBoardListViewModel(),
+            homeViewControllerDependency: mainTabBarViewControllerDependency.homeViewControllerDependency,
+            lottieViewControllerDependency: lottieViewControllerDependency,
+            bookmarkVCDependency: bookmarkVCDependency,
+            calendarVCDependency: calendarVCDependency
+        )
+//        let vc = KlaytnTabViewController(vm: mainTabBarViewControllerDependency.leaderBoardListViewModel())
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
-extension StartViewController {
-    
-    func bind(reactor: StartViewReactor) {
-        bindAction(with: reactor)
-        bindState(with: reactor)
-    }
-    
-    private func bindState(with reactor: StartViewReactor) {
-        reactor.state.map { $0.start }
-            .bind { [weak self] _ in self?.pushToHomeVC() }
-            .disposed(by: disposeBag)
-    }
-    
-    private func bindAction(with reactor: StartViewReactor) {
-        startButton.rx.tap
-            .map { Reactor.Action.start }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-    }
-    
-}
+

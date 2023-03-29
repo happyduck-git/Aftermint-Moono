@@ -5,7 +5,7 @@
 //  Created by HappyDuck on 2023/02/25.
 //
 
-import UIKit.UIImage
+import Foundation
 
 class NFTCardViewModel {
     

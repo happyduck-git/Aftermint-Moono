@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+ 
 class Box<T> {
     var value: T? {
         didSet {

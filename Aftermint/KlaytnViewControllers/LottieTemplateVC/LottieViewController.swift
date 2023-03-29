@@ -16,6 +16,11 @@ import Nuke
 
 class LottieViewController: UIViewController, View {
     
+    // MARK: - Dependency
+    struct Dependency {
+        let factory: LottieViewReactor.Factory
+    }
+    
     var disposeBag = DisposeBag()
     
     //MARK: - Init
@@ -37,6 +42,13 @@ class LottieViewController: UIViewController, View {
     
     private let templateOffImageList: [UIImage?] = [
         UIImage(named: "fyi_off"), UIImage(named: "welcome_off"), UIImage(named: "gallery_off"), UIImage(named: "bought_off")
+    ]
+    
+    private let testCellVMList: [TemplateCellContent] = [
+        TemplateCellContent(emojiString: "🗝", title: "FYI", subTitle: "제일 가치로운"),
+        TemplateCellContent(emojiString: "🎉", title: "Welcome", subTitle: "환영합니다!"),
+        TemplateCellContent(emojiString: "🏙", title: "Gallery", subTitle: "멋진 갤러리처럼"),
+        TemplateCellContent(emojiString: "💰", title: "Just Bought", subTitle: "새로 샀어요"),
     ]
     
     //MARK: - UI Elements
@@ -74,10 +86,7 @@ class LottieViewController: UIViewController, View {
         label.textAlignment = .center
         label.font = BellyGomFont.header05
         label.numberOfLines = 0
-        label.text = """
-                    월요병아리님의 NFT를 가장 중요한 정보와 함께 자랑하세요!
-                    모두가 주목할 거에요. 🗝️
-                    """
+        label.text = LottieAsset.description.rawValue
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -92,21 +101,21 @@ class LottieViewController: UIViewController, View {
     
     private let refreshButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "refresh"), for: .normal)
+        button.setImage(UIImage(named: LottieAsset.refreshButton.rawValue), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     private let undoButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "undo"), for: .normal)
+        button.setImage(UIImage(named: LottieAsset.undoButton.rawValue), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     private let redoButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "redo"), for: .normal)
+        button.setImage(UIImage(named: LottieAsset.redoButton.rawValue), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -126,7 +135,7 @@ class LottieViewController: UIViewController, View {
 
     private lazy var shareButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "share_button"), for: .normal)
+        button.setImage(UIImage(named: LottieAsset.sharedButton.rawValue), for: .normal)
         button.imageView?.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -134,7 +143,7 @@ class LottieViewController: UIViewController, View {
     
     private let barButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "back"), for: .normal)
+        button.setImage(UIImage(named: LottieAsset.backButton.rawValue), for: .normal)
         return button
     }()
 
@@ -229,7 +238,7 @@ class LottieViewController: UIViewController, View {
     }
 
     private func setBarButtonItem() {
-        let backButtonImage: UIImage? = UIImage(named: "back")?.withRenderingMode(.alwaysOriginal)
+        let backButtonImage: UIImage? = UIImage(named: LottieAsset.backButton.rawValue)?.withRenderingMode(.alwaysOriginal)
         let buttonItem = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backToHomeVC))
         self.navigationItem.leftBarButtonItem = buttonItem
     }
@@ -298,8 +307,10 @@ extension LottieViewController: UICollectionViewDelegate, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LottieTemplateCell.identifier, for: indexPath) as? LottieTemplateCell else {
             fatalError("Unsupported cell")
         }
-        cell.configure(with: templateOffImageList[indexPath.row])
-        cell.layer.cornerRadius = 20.0
+        cell.resetCell()
+        let vm = testCellVMList[indexPath.row]
+        cell.configure(emojiString: vm.emojiString, title: vm.title, subTitle: vm.subTitle)
+        
         return cell
     }
     
@@ -310,14 +321,13 @@ extension LottieViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         guard let cell = collectionView.cellForItem(at: indexPath) as? LottieTemplateCell else { return }
         
         cell.isOff = !cell.isOff
         if cell.isOff {
-            cell.configure(with: templateOffImageList[indexPath.row])
+            cell.removeGradientLayer()
         } else {
-            cell.configure(with: templateOnImageList[indexPath.row])
+            cell.setGradientColor()
         }
         
     }
@@ -327,9 +337,9 @@ extension LottieViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         cell.isOff = !cell.isOff
         if cell.isOff {
-            cell.configure(with: templateOffImageList[indexPath.row])
+            cell.removeGradientLayer()
         } else {
-            cell.configure(with: templateOnImageList[indexPath.row])
+            cell.setGradientColor()
         }
     }
 

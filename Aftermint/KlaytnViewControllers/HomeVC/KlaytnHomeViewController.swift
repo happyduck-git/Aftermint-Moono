@@ -9,6 +9,14 @@ import UIKit
 
 class KlaytnHomeViewController: UIViewController {
     
+    struct Dependency {
+        let homeViewReactor: HomeViewReactor2
+        let lottieViewControllerDependency: LottieViewController.Dependency
+    }
+    
+    var reactor: HomeViewReactor2
+    var lottieVCDependency: LottieViewController.Dependency
+    
     //MARK: - UIElements
     
     private let welcomeUpperView: WelcomeUpperView = {
@@ -18,7 +26,8 @@ class KlaytnHomeViewController: UIViewController {
     }()
     
     private let nftCardView: NFTCardView = {
-        let cardView = NFTCardView()
+        let vm = NFTCardViewModel()
+        let cardView = NFTCardView(vm: vm)
         cardView.accessibilityIdentifier = "nftCardView"
         cardView.translatesAutoresizingMaskIntoConstraints = false
         return cardView
@@ -31,6 +40,19 @@ class KlaytnHomeViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    //MARK: - Init
+    init(reactor: HomeViewReactor2,
+         lottieViewControllerDependency: LottieViewController.Dependency) {
+        self.reactor = reactor
+        self.lottieVCDependency = lottieViewControllerDependency
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     //MARK: - Life cycle
     
@@ -48,13 +70,14 @@ class KlaytnHomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("KHVC will appear")
-        
+        nftCardView.prefetcher.isPaused = false
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("KHVC will disappear")
+        nftCardView.prefetcher.isPaused = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
@@ -92,38 +115,42 @@ class KlaytnHomeViewController: UIViewController {
 
 extension KlaytnHomeViewController: NFTCardViewDelegate {
 
-    
     func didTapTemplateButton() {
         
         let templateVC: LottieViewController = LottieViewController(reactor: makeMockMoonoReactorByGall3ry3())
         navigationController?.pushViewController(templateVC, animated: true)
         
     }
+    
 }
 
 // MARK: Extension for Lottie player of Gall3ry3
 extension KlaytnHomeViewController {
-    
-    private func makeReactorByGall3ry3(nft: BellyGomNft) -> LottieViewReactor {
-        let appDependency = AppDependency.resolve()
-        return appDependency.homeViewReactor.dependency
-            .lottieViewReactorFactory.create(
-                payload: .init(nft: makeOpenSeaNftByGall3ry3(bellyGomNft: nft), format: .video)
-            )
+ 
+    private func makeReactorByGall3ry3(nft: MoonoNft) -> LottieViewReactor {
+//        let appDependency = AppDependency.resolve()
+//        return appDependency.homeViewReactor.dependency
+//            .lottieViewReactorFactory.create(
+//                payload: .init(nft: makeOpenSeaNftByGall3ry3(moonoNft: nft), format: .video)
+//            )
+        
+        return reactor.dependency.lottieViewReactorFactory.create(payload: .init(nft: makeOpenSeaNftByGall3ry3(moonoNft: nft), format: .video))
+        
     }
     
-    private func makeMockReactorByGall3ry3() -> LottieViewReactor {
-        let appDependency = AppDependency.resolve()
-        return appDependency.homeViewReactor.dependency
-            .lottieViewReactorFactory.create(
-                payload: .init(nft: makeMockOpenSeaNftByGall3ry3(), format: .video)
-            )
+    private func makeMockMoonoReactorByGall3ry3() -> LottieViewReactor {
+//        let appDependency = AppDependency.resolve()
+//        return appDependency.homeViewReactor.dependency
+//            .lottieViewReactorFactory.create(
+//                payload: .init(nft: makeMockOpenSeaMoonoNftByGall3ry3(), format: .video)
+//            )
+        return reactor.dependency.lottieViewReactorFactory.create(payload: .init(nft: makeMockOpenSeaMoonoNftByGall3ry3(), format: .video))
     }
     
-    private func makeOpenSeaNftByGall3ry3(bellyGomNft: BellyGomNft) -> OpenSeaNFT {
-        let collectionTitle = "Bellygom World Official"
-        let collectionProfileImageUrl = "https://i.seadn.io/gcs/files/ed4380136946111c0a73f0f18ede3700.gif?auto=format&w=256"
-        let nftOwnerAddress = "0xBEeBb41496BE8385291886928725d1c2bD9aBA42"
+    private func makeOpenSeaNftByGall3ry3(moonoNft: MoonoNft) -> OpenSeaNFT {
+        let collectionTitle = "Moono Week"
+        let collectionProfileImageUrl = "https://i.seadn.io/gae/cB8JeJwP76w_GGSvQe-WpwfzA31aQZF2fVLA0FmvcsrISfe9e7HDQ_DE9QhilMaCW88vFo_EfBA6ItrNrUOxmbWlbq6suY0v8Sln?auto=format&w=256"
+        let nftOwnerAddress = "0x3961eA20e28A30bCB25E130bec3378d0C248030C"
         
         let openSeaPaymentToken = OpenSeaPaymentToken(
             eth_price: "1.000000000000000"
@@ -135,71 +162,31 @@ extension KlaytnHomeViewController {
         let openSeaNftCollection = OpenSearNFTCollection(
             name: collectionTitle,
             image_url: collectionProfileImageUrl,
-            slug: "BGom"
+            slug: "MOONO"
         )
         let openSeaCreator = OpenSeaCreator(
             user: OpenseaUser(username: collectionTitle)
         )
         let openSeaNftOwner = OpenSeaNFTOwner(
             user: OpenSeaNFTOwner.OpenSeaNFTUser(username: nftOwnerAddress),
-            profile_img_url: "https://storage.googleapis.com/opensea-static/opensea-profile/28.png",
+            profile_img_url: "https://storage.googleapis.com/opensea-static/opensea-profile/11.png",
             address: nftOwnerAddress
         )
         
         return OpenSeaNFT(
-            id: Int(bellyGomNft.tokenId) ?? -1,
+            id: Int(moonoNft.tokenId) ?? -1,
             owner: openSeaNftOwner,
-            name: bellyGomNft.name,
-            permalink: "https://opensea.io/assets/klaytn/0xce70eef5adac126c37c8bc0c1228d48b70066d03/\(bellyGomNft.tokenId)",
+            name: moonoNft.name,
+            permalink: "https://opensea.io/assets/klaytn/0x29421a3c92075348fcbcb04de965e802ed187302/\(moonoNft.tokenIdInteger)",
             sell_orders: nil,
             last_sale: openSeaNftLastSale,
             collection: openSeaNftCollection,
             creator: openSeaCreator,
             price: nil,
-            tokenID: bellyGomNft.tokenId,
-            description: bellyGomNft.description,
-            imageURLString: bellyGomNft.imageUrl
+            tokenID: moonoNft.tokenId,
+            description: moonoNft.description,
+            imageURLString: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23\(moonoNft.tokenIdInteger).jpeg?alt=media"
         )
-    }
-    
-    private func makeMockOpenSeaNftByGall3ry3() -> OpenSeaNFT {
-        let openSeaPaymentToken = OpenSeaPaymentToken(
-            eth_price: "1.000000000000000"
-        )
-        let openSeaNftLastSale = OpenSeaNFTLastSale(
-            total_price: "31000000000000000",
-            payment_token: openSeaPaymentToken
-        )
-        let openSeaNftCollection = OpenSearNFTCollection(
-            name: "Bellygom World Official",
-            image_url: "https://i.seadn.io/gcs/files/ed4380136946111c0a73f0f18ede3700.gif?auto=format&w=384",
-            slug: "thebonsaiassemblance"
-        )
-        let openSeaCreator = OpenSeaCreator(
-            user: OpenseaUser(username: "TheBonsaiVault")
-        )
-        return OpenSeaNFT(
-            id: 994262845,
-            owner: nil,
-            name: "Bellygom#6483",
-            permalink: "https://opensea.io/assets/ethereum/0xe02d701a6183cf64adad56f905d33a21c7e83777/275",
-            sell_orders: nil,
-            last_sale: openSeaNftLastSale,
-            collection: openSeaNftCollection,
-            creator: openSeaCreator,
-            price: nil,
-            tokenID: "6438",
-            description: "BELLYGOM NFT is a project created and developed from the partnership between Lotte Home Shopping and a FSN's affiliate, 'FingerVerse.' With a total of 10,000 PFPs, various experiences with the BELLYGOM IP such as shopping, hotels, exhibitions, and movies etc, are in store for you. We plan to design a new roadmap with the community members, to expand the BELLYGOM Universe through private membership benefits and events such as renting the entire Lotte World just for our community. Join us and enjoy these amazing IRL experiences with BELLYGOM NFT now!",
-            imageURLString: "https://i.seadn.io/gae/-sBB9Ac4c-IZhv7SHeVIC3LZNCGA1yg_BBBqYPI8Z6AgoPLbje-ryLS8ygcGgLUBI9Vp-JNTkoDF7-GBHXtdq-5DaaRgoPOkAuxna-8?auto=format&w=1000"
-        )
-    }
-    
-    private func makeMockMoonoReactorByGall3ry3() -> LottieViewReactor {
-        let appDependency = AppDependency.resolve()
-        return appDependency.homeViewReactor.dependency
-            .lottieViewReactorFactory.create(
-                payload: .init(nft: makeMockOpenSeaMoonoNftByGall3ry3(), format: .video)
-            )
     }
     
     private func makeMockOpenSeaMoonoNftByGall3ry3() -> OpenSeaNFT {

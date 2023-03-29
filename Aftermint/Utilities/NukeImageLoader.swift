@@ -17,6 +17,7 @@ struct NukeImageLoader {
             switch result {
             case .success(let imageResponse):
                 completion(imageResponse.image)
+                return
             case .failure(let failure):
                 print("Nuke load image failed: \(failure)")
             }

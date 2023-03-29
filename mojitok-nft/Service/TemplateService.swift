@@ -36,6 +36,7 @@ final class TemplateService {
         templateQueue.sync {
             if let data = try? Data(contentsOf: TemplateService.templateFileURL),
                let templates = try? JSONDecoder().decode([Template].self, from: data) {
+                print("templateFileURL: \(TemplateService.templateFileURL)")
                 return templates
             }
             return []
@@ -89,12 +90,14 @@ final class TemplateService {
                     let thumbnailSemaphore = DispatchSemaphore(value: 0)
                     var thumbnailData: Data?
                     self?.removeTemplate(template: remoteTemplate)
-                    FirebaseStorageService.shared.getFile(urlString: "/template/file/\(remoteTemplate.lottieFileName)") { data in
+
+                    FirebaseStorageService.shared.getFile(urlString: "/template/lottie_resources/\(remoteTemplate.lottieFileName)") { data in
                         fileData = data
                         fileSemaphore.signal()
                     }
                     fileSemaphore.wait()
-                    FirebaseStorageService.shared.getFile(urlString: "/template/thumbnail/\(remoteTemplate.thumbnailImageName)") { data in
+                    
+                    FirebaseStorageService.shared.getFile(urlString: "/template/lottie_thumbnails/\(remoteTemplate.thumbnailImageName)") { data in
                         thumbnailData = data
                         thumbnailSemaphore.signal()
                     }
@@ -118,17 +121,17 @@ final class TemplateService {
         }
     }
     
+    private var _templates: [Template?] = Array(repeating: nil, count: 4)
     private func addTemplate(template: Template, index: Int, fileData: Data?, thumbnailData: Data) {
         if let fileData = fileData {
             try? fileData.write(to: template.fileURL)
         }
         try? thumbnailData.write(to: template.thumbnailURL)
         templateQueue.sync {
-            if templates.count > index {
-                templates.insert(template, at: index)
-            } else {
-                templates.append(template)
-            }
+            _templates[index] = template
+            templates = _templates
+                .filter { $0 != nil }
+                .map { $0! }
         }
     }
     

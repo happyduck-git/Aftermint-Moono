@@ -9,22 +9,14 @@ import UIKit
 
 class MarketViewController: UIViewController {
     
-    // TODO: Move dummy lists to other file
-    private let dummyImageList: [UIImage?] = [
-        UIImage(named: "nftimage1"),
-        UIImage(named: "nftimage2"),
-        UIImage(named: "nftimage3"),
-        UIImage(named: "nftimage4"),
-        UIImage(named: "nftimage5"),
-        UIImage(named: "nftimage6"),
-        UIImage(named: "nftimage7"),
-        UIImage(named: "nftimage8")
-    ]
+    /// NOTE: Only for demonstration purpose;
+    /// use of dummy images will be replaced with real image data from Opensea
+    let moonoMockImageData: MoonoMockImageData = MoonoMockImageData()
     
-    /* Change the dropDown view using DropDown library */
+    /// NOTE: Change the dropDown view using DropDown library
     let dropDownView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "dropdown_image")
+        view.image = UIImage(named: MarketAsset.dropDown.rawValue)
         view.contentMode = .scaleAspectFit
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -66,7 +58,6 @@ class MarketViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
     }
     
     //MARK: - Set UI & Layout
@@ -98,16 +89,12 @@ class MarketViewController: UIViewController {
     private func navigationBarSetup() {
         
         self.tabBarController?.navigationItem.setHidesBackButton(true, animated: false)
-        
         self.tabBarController?.navigationItem.title = ""
         
-        /* Left bar item */
-        let logo = UIImage(named: "marketplace_logo")
+        let logo = UIImage(named: MarketAsset.marketVCLogo.rawValue)
         let myImageView = UIImageView(image: logo)
         let leftBar: UIBarButtonItem = UIBarButtonItem(customView: myImageView)
         self.tabBarController?.navigationItem.leftBarButtonItem = leftBar
-        
-        /* Right bar item */
         self.tabBarController?.navigationItem.rightBarButtonItems = nil
     }
 }
@@ -122,7 +109,7 @@ extension MarketViewController: UICollectionViewDelegate, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MarketCell.identifier, for: indexPath) as? MarketCell else {
             fatalError("Unsupported cell")
         }
-        cell.configure(image: dummyImageList[indexPath.item % 8])
+        cell.configure(image: moonoMockImageData.moonoDummyImages[indexPath.item % 8])
         return cell
     }
     

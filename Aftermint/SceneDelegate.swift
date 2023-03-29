@@ -7,15 +7,23 @@
 
 import UIKit
 import ReactorKit
+import FirebaseCore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    private let dependency: AppDependency
+    
+    private override init() {
+        self.dependency = AppDependency.resolve()
+        super.init()
+    }
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-
+        
         if let windowScene = scene as? UIWindowScene {
-            var path: [AnyObject] = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true) as [AnyObject]
+            let path: [AnyObject] = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true) as [AnyObject]
             let folder: String = path[0] as! String
             print("Your NSUserDefaults are stored in this folder: %@/Preferences", folder)
             /* Gallery3 */
@@ -32,27 +40,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.backgroundColor = AftermintColor.backgroundNavy
             UINavigationBar.appearance().backIndicatorImage = UIImage(named: "back")
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(named: "back")
-            
-            /* From LoginVC */
 
             let token = UserDefaults.standard.string(forKey: KasWalletRepository.shared.getWalletKey())
             var rootNaviVC: UINavigationController?
             
-            /* Temp Comment: LogincVC */
-//            if token == nil {
-//                let reactor: LoginViewReactor = LoginViewReactor()
-//                let loginVC = LoginViewController(reactor: reactor)
-//                rootNaviVC = UINavigationController(rootViewController: loginVC)
-//            } else {
-//                let homeVC = KlaytnTabViewController()
-//                rootNaviVC = UINavigationController(rootViewController: homeVC)
-//            }
+            /* Dependency */
+            let loginVCDependency = dependency.loginViewControllerDependency
+            let startViewDependency = dependency.startViewControllerDependency
+            let mainTabVCDependency = dependency.klaytnTabBarViewControllerDependency
+            let lottieVCDependency = dependency.lottieViewControllerDependency
+            let bookmarkVCDependency = dependency.bookmarkViewControllerDependency
+            let calendarVCDependency = dependency.calendarViewControllerDependency
             
-            /* Temp: StartVC */
-            rootNaviVC = UINavigationController(rootViewController: KlaytnTabViewController())
-           
+            let loginVC = LoginViewController(
+                reactor: loginVCDependency.reactor(),
+                startVCDependency: startViewDependency,
+                mainTabBarVCDependency: mainTabVCDependency,
+                lottieVCDependency: lottieVCDependency,
+                bookmarkVCDependency: bookmarkVCDependency,
+                calendarVCDependency: calendarVCDependency
+            )
             
-//            rootNaviVC?.setNavigationBarHidden(true, animated: false)
+            let mainTabVC = KlaytnTabViewController(
+                vm: mainTabVCDependency.leaderBoardListViewModel(),
+                homeViewControllerDependency: mainTabVCDependency.homeViewControllerDependency,
+                lottieViewControllerDependency: lottieVCDependency,
+                bookmarkVCDependency: bookmarkVCDependency,
+                calendarVCDependency: calendarVCDependency
+            )
+            
+            if token == nil {
+                rootNaviVC = UINavigationController(rootViewController: loginVC)
+            } else {
+                rootNaviVC = UINavigationController(rootViewController: mainTabVC)
+            }
             
             window.rootViewController = rootNaviVC
             self.window = window

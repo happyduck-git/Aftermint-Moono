@@ -10,10 +10,7 @@
 		240121AA29A7B49200F60BDA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240121A929A7B49200F60BDA /* Coordinator.swift */; };
 		240121AD29A7B6DF00F60BDA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240121AC29A7B6DF00F60BDA /* AppCoordinator.swift */; };
 		24097B1A2989530000F92366 /* NftCardCellBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B192989530000F92366 /* NftCardCellBackView.swift */; };
-		24097B22298D515E00F92366 /* MarketViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B21298D515E00F92366 /* MarketViewReactor.swift */; };
 		24097B25298E952600F92366 /* MarketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B24298E952600F92366 /* MarketCell.swift */; };
-		24097B2D298FC61100F92366 /* BellygomEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B2C298FC61100F92366 /* BellygomEventModel.swift */; };
-		24097B34298FD99700F92366 /* BellygomUtilityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B33298FD99700F92366 /* BellygomUtilityModel.swift */; };
 		24097B7929913C2E00F92366 /* MarketDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B7829913C2E00F92366 /* MarketDetailViewController.swift */; };
 		24097B7C29913E9000F92366 /* Pulley in Frameworks */ = {isa = PBXBuildFile; productRef = 24097B7B29913E9000F92366 /* Pulley */; };
 		24097B7E29913EFD00F92366 /* BenefitTabBottomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */; };
@@ -22,7 +19,6 @@
 		245AC14D29A91AFE00CE7857 /* NFTCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */; };
 		245AC15029A9348E00CE7857 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14F29A9348E00CE7857 /* Box.swift */; };
 		245AC15229A934DC00CE7857 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC15129A934DC00CE7857 /* Constants.swift */; };
-		245AC26E29B4ADD300CE7857 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC26D29B4ADD200CE7857 /* TestViewController.swift */; };
 		2481E1CE297A870F00187BB9 /* NFTCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481E1CD297A870F00187BB9 /* NFTCardView.swift */; };
 		2481E1D0297A878900187BB9 /* WelcomeUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481E1CF297A878900187BB9 /* WelcomeUpperView.swift */; };
 		2481E1D3297A94BC00187BB9 /* AftermintColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481E1D2297A94BC00187BB9 /* AftermintColor.swift */; };
@@ -373,14 +369,25 @@
 		36907844297A70620066530D /* TemplateCreateViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36907843297A70620066530D /* TemplateCreateViewController2.swift */; };
 		36907846297A706E0066530D /* TemplateCreateViewReactor2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36907845297A706E0066530D /* TemplateCreateViewReactor2.swift */; };
 		36A8CEE72983B5FC007BF65A /* KlaytnRawNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEE62983B5FC007BF65A /* KlaytnRawNft.swift */; };
-		36A8CEE92983B641007BF65A /* BellyGomNftMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEE82983B641007BF65A /* BellyGomNftMetadata.swift */; };
-		36A8CEEB2983BE7B007BF65A /* BellyGomNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEA2983BE7B007BF65A /* BellyGomNft.swift */; };
 		36A8CEED2983C238007BF65A /* KlaytnNftRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */; };
 		36A8CEF02983CB9C007BF65A /* LLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEF2983CB9C007BF65A /* LLog.swift */; };
+		9300BB1B29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */; };
+		9300BB1F29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1E29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift */; };
+		9300BB2829C44AD400C67A29 /* MoonoGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */; };
+		9300BB2B29C44C6400C67A29 /* SparkParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9300BB2929C44C6400C67A29 /* SparkParticle.sks */; };
+		9300BB2C29C44C6400C67A29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9300BB2A29C44C6400C67A29 /* Assets.xcassets */; };
+		9300BB5829C8106200C67A29 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB5729C8106200C67A29 /* BottomSheetView.swift */; };
+		9300BB5A29C8116D00C67A29 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB5929C8116D00C67A29 /* PassThroughView.swift */; };
+		9300BB5C29C820C900C67A29 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BB5B29C820C900C67A29 /* FirebaseFirestore */; };
+		9300BB5E29C820D100C67A29 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9300BB5D29C820D100C67A29 /* FirebaseFirestoreSwift */; };
+		9300BB6029C8214000C67A29 /* FirestoreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB5F29C8214000C67A29 /* FirestoreRepository.swift */; };
+		9300BB6329C8222300C67A29 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB6229C8222300C67A29 /* Card.swift */; };
+		9300BB6629C8226900C67A29 /* Storable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB6529C8226900C67A29 /* Storable.swift */; };
+		9300BB6929C8280100C67A29 /* NftCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB6829C8280100C67A29 /* NftCollection.swift */; };
+		9300BB7629C840FD00C67A29 /* MoonoMockMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */; };
 		93199EF12989EDE1008D532B /* KASConnectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93199EF02989EDE1008D532B /* KASConnectService.swift */; };
 		93199EF4298A06A4008D532B /* KasWalletRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93199EF3298A06A4008D532B /* KasWalletRepository.swift */; };
 		932977862987990700C76AB5 /* LoginViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932977852987990700C76AB5 /* LoginViewReactor.swift */; };
-		9329778929879F4400C76AB5 /* StartViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9329778829879F4400C76AB5 /* StartViewReactor.swift */; };
 		935E6A742980BC1900D94DA6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935E6A732980BC1900D94DA6 /* LoginViewController.swift */; };
 		935E6A762980CE0800D94DA6 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935E6A752980CE0800D94DA6 /* StartViewController.swift */; };
 		935E6A802982462B00D94DA6 /* CustomeSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935E6A7F2982462B00D94DA6 /* CustomeSegmentedControl.swift */; };
@@ -412,10 +419,11 @@
 		93A4B8172991CF3500146FD8 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A4B8162991CF3500146FD8 /* CalendarViewController.swift */; };
 		93A4B81A2991CFC100146FD8 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 93A4B8192991CFC100146FD8 /* FSCalendar */; };
 		93A4B8692994E5A600146FD8 /* CalendarViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A4B8682994E5A600146FD8 /* CalendarViewReactor.swift */; };
+		93BAFF1029D2C93300596999 /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */; };
 		93C32FBE29B9A69700DB3CB3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */; };
-		93C32FC129BAC2DD00DB3CB3 /* LeaderBoardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC029BAC2DD00DB3CB3 /* LeaderBoardBottomSheetViewController.swift */; };
 		93C32FC329BB000600DB3CB3 /* NftCardCellPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */; };
 		93C32FC529BB004400DB3CB3 /* NftCardCellPropertyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */; };
+		93E1558129D27E1F00C7892E /* MoonoMockImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E1558029D27E1F00C7892E /* MoonoMockImageData.swift */; };
 		93FA0FE5298C960D00F3B2E3 /* BellyGomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FA0FE4298C960D00F3B2E3 /* BellyGomFont.swift */; };
 /* End PBXBuildFile section */
 
@@ -423,10 +431,7 @@
 		240121A929A7B49200F60BDA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		240121AC29A7B6DF00F60BDA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		24097B192989530000F92366 /* NftCardCellBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellBackView.swift; sourceTree = "<group>"; };
-		24097B21298D515E00F92366 /* MarketViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketViewReactor.swift; sourceTree = "<group>"; };
 		24097B24298E952600F92366 /* MarketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketCell.swift; sourceTree = "<group>"; };
-		24097B2C298FC61100F92366 /* BellygomEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellygomEventModel.swift; sourceTree = "<group>"; };
-		24097B33298FD99700F92366 /* BellygomUtilityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellygomUtilityModel.swift; sourceTree = "<group>"; };
 		24097B7829913C2E00F92366 /* MarketDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketDetailViewController.swift; sourceTree = "<group>"; };
 		24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitTabBottomViewController.swift; sourceTree = "<group>"; };
 		24097B7F299154E200F92366 /* UtilityClaimBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityClaimBottomSheet.swift; sourceTree = "<group>"; };
@@ -434,7 +439,6 @@
 		245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCardViewModel.swift; sourceTree = "<group>"; };
 		245AC14F29A9348E00CE7857 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		245AC15129A934DC00CE7857 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		245AC26D29B4ADD200CE7857 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		2481E1CD297A870F00187BB9 /* NFTCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCardView.swift; sourceTree = "<group>"; };
 		2481E1CF297A878900187BB9 /* WelcomeUpperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeUpperView.swift; sourceTree = "<group>"; };
 		2481E1D2297A94BC00187BB9 /* AftermintColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AftermintColor.swift; sourceTree = "<group>"; };
@@ -769,14 +773,24 @@
 		36907843297A70620066530D /* TemplateCreateViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCreateViewController2.swift; sourceTree = "<group>"; };
 		36907845297A706E0066530D /* TemplateCreateViewReactor2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCreateViewReactor2.swift; sourceTree = "<group>"; };
 		36A8CEE62983B5FC007BF65A /* KlaytnRawNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnRawNft.swift; sourceTree = "<group>"; };
-		36A8CEE82983B641007BF65A /* BellyGomNftMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellyGomNftMetadata.swift; sourceTree = "<group>"; };
-		36A8CEEA2983BE7B007BF65A /* BellyGomNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellyGomNft.swift; sourceTree = "<group>"; };
 		36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnNftRequester.swift; sourceTree = "<group>"; };
 		36A8CEEF2983CB9C007BF65A /* LLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLog.swift; sourceTree = "<group>"; };
+		9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardTableViewCell.swift; sourceTree = "<group>"; };
+		9300BB1E29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoGameScene.swift; sourceTree = "<group>"; };
+		9300BB2929C44C6400C67A29 /* SparkParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SparkParticle.sks; sourceTree = "<group>"; };
+		9300BB2A29C44C6400C67A29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9300BB5729C8106200C67A29 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
+		9300BB5929C8116D00C67A29 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
+		9300BB5F29C8214000C67A29 /* FirestoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreRepository.swift; sourceTree = "<group>"; };
+		9300BB6229C8222300C67A29 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		9300BB6529C8226900C67A29 /* Storable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storable.swift; sourceTree = "<group>"; };
+		9300BB6829C8280100C67A29 /* NftCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCollection.swift; sourceTree = "<group>"; };
+		9300BB7429C8382300C67A29 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoMockMetaData.swift; sourceTree = "<group>"; };
 		93199EF02989EDE1008D532B /* KASConnectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KASConnectService.swift; sourceTree = "<group>"; };
 		93199EF3298A06A4008D532B /* KasWalletRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KasWalletRepository.swift; sourceTree = "<group>"; };
 		932977852987990700C76AB5 /* LoginViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewReactor.swift; sourceTree = "<group>"; };
-		9329778829879F4400C76AB5 /* StartViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewReactor.swift; sourceTree = "<group>"; };
 		935E6A732980BC1900D94DA6 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		935E6A752980CE0800D94DA6 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		935E6A7F2982462B00D94DA6 /* CustomeSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeSegmentedControl.swift; sourceTree = "<group>"; };
@@ -809,10 +823,11 @@
 		93A4B8132990EAD700146FD8 /* UIScrollViewSuperTaps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSuperTaps.swift; sourceTree = "<group>"; };
 		93A4B8162991CF3500146FD8 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		93A4B8682994E5A600146FD8 /* CalendarViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewReactor.swift; sourceTree = "<group>"; };
+		93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		93C32FC029BAC2DD00DB3CB3 /* LeaderBoardBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardBottomSheetViewController.swift; sourceTree = "<group>"; };
 		93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyView.swift; sourceTree = "<group>"; };
 		93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyItemView.swift; sourceTree = "<group>"; };
+		93E1558029D27E1F00C7892E /* MoonoMockImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoMockImageData.swift; sourceTree = "<group>"; };
 		93FA0FE4298C960D00F3B2E3 /* BellyGomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellyGomFont.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -826,6 +841,7 @@
 				3619B20129790AFB0051C387 /* ReactorKit in Frameworks */,
 				3619B2252979120F0051C387 /* FirebaseRemoteConfig in Frameworks */,
 				3619B20B29790BBB0051C387 /* RxGesture in Frameworks */,
+				9300BB5E29C820D100C67A29 /* FirebaseFirestoreSwift in Frameworks */,
 				3619B22D2979123B0051C387 /* RxDataSources in Frameworks */,
 				3619B20E29790BCE0051C387 /* Macaw in Frameworks */,
 				3619B2232979120F0051C387 /* FirebaseCrashlytics in Frameworks */,
@@ -841,6 +857,7 @@
 				3619B2212979120F0051C387 /* FirebaseAnalytics in Frameworks */,
 				24097B7C29913E9000F92366 /* Pulley in Frameworks */,
 				3619B20429790B0E0051C387 /* Then in Frameworks */,
+				9300BB5C29C820C900C67A29 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,7 +877,6 @@
 			isa = PBXGroup;
 			children = (
 				939DE055297A246B00EFA71E /* MarketViewController.swift */,
-				24097B21298D515E00F92366 /* MarketViewReactor.swift */,
 				24097B7829913C2E00F92366 /* MarketDetailViewController.swift */,
 			);
 			path = MarketVC;
@@ -878,6 +894,8 @@
 		2481E1CC297A870000187BB9 /* KlaytnViews */ = {
 			isa = PBXGroup;
 			children = (
+				9300BB5629C8104B00C67A29 /* BottomSheetView */,
+				9300BB1929C3FFAE00C67A29 /* LeaderBoardCell */,
 				24ED33AD29BF29D100C2D4E1 /* NftCardCell */,
 				93A4B8122990E71B00146FD8 /* MenuBars */,
 				93A4B7FB2990CB8000146FD8 /* BenefitTabCells */,
@@ -891,7 +909,6 @@
 				24F9FFB4298424DF00E534A1 /* LottieTemplateCell.swift */,
 				24097B192989530000F92366 /* NftCardCellBackView.swift */,
 				24097B24298E952600F92366 /* MarketCell.swift */,
-				24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */,
 				24097B7F299154E200F92366 /* UtilityClaimBottomSheet.swift */,
 				93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */,
 				93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */,
@@ -970,19 +987,20 @@
 		3619AF11297908F90051C387 /* Aftermint */ = {
 			isa = PBXGroup;
 			children = (
+				9300BB7029C8367100C67A29 /* Firebase */,
+				9300BB2429C44A8C00C67A29 /* GameScene */,
 				240121A829A7B48100F60BDA /* Coordinator */,
 				93199EF2298A0685008D532B /* Repository */,
 				360D73A12987D1D800D109C3 /* Service */,
 				36A8CEEE2983CB8D007BF65A /* Utilities */,
 				2481E1DA297C48D900187BB9 /* Extensions */,
 				2481E1D1297A947200187BB9 /* Resources */,
-				2481E1CC297A870000187BB9 /* KlaytnViews */,
 				939DE05E297A2DC000EFA71E /* Models */,
+				2481E1CC297A870000187BB9 /* KlaytnViews */,
 				939DE04E297A223100EFA71E /* KlaytnViewControllers */,
 				3619AF12297908F90051C387 /* AppDelegate.swift */,
 				3619AF14297908F90051C387 /* SceneDelegate.swift */,
 				3619AF20297908FA0051C387 /* Info.plist */,
-				3619B232297920C50051C387 /* GoogleService-Info.plist */,
 			);
 			path = Aftermint;
 			sourceTree = "<group>";
@@ -1026,6 +1044,7 @@
 				3619AF3229790AC50051C387 /* UIButton.swift */,
 				3619AF3329790AC50051C387 /* UIImageView.swift */,
 				3619AF3429790AC50051C387 /* UICollectionReusableView.swift */,
+				93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -2123,14 +2142,88 @@
 				245AC14F29A9348E00CE7857 /* Box.swift */,
 				245AC15129A934DC00CE7857 /* Constants.swift */,
 				24ED33AB29BEBCDD00C2D4E1 /* NukeImageLoader.swift */,
+				9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */,
+				93E1558029D27E1F00C7892E /* MoonoMockImageData.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		9300BB1929C3FFAE00C67A29 /* LeaderBoardCell */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */,
+				9300BB1E29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift */,
+			);
+			path = LeaderBoardCell;
+			sourceTree = "<group>";
+		};
+		9300BB2429C44A8C00C67A29 /* GameScene */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */,
+				9300BB2929C44C6400C67A29 /* SparkParticle.sks */,
+				9300BB2A29C44C6400C67A29 /* Assets.xcassets */,
+			);
+			path = GameScene;
+			sourceTree = "<group>";
+		};
+		9300BB5629C8104B00C67A29 /* BottomSheetView */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB5729C8106200C67A29 /* BottomSheetView.swift */,
+				9300BB5929C8116D00C67A29 /* PassThroughView.swift */,
+			);
+			path = BottomSheetView;
+			sourceTree = "<group>";
+		};
+		9300BB6129C821E900C67A29 /* Firestore */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB6229C8222300C67A29 /* Card.swift */,
+				9300BB6829C8280100C67A29 /* NftCollection.swift */,
+			);
+			path = Firestore;
+			sourceTree = "<group>";
+		};
+		9300BB6429C8225100C67A29 /* FireStore */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB5F29C8214000C67A29 /* FirestoreRepository.swift */,
+			);
+			path = FireStore;
+			sourceTree = "<group>";
+		};
+		9300BB7029C8367100C67A29 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB7329C836C800C67A29 /* DEV */,
+				9300BB7229C836B400C67A29 /* PROD */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		9300BB7229C836B400C67A29 /* PROD */ = {
+			isa = PBXGroup;
+			children = (
+				3619B232297920C50051C387 /* GoogleService-Info.plist */,
+			);
+			path = PROD;
+			sourceTree = "<group>";
+		};
+		9300BB7329C836C800C67A29 /* DEV */ = {
+			isa = PBXGroup;
+			children = (
+				9300BB7429C8382300C67A29 /* GoogleService-Info.plist */,
+			);
+			path = DEV;
 			sourceTree = "<group>";
 		};
 		93199EF2298A0685008D532B /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				9300BB6429C8225100C67A29 /* FireStore */,
 				93199EF3298A06A4008D532B /* KasWalletRepository.swift */,
+				9300BB6529C8226900C67A29 /* Storable.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2157,7 +2250,6 @@
 			isa = PBXGroup;
 			children = (
 				935E6A752980CE0800D94DA6 /* StartViewController.swift */,
-				9329778829879F4400C76AB5 /* StartViewReactor.swift */,
 			);
 			path = StartVC;
 			sourceTree = "<group>";
@@ -2177,7 +2269,6 @@
 		939DE04E297A223100EFA71E /* KlaytnViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				93C32FBF29BAC2C900DB3CB3 /* LeaderBoardBottomSheetViewController */,
 				93C32FBC29B9A68700DB3CB3 /* GameVC */,
 				93C32FBB29B9A52500DB3CB3 /* TabBarVC */,
 				93C32FBA29B9A4B400DB3CB3 /* HomeVC */,
@@ -2189,11 +2280,11 @@
 				93297784298798CA00C76AB5 /* LoginVC */,
 				24F9FFB62986612500E534A1 /* LottieTemplateVC */,
 				939DE053297A242500EFA71E /* BenefitViewController.swift */,
+				24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */,
 				939DE057297A24A400EFA71E /* SettingViewController.swift */,
 				360D739F2987CA2A00D109C3 /* DevHankViewController.swift */,
 				93A4B7F72990C0C600146FD8 /* BottomSheetViewController.swift */,
 				93A4B7F92990C50700146FD8 /* BasicTabBarController.swift */,
-				245AC26D29B4ADD200CE7857 /* TestViewController.swift */,
 			);
 			path = KlaytnViewControllers;
 			sourceTree = "<group>";
@@ -2201,16 +2292,13 @@
 		939DE05E297A2DC000EFA71E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9300BB6129C821E900C67A29 /* Firestore */,
 				939DE061297A2E0600EFA71E /* KlaytnAuthResult.swift */,
 				939DE062297A2E0600EFA71E /* KlaytnNFT.swift */,
 				36A8CEE62983B5FC007BF65A /* KlaytnRawNft.swift */,
 				939DE05F297A2E0600EFA71E /* KlaytnPrepareResponse.swift */,
 				939DE060297A2E0600EFA71E /* KlaytnTokenResponse.swift */,
-				36A8CEE82983B641007BF65A /* BellyGomNftMetadata.swift */,
-				36A8CEEA2983BE7B007BF65A /* BellyGomNft.swift */,
 				24DDC999298175A2007A3F63 /* UtilityModel.swift */,
-				24097B2C298FC61100F92366 /* BellygomEventModel.swift */,
-				24097B33298FD99700F92366 /* BellygomUtilityModel.swift */,
 				3620690529B88699008764BE /* MoonoNftMetadata.swift */,
 				3620690729B88789008764BE /* MoonoNft.swift */,
 			);
@@ -2287,14 +2375,6 @@
 			path = GameVC;
 			sourceTree = "<group>";
 		};
-		93C32FBF29BAC2C900DB3CB3 /* LeaderBoardBottomSheetViewController */ = {
-			isa = PBXGroup;
-			children = (
-				93C32FC029BAC2DD00DB3CB3 /* LeaderBoardBottomSheetViewController.swift */,
-			);
-			path = LeaderBoardBottomSheetViewController;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2305,6 +2385,7 @@
 				3619AF0B297908F90051C387 /* Sources */,
 				3619AF0C297908F90051C387 /* Frameworks */,
 				3619AF0D297908F90051C387 /* Resources */,
+				9300BB7129C8368B00C67A29 /* Setup Firebase Environment GoogleService-Info.plist */,
 			);
 			buildRules = (
 			);
@@ -2332,6 +2413,8 @@
 				3619B2302979125D0051C387 /* SnapKit */,
 				24097B7B29913E9000F92366 /* Pulley */,
 				93A4B8192991CFC100146FD8 /* FSCalendar */,
+				9300BB5B29C820C900C67A29 /* FirebaseFirestore */,
+				9300BB5D29C820D100C67A29 /* FirebaseFirestoreSwift */,
 			);
 			productName = Aftermint;
 			productReference = 3619AF0F297908F90051C387 /* Aftermint.app */;
@@ -2396,7 +2479,9 @@
 				3619B12C29790AC60051C387 /* just_bought.json in Resources */,
 				3619AF1F297908FA0051C387 /* LaunchScreen.storyboard in Resources */,
 				3619B12F29790AC60051C387 /* basic.png in Resources */,
+				9300BB2B29C44C6400C67A29 /* SparkParticle.sks in Resources */,
 				3619B1EC29790AC60051C387 /* respect.png in Resources */,
+				9300BB2C29C44C6400C67A29 /* Assets.xcassets in Resources */,
 				3619B12E29790AC60051C387 /* vector_test_0509.json in Resources */,
 				3619B1EB29790AC60051C387 /* background.png in Resources */,
 				3619B1E529790AC60051C387 /* Icon_Coin.png in Resources */,
@@ -2420,6 +2505,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9300BB7129C8368B00C67A29 /* Setup Firebase Environment GoogleService-Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Firebase Environment GoogleService-Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/DEV/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/PROD/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release\" ]\nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3619AF0B297908F90051C387 /* Sources */ = {
@@ -2449,7 +2556,6 @@
 				3619B11C29790AC60051C387 /* AppDependency.swift in Sources */,
 				3619B1C029790AC60051C387 /* Animation.swift in Sources */,
 				3619B19E29790AC60051C387 /* NodeProperty.swift in Sources */,
-				24097B2D298FC61100F92366 /* BellygomEventModel.swift in Sources */,
 				3619B0F729790AC50051C387 /* OAuthTokenInput.swift in Sources */,
 				3619B1BB29790AC60051C387 /* LayerModel.swift in Sources */,
 				3619B1B629790AC60051C387 /* GradientStroke.swift in Sources */,
@@ -2463,6 +2569,7 @@
 				3619B1E229790AC60051C387 /* AnimationContext.swift in Sources */,
 				3619B15729790AC60051C387 /* PointValueProvider.swift in Sources */,
 				3619B15B29790AC60051C387 /* LayerModel+makeAnimationLayer.swift in Sources */,
+				93BAFF1029D2C93300596999 /* CAGradientLayer+Extensions.swift in Sources */,
 				3619B12929790AC60051C387 /* OAuthSwiftRequestInterceptor.swift in Sources */,
 				3619B1F529790AC60051C387 /* TemplateShareViewController.swift in Sources */,
 				3619B1B529790AC60051C387 /* GradientFill.swift in Sources */,
@@ -2477,6 +2584,7 @@
 				3619B1A029790AC60051C387 /* NodePropertyMap.swift in Sources */,
 				24097B7E29913EFD00F92366 /* BenefitTabBottomViewController.swift in Sources */,
 				3619B18629790AC60051C387 /* InvertedMatteLayer.swift in Sources */,
+				9300BB6329C8222300C67A29 /* Card.swift in Sources */,
 				3619B0CF29790AC50051C387 /* UIButton.swift in Sources */,
 				3619B14C29790AC60051C387 /* Keyframe.swift in Sources */,
 				3619B0D729790AC50051C387 /* WalletServiceProtocol.swift in Sources */,
@@ -2497,7 +2605,6 @@
 				3619B12329790AC60051C387 /* TwitterService.swift in Sources */,
 				3619B1DD29790AC60051C387 /* PathElement.swift in Sources */,
 				3619B17129790AC60051C387 /* StrokeAnimation.swift in Sources */,
-				245AC26E29B4ADD300CE7857 /* TestViewController.swift in Sources */,
 				3619B14A29790AC60051C387 /* Color.swift in Sources */,
 				3619B15629790AC60051C387 /* GradientValueProvider.swift in Sources */,
 				3619B13929790AC60051C387 /* LottieConfiguration.swift in Sources */,
@@ -2541,8 +2648,8 @@
 				3619B15529790AC60051C387 /* SizeValueProvider.swift in Sources */,
 				3620690829B88789008764BE /* MoonoNft.swift in Sources */,
 				3619B0DB29790AC50051C387 /* MediaType.swift in Sources */,
+				93E1558129D27E1F00C7892E /* MoonoMockImageData.swift in Sources */,
 				24097B7929913C2E00F92366 /* MarketDetailViewController.swift in Sources */,
-				24097B22298D515E00F92366 /* MarketViewReactor.swift in Sources */,
 				3619B0C929790AC50051C387 /* Date.swift in Sources */,
 				3619B19429790AC60051C387 /* PolygonNode.swift in Sources */,
 				93A4B8072990D6A100146FD8 /* UtilityDetailViewController.swift in Sources */,
@@ -2587,7 +2694,6 @@
 				3619B1C829790AC60051C387 /* KeyframeData.swift in Sources */,
 				3619B1A229790AC60051C387 /* AnyValueContainer.swift in Sources */,
 				3619B1CE29790AC60051C387 /* PrecompAsset.swift in Sources */,
-				36A8CEE92983B641007BF65A /* BellyGomNftMetadata.swift in Sources */,
 				3619B0DE29790AC50051C387 /* Resource.swift in Sources */,
 				3690783E297A70050066530D /* HomeViewReactor2.swift in Sources */,
 				3619B10B29790AC50051C387 /* FontMeta.swift in Sources */,
@@ -2636,7 +2742,6 @@
 				3619B1C429790AC60051C387 /* Marker.swift in Sources */,
 				240121AA29A7B49200F60BDA /* Coordinator.swift in Sources */,
 				3619B16829790AC60051C387 /* ValueProviderStore.swift in Sources */,
-				24097B34298FD99700F92366 /* BellygomUtilityModel.swift in Sources */,
 				935E6A822982619200D94DA6 /* LottieViewController.swift in Sources */,
 				3619B0D129790AC50051C387 /* UICollectionReusableView.swift in Sources */,
 				3619B1FA29790AC60051C387 /* NewVideoRenderer.swift in Sources */,
@@ -2688,12 +2793,15 @@
 				3619B14E29790AC60051C387 /* LRUAnimationCache.swift in Sources */,
 				24F9FFB5298424DF00E534A1 /* LottieTemplateCell.swift in Sources */,
 				939DE054297A242500EFA71E /* BenefitViewController.swift in Sources */,
+				9300BB1F29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift in Sources */,
+				9300BB2829C44AD400C67A29 /* MoonoGameScene.swift in Sources */,
 				3619B1B829790AC60051C387 /* Rectangle.swift in Sources */,
 				3619B16129790AC60051C387 /* AnimationLayer.swift in Sources */,
 				3619B19A29790AC60051C387 /* StrokeNode.swift in Sources */,
 				3619B0CD29790AC50051C387 /* UITableViewCell.swift in Sources */,
 				3619B1FD29790AC60051C387 /* FilesManager.swift in Sources */,
 				3690783C297A6FEF0066530D /* HomeViewController2.swift in Sources */,
+				9300BB1B29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift in Sources */,
 				2481E1D5297A998F00187BB9 /* CollectNewNFTButton.swift in Sources */,
 				3619B0E129790AC50051C387 /* ImageTemplate.swift in Sources */,
 				3619B11529790AC60051C387 /* NFTCellReactor.swift in Sources */,
@@ -2703,6 +2811,7 @@
 				3619B0EB29790AC50051C387 /* JWT.swift in Sources */,
 				3619B16929790AC60051C387 /* CALayer+fillBounds.swift in Sources */,
 				3619B0F429790AC50051C387 /* TwitterTweetForm.swift in Sources */,
+				9300BB7629C840FD00C67A29 /* MoonoMockMetaData.swift in Sources */,
 				3619B1A929790AC60051C387 /* PathNode.swift in Sources */,
 				3619B16029790AC60051C387 /* TransformLayer.swift in Sources */,
 				3619B0E929790AC50051C387 /* TokenKind.swift in Sources */,
@@ -2713,6 +2822,7 @@
 				3619B14529790AC60051C387 /* AnimationViewBase.swift in Sources */,
 				3619B17529790AC60051C387 /* CALayer+addAnimation.swift in Sources */,
 				3619B0E029790AC50051C387 /* ArtUIProtocol.swift in Sources */,
+				9300BB5A29C8116D00C67A29 /* PassThroughView.swift in Sources */,
 				3619B12129790AC60051C387 /* TwitterUtility.swift in Sources */,
 				3619B10329790AC50051C387 /* OpenSeaCollection.swift in Sources */,
 				3619B10829790AC50051C387 /* WalletProtocol.swift in Sources */,
@@ -2726,8 +2836,7 @@
 				3619B12529790AC60051C387 /* FirebaseRemoteConfigService.swift in Sources */,
 				3619B1D429790AC60051C387 /* CGFloatExtensions.swift in Sources */,
 				3619B0EC29790AC50051C387 /* AccessTokenWithSecret.swift in Sources */,
-				9329778929879F4400C76AB5 /* StartViewReactor.swift in Sources */,
-				93C32FC129BAC2DD00DB3CB3 /* LeaderBoardBottomSheetViewController.swift in Sources */,
+				9300BB5829C8106200C67A29 /* BottomSheetView.swift in Sources */,
 				24ED33AC29BEBCDD00C2D4E1 /* NukeImageLoader.swift in Sources */,
 				2481E1DC297C48E700187BB9 /* UIImage.swift in Sources */,
 				3619B15029790AC60051C387 /* LottieLogger.swift in Sources */,
@@ -2747,9 +2856,11 @@
 				3619B0F229790AC50051C387 /* MediaUploadImageType.swift in Sources */,
 				93A4B8112990E70E00146FD8 /* BookmarkMenuBar.swift in Sources */,
 				3619B1D629790AC60051C387 /* AnimationKeypathExtension.swift in Sources */,
+				9300BB6929C8280100C67A29 /* NftCollection.swift in Sources */,
 				3619B13729790AC60051C387 /* AnimationSubview.macOS.swift in Sources */,
 				3619B1D229790AC60051C387 /* SnapshotTestSupport.swift in Sources */,
 				3619B0F929790AC50051C387 /* MediaUploadVideoType.swift in Sources */,
+				9300BB6029C8214000C67A29 /* FirestoreRepository.swift in Sources */,
 				3619B0F329790AC50051C387 /* MediaUploadFinalizeResponse.swift in Sources */,
 				3619AF13297908F90051C387 /* AppDelegate.swift in Sources */,
 				3619B17329790AC60051C387 /* StarAnimation.swift in Sources */,
@@ -2761,6 +2872,7 @@
 				36907844297A70620066530D /* TemplateCreateViewController2.swift in Sources */,
 				3619B0CB29790AC50051C387 /* URLRequest.swift in Sources */,
 				3619B14429790AC60051C387 /* AnimatedButton.swift in Sources */,
+				9300BB6629C8226900C67A29 /* Storable.swift in Sources */,
 				3619B11129790AC50051C387 /* SVGView.swift in Sources */,
 				3619B17029790AC60051C387 /* RectangleAnimation.swift in Sources */,
 				36907846297A706E0066530D /* TemplateCreateViewReactor2.swift in Sources */,
@@ -2782,7 +2894,6 @@
 				3619B0F829790AC50051C387 /* TwitterUploadStatusResponse.swift in Sources */,
 				3619B13D29790AC60051C387 /* AnimationImageProvider.swift in Sources */,
 				3619B1CA29790AC60051C387 /* Glyph.swift in Sources */,
-				36A8CEEB2983BE7B007BF65A /* BellyGomNft.swift in Sources */,
 				3619B17F29790AC60051C387 /* ImageCompositionLayer.swift in Sources */,
 				3619B0CC29790AC50051C387 /* UIColor.swift in Sources */,
 				3619B16729790AC60051C387 /* ExperimentalAnimationLayer.swift in Sources */,
@@ -2917,6 +3028,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -2930,7 +3042,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W287BT4V38;
+				DEVELOPMENT_TEAM = KZ7GPQGAGJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Aftermint/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -2959,7 +3071,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W287BT4V38;
+				DEVELOPMENT_TEAM = KZ7GPQGAGJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Aftermint/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -3222,6 +3334,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3619B20529790B220051C387 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		9300BB5B29C820C900C67A29 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		9300BB5D29C820D100C67A29 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3619B21329790C900051C387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 		93A4B8192991CFC100146FD8 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;

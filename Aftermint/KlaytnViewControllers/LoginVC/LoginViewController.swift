@@ -10,13 +10,36 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-class LoginViewController: UIViewController, View, Coordinating {
+class LoginViewController: UIViewController, View {
     
-    var coordinator: Coordinator?
+    // MARK: - Dependency
+    struct Dependency {
+        let reactor: () -> LoginViewReactor
+        let startViewControllerDependency: StartViewController.Dependency
+        let mainTabBarViewControllerDependency: KlaytnTabViewController.Dependency
+    }
+    
+    private var startVCDependency: StartViewController.Dependency
+    private var mainTabBarVCDependency: KlaytnTabViewController.Dependency
+    private let lottieVCDependency: LottieViewController.Dependency
+    private var bookmarkVCDependency: BookmarkViewController.Dependency
+    private var calendarVCDependency: CalendarViewController.Dependency
+    
     var disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - Init
-    init(reactor: LoginViewReactor) {
+    init(reactor: LoginViewReactor,
+         startVCDependency: StartViewController.Dependency,
+         mainTabBarVCDependency: KlaytnTabViewController.Dependency,
+         lottieVCDependency: LottieViewController.Dependency,
+         bookmarkVCDependency: BookmarkViewController.Dependency,
+         calendarVCDependency: CalendarViewController.Dependency
+    ) {
+        self.startVCDependency = startVCDependency
+        self.mainTabBarVCDependency = mainTabBarVCDependency
+        self.lottieVCDependency = lottieVCDependency
+        self.bookmarkVCDependency = bookmarkVCDependency
+        self.calendarVCDependency = calendarVCDependency
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
@@ -29,7 +52,7 @@ class LoginViewController: UIViewController, View, Coordinating {
     // MARK: - UI Elements
     private let moonoLoginBackgroundImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "moono_login_image")
+        imageView.image = UIImage(named: LoginAsset.backgroundImage.rawValue)
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -37,7 +60,7 @@ class LoginViewController: UIViewController, View, Coordinating {
 
     private let loginDescription: UILabel = {
         let label = UILabel()
-        label.text = "멤버십 서비스 이용을 위해 NFT 지갑을 연결해주세요."
+        label.text = LoginAsset.loginDescription.rawValue
         label.sizeToFit()
         label.font = BellyGomFont.header06
         label.textColor = AftermintColor.lightGrey
@@ -55,13 +78,13 @@ class LoginViewController: UIViewController, View, Coordinating {
     
     private let favorletButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "favorletbutton"), for: .normal)
+        button.setImage(UIImage(named: LoginAsset.favorletButton.rawValue), for: .normal)
         return button
     }()
     
     private lazy var kaikasButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "kaikasbutton"), for: .normal)
+        button.setImage(UIImage(named: LoginAsset.kaikasButton.rawValue), for: .normal)
         return button
     }()
     
@@ -75,7 +98,15 @@ class LoginViewController: UIViewController, View, Coordinating {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
+        UIView.animate(withDuration: 0.1,
+                       delay: 0.0,
+                       options: .curveEaseOut) {
+            self.moonoLoginBackgroundImageView.alpha = 0.0
+            self.loginDescription.alpha = 0.0
+            self.walletStackView.alpha = 0.0
+            self.favorletButton.alpha = 0.0
+            self.kaikasButton.alpha = 0.0
+        }
     }
     
     // MARK: - Set UI & Layout
@@ -111,11 +142,27 @@ class LoginViewController: UIViewController, View, Coordinating {
         ])
     }
     
-    private func connectKaikasWallet() {
-        let reactor: StartViewReactor = StartViewReactor()
-        let startVC = StartViewController(reactor: reactor)
+    private func connectFavorletWallet() {
+        /// NOTE: Temporarily push directly to KlaytnTabViewController;
+        /// Will connect to FavorletWallet application later in the future
+        let homeVC = KlaytnTabViewController(
+            vm: mainTabBarVCDependency.leaderBoardListViewModel(),
+            homeViewControllerDependency: mainTabBarVCDependency.homeViewControllerDependency,
+            lottieViewControllerDependency: lottieVCDependency,
+            bookmarkVCDependency: bookmarkVCDependency,
+            calendarVCDependency: calendarVCDependency
+        )
+        navigationController?.pushViewController(homeVC, animated: true)
+    }
+    
+    private func connectKaikasWallet() { //change the name of the function to openStartVC
+        let startVC = StartViewController(
+            mainTabBarViewControllerDependency: mainTabBarVCDependency,
+            lottieViewControllerDependency: lottieVCDependency,
+            bookmarkVCDependency: bookmarkVCDependency,
+            calendarVCDependency: calendarVCDependency
+        )
         navigationController?.pushViewController(startVC, animated: true)
-        
     }
 
 }
@@ -130,12 +177,31 @@ extension LoginViewController {
     }
     
     private func bindState(with reactor: LoginViewReactor) {
-        reactor.state.map { $0.connect }
-            .bind{ [weak self] _ in self?.connectKaikasWallet()  }
+        reactor.state.map { $0.shouldOpenFavorlet }
+            .bind{ [weak self] shouldOpenFavorlet in
+                if shouldOpenFavorlet {
+                    self?.connectFavorletWallet()
+                }
+            }
+            .disposed(by: disposeBag)
+    
+        reactor.state.map { $0.isWalletConnected }
+            .bind{ [weak self] isWalletConnected in
+                if isWalletConnected {
+                    DispatchQueue.main.async {
+                        self?.connectKaikasWallet()
+                    }
+                }
+            }
             .disposed(by: disposeBag)
     }
     
     private func bindAction(with reactor: LoginViewReactor) {
+        favorletButton.rx.tap
+            .map { Reactor.Action.connectWithFavorlet }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         kaikasButton.rx.tap
             .map { Reactor.Action.connectWithKaikas }
             .bind(to: reactor.action)

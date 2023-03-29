@@ -18,7 +18,8 @@ protocol NFTCardViewDelegate: AnyObject {
 
 class NFTCardView: UIView {
     
-    var viewModel: NFTCardViewModel = NFTCardViewModel()
+    let prefetcher = ImagePrefetcher()
+    var viewModel: NFTCardViewModel
     var nftSelected: [Bool] = []
     
     // MARK: - UIElements
@@ -68,8 +69,9 @@ class NFTCardView: UIView {
     
     // MARK: - Init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(vm: NFTCardViewModel) {
+        self.viewModel = vm
+        super.init(frame: .zero)
         setUI()
         layout()
         setDelegate()
@@ -94,6 +96,9 @@ class NFTCardView: UIView {
     private func setDelegate() {
         self.nftCollectionView.delegate = self
         self.nftCollectionView.dataSource = self
+        
+        self.nftCollectionView.isPrefetchingEnabled = true
+        self.nftCollectionView.prefetchDataSource = self
     }
     
     private func layout() {
@@ -210,9 +215,37 @@ extension NFTCardView: UICollectionViewDataSource, UICollectionViewDelegate, UIC
         cell.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 4, y: 10, width: cell.frame.width, height: cell.frame.height - 10), cornerRadius: 20).cgPath
         cell.layer.shadowOffset = CGSize(width: 4, height: 4)
     }
-    
-    
  
+}
+
+extension NFTCardView: UICollectionViewDataSourcePrefetching {
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        prefetchItemsAt indexPaths: [IndexPath]
+    ) {
+        let urlStrings = indexPaths.compactMap {
+            self.viewModel.itemAtIndex($0.row)?.imageUrl
+        }
+        let urls = urlStrings.compactMap {
+            URL(string: $0)
+        }
+        prefetcher.startPrefetching(with: urls)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cancelPrefetchingForItemsAt indexPaths: [IndexPath]
+    ) {
+        let urlStrings = indexPaths.compactMap {
+            self.viewModel.itemAtIndex($0.row)?.imageUrl
+        }
+        let urls = urlStrings.compactMap {
+            URL(string: $0)
+        }
+        prefetcher.stopPrefetching(with: urls)
+    }
+
 }
 
 //MARK: - ViewModel related

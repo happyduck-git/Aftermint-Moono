@@ -10,6 +10,26 @@ import Pulley
 
 class BenefitViewController: UIViewController {
     
+    // MARK: - Dependency
+    struct Dependency {
+        let bookmarkVCDependency: BookmarkViewController.Dependency
+        let calendarVCDependency: CalendarViewController.Dependency
+    }
+    
+    private let bookmarkVCDependency: BookmarkViewController.Dependency
+    private var calendarVCDependency: CalendarViewController.Dependency
+    
+    // MARK: - Init
+    init(bookmarkVCDependency: BookmarkViewController.Dependency,
+         calendarVCDependency: CalendarViewController.Dependency) {
+        self.bookmarkVCDependency = bookmarkVCDependency
+        self.calendarVCDependency = calendarVCDependency
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - UI Elements
     private let menuBar: BenefitMenuBar = {
@@ -120,13 +140,17 @@ class BenefitViewController: UIViewController {
     
     @objc private func bookmarkTapped() {
         let reactor = BookmarkViewReactor()
-        let bookmarkVC = BookmarkViewController(reactor: reactor)
+        /// NOTE: DELETE IF NOT NEEDED
+//        let benefitTabBottomVC = BenefitTabBottomViewController()
+        let bookmarkVC = BookmarkViewController(reactor: bookmarkVCDependency.reactor(),
+                                                bottomSheetVC: bookmarkVCDependency.bottomSheetVC)
         self.navigationController?.pushViewController(bookmarkVC, animated: true)
     }
     
     @objc private func calendarTapped() {
         let reactor = CalendarViewReactor()
-        let calendarVC = CalendarViewController(reactor: reactor)
+        let calendarVC = CalendarViewController(reactor: calendarVCDependency.reactor(),
+                                                bottomSheetVC: calendarVCDependency.bottomSheetVC)
         self.navigationController?.pushViewController(calendarVC, animated: true)
     }
     

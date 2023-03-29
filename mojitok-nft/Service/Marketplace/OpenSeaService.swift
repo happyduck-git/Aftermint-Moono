@@ -73,7 +73,7 @@ final class OpenSeaService: MarketPlaceServiceProtocol {
     }
     
     func refresh() {
-        self.queue.sync { [weak self] in
+        self.queue.sync {
             allNFTs.removeAll()
             dateNFTs.removeAll()
             priceNFTs.removeAll()

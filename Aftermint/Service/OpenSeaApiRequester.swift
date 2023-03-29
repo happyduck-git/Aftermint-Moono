@@ -75,16 +75,14 @@ class OpenSeaApiRequester {
     ) -> Bool {
         let urlSession = URLSession(configuration: .default)
         
-        LLog.d("UInt32(tokenId.dropFirst(2), radix: 16) ?? 0: \(UInt32(tokenId.dropFirst(2), radix: 16) ?? 0)")
-        
         let urlToken = String(
             format: OpenSeaApiRequester.url__retrieve_an_asset__params_2,
             contractAddress,
             UInt32(tokenId.dropFirst(2), radix: 16) ?? 0
         )
-        var urlComponents = URLComponents(string: urlToken)
+        let urlComponents = URLComponents(string: urlToken)
         
-        guard var url = urlComponents?.url else {
+        guard let url = urlComponents?.url else {
             let errorMessage = "Url is nil : urlToken: \(urlToken), contractAddress: \(contractAddress), tokenId: \(tokenId)."
             completionHandler(nil, nil, NSError(domain: errorMessage, code: -1))
             LLog.w(errorMessage)

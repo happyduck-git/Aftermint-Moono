@@ -51,7 +51,7 @@ final class TwitterUtility {
     }
     
     private func signatureBaseString(_ httpMethod: String = "POST", _ url: String, _ params: [String:Any]) -> String {
-        var param = params
+        let param = params
         let parameterString = signatureParameterString(params: param)
         return httpMethod + "&" + url.urlEncoded + "&" + parameterString.urlEncoded
     }

@@ -67,7 +67,7 @@ class KASConnectService {
     }
     
     
-    
+    //TODO: Change return type: String? to Result<String?, Error>
     func getWalletAddress(requestKey: String) async throws -> String? {
 
         let urlString = "https://api.kaikas.io/api/v1/k/result/\(requestKey)"

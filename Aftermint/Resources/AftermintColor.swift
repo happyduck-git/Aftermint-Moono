@@ -13,18 +13,20 @@ struct AftermintColor {
     static let backgroundNavy: UIColor = UIColor(hex: 0x131C36)
     static let tabBarNavy: UIColor = UIColor(hex: 0x212A45)
     static let secondaryBackgroundNavy: UIColor = UIColor(hex: 0x242D50)
-
+    static let separatorNavy: UIColor = UIColor(hex: 0x2C3858)
+    static let borderNavy: UIColor = UIColor(hex: 0x384467)
+    
     static let backgroundBlue: UIColor = UIColor(hex: 0x002040)
     static let backgroundLightBlue: UIColor = UIColor(red: 29, green: 76, blue: 146)
     static let titleBlue: UIColor = UIColor(hex: 0x6387FE)
     static let moonoBlue: UIColor = UIColor(hex: 0x69DCFE)
-    
     
     static let moonoYellow: UIColor = UIColor(hex: 0xFFEC6D)
     
     static let moonoGrey: UIColor = UIColor(hex: 0x444E67)
     static let titleGrey: UIColor = UIColor(hex: 0xB3B3B3)
     static let secondaryTitleGrey: UIColor = UIColor(hex: 0xF4F4F4)
+    static let rankGrey: UIColor = UIColor(hex: 0xB0B7CA)
     
     
     /* BellyGom Color (Will be removed) */

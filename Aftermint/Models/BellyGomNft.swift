@@ -18,6 +18,12 @@ struct BellyGomNft {
     let previousOwnerAddress: String
     let traits: Traits
     
+    var tokenIdInteger: UInt32 {
+        get {
+            return UInt32(tokenId.dropFirst(2), radix: 16) ?? 0
+        }
+    }
+    
     struct Traits {
         let background: String
         let body: String

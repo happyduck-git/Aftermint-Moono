@@ -208,6 +208,8 @@ final class LottieViewReactor: Reactor, FactoryModule {
                 normalTemplates.append(template)
             }
         }
+        let total: [Template] = collectionTemplates + normalTemplates + purchaseTemplates + mockTemplates
+        print("Templates count: \(total.count)")
         return collectionTemplates + normalTemplates + purchaseTemplates + mockTemplates
     }
     

@@ -8,6 +8,12 @@
 import Foundation
 import SystemConfiguration
 
+//MARK: - Network Error
+enum NetworkError: Error {
+    case networkConnectionError
+}
+
+//MARK: - NetworkStatus Class
 final class NetworkStatus {
     static let shared = NetworkStatus()
     

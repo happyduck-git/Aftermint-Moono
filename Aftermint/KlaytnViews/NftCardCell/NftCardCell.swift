@@ -124,7 +124,9 @@ class NftCardCell: UICollectionViewCell {
         
         guard let url = URL(string: viewModel.imageUrl) else { return }
         NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            self.cardFrontView.image = image
+                DispatchQueue.main.async {
+                    self.cardFrontView.image = image
+                }
         }
     }
     

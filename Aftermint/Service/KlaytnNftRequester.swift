@@ -169,13 +169,13 @@ class KlaytnNftRequester {
         
         rawNfts.items.forEach { rawItem in
             
-            guard let tokenUri = rawItem.tokenUri else {
-                print("Token uri found to be nil")
+            guard let tokenUri = rawItem.tokenUri, !tokenUri.isEmpty else {
+                discountTaskSafely()
+                LLog.w("Token uri found to be nil")
                 return
             }
             
-            // https://ipfs.io/ipfs/ -> https://gateway.pinata.cloud/
-            let convertedTokenUri = tokenUri.replace(target: "ipfs://", withString: "https://gateway.pinata.cloud/ipfs/")
+            let convertedTokenUri = tokenUri.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
      
             _ = requestSimple(urlToken: convertedTokenUri) { data, response, error in
                 dispatchQueue.async {
@@ -216,16 +216,13 @@ class KlaytnNftRequester {
         
         let imageMetadata = metadata.image
         
-        /* pinata gateway test */
-        let convertedImageUrl = imageMetadata.replace(target: "ipfs://", withString: "https://gateway.pinata.cloud/ipfs/")
-        
         /* when using original gateway */
-//        let lastIndex = imageMetadata.lastIndex(of: "/")!
-//        let startIndex = imageMetadata.index(after: lastIndex)
-//        let endIndex = imageMetadata.lastIndex(of: ".")!
-//        let imageNumber = imageMetadata[startIndex..<endIndex]
-//
-//        let convertedImageUrl: String =  "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23" + "\(imageNumber)" + ".jpeg?alt=media"
+        let lastIndex = imageMetadata.lastIndex(of: "/")!
+        let startIndex = imageMetadata.index(after: lastIndex)
+        let endIndex = imageMetadata.lastIndex(of: ".")!
+        let imageNumber = imageMetadata[startIndex..<endIndex]
+
+        let convertedImageUrl: String =  "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23" + "\(imageNumber)" + ".jpeg?alt=media"
     
         return MoonoNft(
             name: metadata.name,

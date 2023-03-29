@@ -10,6 +10,14 @@ import Foundation
 import FirebaseStorage
 
 final class FirebaseStorageService {
+    
+    // MARK: - Enum
+    enum FirebaseUrlPath: String {
+        case font = "/font"
+        case jsonTemplate = "/template/lottie_resources"
+        case pngTemplate = "/template/lottie_thumbnails"
+    }
+    
 
     static let shared = FirebaseStorageService()
 
@@ -18,6 +26,11 @@ final class FirebaseStorageService {
 
     private init() {
         self.storage = Storage.storage().reference()
+    }
+    /// Currently not in use: Consider using this method instead of the one below
+    func getFile(folderPath: FirebaseUrlPath, fileName: String, completion: @escaping (Data?) -> Void) {
+        let urlString = folderPath.rawValue + "/" + fileName
+        self.getFile(urlString: urlString, completion: completion)
     }
 
     func getFile(urlString: String, completion: @escaping (Data?) -> Void) {

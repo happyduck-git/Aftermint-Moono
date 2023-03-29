@@ -13,7 +13,13 @@ import Pulley
 
 class BookmarkViewController: UIViewController {
     
-    let bottomSheetVC: BenefitTabBottomViewController = BenefitTabBottomViewController()
+    // MARK: - Dependency
+    struct Dependency {
+        let reactor: () -> BookmarkViewReactor
+        let bottomSheetVC: BenefitTabBottomViewController
+    }
+    
+    private var bottomSheetVC: BenefitTabBottomViewController
     var disposeBag: DisposeBag = DisposeBag()
     
     //MARK: - UI Elements
@@ -26,7 +32,6 @@ class BookmarkViewController: UIViewController {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(EventCell.self, forCellWithReuseIdentifier: EventCell.identifier)
-
         collection.showsHorizontalScrollIndicator = false
         collection.isPagingEnabled = true
 
@@ -35,7 +40,9 @@ class BookmarkViewController: UIViewController {
     }()
     
     //MARK: - Init
-    init(reactor: BookmarkViewReactor) {
+    init(reactor: BookmarkViewReactor,
+         bottomSheetVC: BenefitTabBottomViewController) {
+        self.bottomSheetVC = bottomSheetVC
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }

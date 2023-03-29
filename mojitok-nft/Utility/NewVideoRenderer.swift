@@ -54,7 +54,7 @@ final class NewVideoRenderer {
         
         generateQueue.async {
             let outputURL = FilesManager.cacheFolderURL.appendingPathComponent("template.mov")
-            var videoWriter: AVAssetWriter! = try! AVAssetWriter(outputURL: outputURL, fileType: .mov)
+            let videoWriter: AVAssetWriter! = try! AVAssetWriter(outputURL: outputURL, fileType: .mov)
             FilesManager.removeFile(url: outputURL)
             
             let videoSettings: [String: AnyObject] = [

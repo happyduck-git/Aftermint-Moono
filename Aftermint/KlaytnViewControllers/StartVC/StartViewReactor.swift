@@ -8,6 +8,7 @@
 import ReactorKit
 import RxSwift
 
+//TODO: Remove Reactor Logic => No specific logics here
 final class StartViewReactor: Reactor { 
     
     let kasWalletRepository: KasWalletRepository = KasWalletRepository.shared

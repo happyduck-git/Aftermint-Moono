@@ -15,10 +15,10 @@ class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let reactor = LoginViewReactor()
-        var vc: UIViewController & Coordinating = LoginViewController(reactor: reactor)
-        vc.coordinator = self
-        navigationController?.setViewControllers([vc], animated: true)
+//        let reactor = LoginViewReactor()
+//        var vc: UIViewController & Coordinating = LoginViewController(reactor: reactor)
+//        vc.coordinator = self
+//        navigationController?.setViewControllers([vc], animated: true)
         
     }
     
