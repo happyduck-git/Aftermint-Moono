@@ -11,7 +11,7 @@ import SpriteKit
 final class GameViewController: UIViewController {
     
     // MARK: - Constants
-    private var nftGradeLabelText: String = "/ Moono week"
+    private var nickNameLabelText: String = "월요 병아리"
     private var initialTouchScore: Int = 0
     
     // MARK: - Dependency
@@ -26,7 +26,7 @@ final class GameViewController: UIViewController {
     }
     
     // MARK: - UI Elements
-    private let nftImageView: UIImageView = {
+    private let userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .tertiarySystemFill
         imageView.contentMode = .scaleAspectFit
@@ -36,39 +36,72 @@ final class GameViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    private let nftDataAndScoreStackView: UIStackView = {
+
+    private let userInfoStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 5
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
-    private let nftDataStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
+    private let walletAddressLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = BellyGomFont.header05
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var nickNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = self.nickNameLabelText
+        label.textColor = .white
+        label.font = BellyGomFont.header05
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let popRankStack: BasicStackView = {
+        let stack = BasicStackView()
+        stack.topLabelText = "Pop Rank"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.bottomLabelText = "12"
+        stack.bottomLabelFont = BellyGomFont.header04
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
-    private let nftNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = BellyGomFont.header06
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let popScoreStack: BasicStackView = {
+        let stack = BasicStackView()
+        stack.topLabelText = "Pop Score"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.bottomLabelText = "358,732"
+        stack.bottomLabelFont = BellyGomFont.header04
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
-    private lazy var nftGradeLabel: UILabel = {
-        let label = UILabel()
-        label.text = self.nftGradeLabelText
-        label.textColor = .white
-        label.font = BellyGomFont.header06
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let nftsStack: BasicStackView = {
+        let stack = BasicStackView()
+        stack.topLabelText = "NFTs"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.bottomLabelText = "17"
+        stack.bottomLabelFont = BellyGomFont.header05
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
+    private let actionCountStack: BasicStackView = {
+        let stack = BasicStackView()
+        stack.topLabelText = "Action Count"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.bottomLabelText = "5,000+"
+        stack.bottomLabelFont = BellyGomFont.header05
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
+    //Change this to Pop Score Label
     private lazy var touchCountLabel: UILabel = {
         let label = UILabel()
         label.text = "\(self.initialTouchScore)"
@@ -140,7 +173,7 @@ final class GameViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        nftImageView.layer.cornerRadius = nftImageView.frame.size.width / 2
+        userImageView.layer.cornerRadius = userImageView.frame.size.width / 2
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -164,28 +197,42 @@ final class GameViewController: UIViewController {
     private func setUI() {
         view.backgroundColor = AftermintColor.backgroundLightBlue
         view.addSubview(gameSKView)
-        view.addSubview(nftImageView)
-        view.addSubview(nftDataAndScoreStackView)
+        view.addSubview(userImageView)
+        view.addSubview(userInfoStackView)
         view.addSubview(bottomSheetView)
+        view.addSubview(popRankStack)
+        view.addSubview(popScoreStack)
+        view.addSubview(nftsStack)
+        view.addSubview(actionCountStack)
         
-        nftDataAndScoreStackView.addArrangedSubview(nftDataStackView)
-        nftDataAndScoreStackView.addArrangedSubview(touchCountLabel)
-        nftDataStackView.addArrangedSubview(nftNameLabel)
-        nftDataStackView.addArrangedSubview(nftGradeLabel)
+        userInfoStackView.addArrangedSubview(walletAddressLabel)
+        userInfoStackView.addArrangedSubview(nickNameLabel)
     }
     
     private func setLayout() {
         let viewHeight = view.frame.size.height
         gameSKView.frame = view.bounds
         NSLayoutConstraint.activate([
-            self.nftImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
-            self.nftImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
-            self.nftImageView.heightAnchor.constraint(equalToConstant: viewHeight / 14),
-            self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
+            self.userImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
+            self.userImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
+            self.userImageView.heightAnchor.constraint(equalToConstant: viewHeight / 14),
+            self.userImageView.widthAnchor.constraint(equalTo: self.userImageView.heightAnchor),
             
+            self.userInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userImageView.trailingAnchor, multiplier: 1),
+            self.userInfoStackView.centerYAnchor.constraint(equalTo: self.userImageView.centerYAnchor),
             
-            self.nftDataAndScoreStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 1),
-            self.nftDataAndScoreStackView.centerYAnchor.constraint(equalTo: self.nftImageView.centerYAnchor),
+            self.popRankStack.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
+            self.popRankStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userInfoStackView.trailingAnchor, multiplier: 1),
+            self.popScoreStack.topAnchor.constraint(equalTo: self.popRankStack.topAnchor),
+            self.popScoreStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.popRankStack.trailingAnchor, multiplier: 1),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreStack.trailingAnchor, multiplier: 1),
+            
+            self.nftsStack.topAnchor.constraint(equalToSystemSpacingBelow: self.popRankStack.bottomAnchor, multiplier: 1),
+            self.nftsStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userInfoStackView.trailingAnchor, multiplier: 1),
+            self.actionCountStack.topAnchor.constraint(equalTo: self.nftsStack.topAnchor),
+            self.actionCountStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftsStack.trailingAnchor, multiplier: 1),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountStack.trailingAnchor, multiplier: 1),
+            
             
             self.bottomSheetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             self.bottomSheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -214,11 +261,11 @@ extension GameViewController {
         let card = leaderBoardListViewModel.randomMoonoData
         let url = URL(string: card.imageUri)
         NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            self.nftImageView.image = image
+            self.userImageView.image = image
         }
         
         let nftName = card.tokenId.replacingOccurrences(of: "___", with: " #")
-        self.nftNameLabel.text = "\(nftName) "
+        self.walletAddressLabel.text = "\(nftName) "
     }
 }
 

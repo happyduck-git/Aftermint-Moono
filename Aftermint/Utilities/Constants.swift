@@ -58,6 +58,10 @@ enum LottieAsset: String {
 /// GameController related constants
 enum GameAsset: String {
     case gameVCLogo = "game_logo"
+    case popRankLabel = "Pop Rank"
+    case popScoreLabel = "Pop Score"
+    case nftsLabel = "NFTs"
+    case actionCountLabel = "Action Count"
 }
 
 /// GameViewController Bottom LeaderBoard related constants

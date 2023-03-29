@@ -15,7 +15,7 @@ final class LeaderBoardTableViewCellListViewModel {
     let fireStoreRepository = FirestoreRepository.shared
     
     func numberOfRowsInSection(at section: Int) -> Int {
-         return self.viewModelList.value?.count ?? 0
+        return self.viewModelList.value?.count ?? 0
     }
     
     func modelAt(_ index: Int) -> LeaderBoardTableViewCellViewModel? {
@@ -23,59 +23,56 @@ final class LeaderBoardTableViewCellListViewModel {
         return viewModel
     }
     
+    //TODO: Need to add error handler
     func getAllNftRankCellViewModels(completion: @escaping (Result<[LeaderBoardTableViewCellViewModel], Error>) -> ()) {
         
-        self.fireStoreRepository.getAllCard { cardsList in
-            
-            guard let cards = cardsList,
-                  let rankImage = UIImage(named: LeaderBoard.firstPlace.rawValue)
-            else { return }
-            
-            let initialRank = 1
-            let viewModels = cards.map { card in
-                
-                let viewModel: LeaderBoardTableViewCellViewModel = LeaderBoardTableViewCellViewModel(rankImage: rankImage,
-                                                                                                     rank: initialRank, // Set initial rank as 1
-                                                                                                     nftImage: card.imageUri,
-                                                                                                     nftName: card.tokenId,
-                                                                                                     touchScore: card.count)
-                return viewModel
-            }
-            completion(.success(viewModels))
-            return
-        }
-        completion(.failure(LeaderBoardTableViewCellListError.nftFetchError))
-    }
-    
-    ///TEMP: Using mock data
-    let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
-    
-    /// Save increase touch count of a certain card to Firestore
-    func increaseTouchCount(_ number: Int64) {
-        saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
-                              collectionId: randomMoonoData.collectionId,
-                              tokenId: randomMoonoData.tokenId,
-                              count: number)
-    }
-    
-    func saveCountNumberOfCard(imageUri: String,
-                               collectionId: String,
-                               tokenId: String,
-                               count: Int64)
-    {
+        let userList: [AftermintUser] = MoonoMockUserData().getAllUserData()
+        guard let rankImage = UIImage(named: LeaderBoard.firstPlace.rawValue) else { return }
+        let initialRank = 1
         
-        let card: Card = Card(imageUri: imageUri,
-                              collectionId: collectionId,
-                              tokenId: tokenId,
-                              count: count)
-        let collection: NftCollection = NftCollection(collectionId: K.ContractAddress.moono,
-                                                      collectionLogoImage: "N/A",
-                                                      count: count)
-        fireStoreRepository.saveCard(card)
-        fireStoreRepository.saveCollection(collection)
-
+        let viewModels = userList.map { user in
+            let viewModel: LeaderBoardTableViewCellViewModel = LeaderBoardTableViewCellViewModel(rankImage: rankImage,
+                                                                                                 rank: initialRank,
+                                                                                                 userProfileImage: user.userProfileImageUrl,
+                                                                                                 topLabelText: user.walletAddress,
+                                                                                                 bottomLabelText: "NFTs \(user.totalOwned)",
+                                                                                                 touchScore: user.popScore)
+            return viewModel
+        }
+        completion(.success(viewModels))
+        return
     }
+}
+
+///TEMP: Using mock data
+let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
+
+/// Save increase touch count of a certain card to Firestore
+func increaseTouchCount(_ number: Int64) {
+    saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
+                          collectionId: randomMoonoData.collectionId,
+                          tokenId: randomMoonoData.tokenId,
+                          count: number)
+}
+
+func saveCountNumberOfCard(imageUri: String,
+                           collectionId: String,
+                           tokenId: String,
+                           count: Int64)
+{
     
+    let card: Card = Card(imageUri: imageUri,
+                          collectionId: collectionId,
+                          tokenId: tokenId,
+                          count: count)
+    let collection: NftCollection = NftCollection(collectionId: K.ContractAddress.moono,
+                                                  collectionLogoImage: "N/A",
+                                                  count: count)
+    fireStoreRepository.saveCard(card)
+    fireStoreRepository.saveCollection(collection)
+    
+}
+
 }
 // MARK: - Custom Error type
 extension LeaderBoardTableViewCellListViewModel {
@@ -88,19 +85,25 @@ extension LeaderBoardTableViewCellListViewModel {
 }
 
 final class LeaderBoardTableViewCellViewModel {
-    
     var rankImage: UIImage
     var rank: Int
-    let nftImage: String
-    let nftName: String
+    let userProfileImage: String
+    let topLabelText: String
+    let bottomLabelText: String
     let touchScore: Int64
     
     //MARK: - Initializer
-    init(rankImage: UIImage, rank: Int, nftImage: String, nftName: String, touchScore: Int64) {
+    init(rankImage: UIImage,
+         rank: Int,
+         userProfileImage: String,
+         topLabelText: String,
+         bottomLabelText: String,
+         touchScore: Int64) {
         self.rankImage = rankImage
         self.rank = rank
-        self.nftImage = nftImage
-        self.nftName = nftName
+        self.userProfileImage = userProfileImage
+        self.topLabelText = topLabelText
+        self.bottomLabelText = bottomLabelText
         self.touchScore = touchScore
     }
     

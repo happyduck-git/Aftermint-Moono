@@ -36,6 +36,12 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private let nftInfoStackView: BasicStackView = {
+        let stack = BasicStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     private let nftNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -76,7 +82,8 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         contentView.addSubview(rankImageView)
         contentView.addSubview(rankLabel)
         contentView.addSubview(nftImageView)
-        contentView.addSubview(nftNameLabel)
+        contentView.addSubview(nftNameLabel) //Will be replaced
+        contentView.addSubview(nftInfoStackView)
         contentView.addSubview(touchScoreLabel)
     }
     
@@ -99,9 +106,9 @@ final class LeaderBoardTableViewCell: UITableViewCell {
             self.nftImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankImageView.trailingAnchor, multiplier: 2),
             
-            self.nftNameLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
-            self.nftNameLabel.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
-            self.nftNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 2),
+            self.nftInfoStackView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
+            self.nftInfoStackView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
+            self.nftInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 2),
             
             self.touchScoreLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             self.touchScoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftNameLabel.trailingAnchor, multiplier: 2),
@@ -129,9 +136,10 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         rankImageView.image = vm.rankImage
         rankLabel.text = String(describing: vm.rank)
         nftNameLabel.text = vm.nftName //TODO: Change TokenId -> NFTName (e.g. Moono #199)
+        nftInfoStackView.topLabelText = "NFT Project"
         touchScoreLabel.text = String(describing: vm.touchScore)
        
-        self.imageStringToImage(with: vm.nftImage) { result in
+        self.imageStringToImage(with: vm.userProfileImage) { result in
             switch result {
             case .success(let image):
                 self.nftImageView.image = image

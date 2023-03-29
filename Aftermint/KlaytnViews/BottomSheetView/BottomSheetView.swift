@@ -299,7 +299,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
     /// PretchImageAt
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.viewModel?.modelAt($0.row)?.nftImage
+            self.viewModel?.modelAt($0.row)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)
@@ -309,7 +309,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.viewModel?.modelAt($0.row)?.nftImage
+            self.viewModel?.modelAt($0.row)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)

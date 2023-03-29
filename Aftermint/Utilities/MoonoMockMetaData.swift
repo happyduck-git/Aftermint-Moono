@@ -60,3 +60,45 @@ struct MoonoMockMetaData {
     
 }
 
+struct MoonoMockUserData {
+    
+    /// Changing this prorperty value will decide what mock AftermintUser object to use from the userList property
+    private let mockIndex: Int = 0
+    
+    private let userList: [AftermintUser] = [
+        AftermintUser(walletAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
+                      username: "Rebecca",
+                      userProfileImageUrl: "rebecca",
+                      totalOwned: 10),
+        AftermintUser(walletAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+                      username: "Maine",
+                      userProfileImageUrl: "maine",
+                      totalOwned: 45),
+        AftermintUser(walletAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+                      username: "Lucy",
+                      userProfileImageUrl: "lucy",
+                      totalOwned: 99),
+        AftermintUser(walletAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+                      username: "David",
+                      userProfileImageUrl: "david",
+                      totalOwned: 23),
+        AftermintUser(walletAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+                      username: "Dorio",
+                      userProfileImageUrl: "dorio",
+                      totalOwned: 71),
+        AftermintUser(walletAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+                      username: "Kiwi",
+                      userProfileImageUrl: "kiwi",
+                      totalOwned: 2)
+    ]
+    
+    func getOneUserData() -> AftermintUser {
+        let numberOfData = self.userList.count
+        return self.userList[mockIndex % numberOfData]
+    }
+    
+    func getAllUserData() -> [AftermintUser] {
+        return self.userList
+    }
+    
+}

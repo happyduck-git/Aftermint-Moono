@@ -420,6 +420,8 @@
 		93A4B81A2991CFC100146FD8 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 93A4B8192991CFC100146FD8 /* FSCalendar */; };
 		93A4B8692994E5A600146FD8 /* CalendarViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A4B8682994E5A600146FD8 /* CalendarViewReactor.swift */; };
 		93BAFF1029D2C93300596999 /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */; };
+		93BAFF1229D4051100596999 /* AftermintUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1129D4051100596999 /* AftermintUser.swift */; };
+		93BAFF1429D411AB00596999 /* BasicStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1329D411AB00596999 /* BasicStackView.swift */; };
 		93C32FBE29B9A69700DB3CB3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */; };
 		93C32FC329BB000600DB3CB3 /* NftCardCellPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */; };
 		93C32FC529BB004400DB3CB3 /* NftCardCellPropertyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */; };
@@ -824,6 +826,8 @@
 		93A4B8162991CF3500146FD8 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		93A4B8682994E5A600146FD8 /* CalendarViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewReactor.swift; sourceTree = "<group>"; };
 		93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
+		93BAFF1129D4051100596999 /* AftermintUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AftermintUser.swift; sourceTree = "<group>"; };
+		93BAFF1329D411AB00596999 /* BasicStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStackView.swift; sourceTree = "<group>"; };
 		93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyView.swift; sourceTree = "<group>"; };
 		93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyItemView.swift; sourceTree = "<group>"; };
@@ -912,6 +916,7 @@
 				24097B7F299154E200F92366 /* UtilityClaimBottomSheet.swift */,
 				93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */,
 				93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */,
+				93BAFF1329D411AB00596999 /* BasicStackView.swift */,
 			);
 			path = KlaytnViews;
 			sourceTree = "<group>";
@@ -2301,6 +2306,7 @@
 				24DDC999298175A2007A3F63 /* UtilityModel.swift */,
 				3620690529B88699008764BE /* MoonoNftMetadata.swift */,
 				3620690729B88789008764BE /* MoonoNft.swift */,
+				93BAFF1129D4051100596999 /* AftermintUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2812,6 +2818,7 @@
 				3619B16929790AC60051C387 /* CALayer+fillBounds.swift in Sources */,
 				3619B0F429790AC50051C387 /* TwitterTweetForm.swift in Sources */,
 				9300BB7629C840FD00C67A29 /* MoonoMockMetaData.swift in Sources */,
+				93BAFF1229D4051100596999 /* AftermintUser.swift in Sources */,
 				3619B1A929790AC60051C387 /* PathNode.swift in Sources */,
 				3619B16029790AC60051C387 /* TransformLayer.swift in Sources */,
 				3619B0E929790AC50051C387 /* TokenKind.swift in Sources */,
@@ -2822,6 +2829,7 @@
 				3619B14529790AC60051C387 /* AnimationViewBase.swift in Sources */,
 				3619B17529790AC60051C387 /* CALayer+addAnimation.swift in Sources */,
 				3619B0E029790AC50051C387 /* ArtUIProtocol.swift in Sources */,
+				93BAFF1429D411AB00596999 /* BasicStackView.swift in Sources */,
 				9300BB5A29C8116D00C67A29 /* PassThroughView.swift in Sources */,
 				3619B12129790AC60051C387 /* TwitterUtility.swift in Sources */,
 				3619B10329790AC50051C387 /* OpenSeaCollection.swift in Sources */,
