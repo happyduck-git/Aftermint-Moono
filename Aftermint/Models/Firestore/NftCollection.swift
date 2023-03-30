@@ -8,7 +8,9 @@
 import Foundation
 
 struct NftCollection: Storable {
+    let collectionName: String
     let collectionId: String
     let collectionLogoImage: String
-    let count: Int64
+    let totalPopCount: Int64
+    let totalActionCount: Int64
 }

@@ -16,6 +16,7 @@ final class BottomSheetView: PassThroughView {
     
     let prefetcher = ImagePrefetcher()
     
+    var firstSectionVM: LeaderBoardTableViewCellListViewModel?
     var viewModel: LeaderBoardTableViewCellListViewModel?
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
@@ -228,6 +229,11 @@ final class BottomSheetView: PassThroughView {
 // MARK: - TableView Delegate & DataSource
 extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let vm = viewModel else { return 0 }
+        return vm.numberOfSections()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let numberOfSection = self.viewModel?.numberOfRowsInSection(at: section) else { return 0 }
         return numberOfSection
@@ -235,37 +241,45 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell else { fatalError("Unsupported Cell") }
-        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell else { return UITableViewCell()
+        }
         cell.resetCell()
         
-        guard let vm = self.viewModel?.modelAt(indexPath.row) else {
-            fatalError("ViewModel found to be nil")
-        }
-        
-        //TODO: Make below logic as a separate function -- (1)
-        ///Find currently used moononft's name from viewModels
-        if vm.nftName == MoonoMockMetaData().getOneMockData().tokenId {
-            DispatchQueue.main.async {
-                cell.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.5)
-                cell.contentView.alpha = 0.5
-                UIView.animate(withDuration: 0.6) {
-                    cell.contentView.alpha = 1.0
-                }
-            }
-        }
-     
-        //TODO: Make below logic as a separate function -- (2)
-        if indexPath.row <= 2 {
-            vm.setRankImage(with: cellRankImageAt(indexPath.row))
+        if indexPath.section == 0 {
+            
+            guard let vm = self.firstSectionVM?.modelAt(indexPath) else { return UITableViewCell() }
+            cell.configure(with: vm)
+            
         } else {
-            cell.switchRankImageToLabel()
-            vm.setRankNumberWithIndexPath(indexPath.row + 1)
+
+            guard let vm = self.viewModel?.modelAt(indexPath.row) else {
+                fatalError("ViewModel found to be nil")
+            }
+            
+            //TODO: Make below logic as a separate function -- (1)
+            ///Find currently used moononft's name from viewModels
+    //        if vm.nftName == MoonoMockMetaData().getOneMockData().tokenId {
+    //            DispatchQueue.main.async {
+    //                cell.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.5)
+    //                cell.contentView.alpha = 0.5
+    //                UIView.animate(withDuration: 0.6) {
+    //                    cell.contentView.alpha = 1.0
+    //                }
+    //            }
+    //        }
+         
+            //TODO: Make below logic as a separate function -- (2)
+            if indexPath.row <= 2 {
+                vm.setRankImage(with: cellRankImageAt(indexPath.row))
+            } else {
+                cell.switchRankImageToLabel()
+                vm.setRankNumberWithIndexPath(indexPath.row + 1)
+            }
+            
+            cell.configure(with: vm)
+            
         }
-        
-        cell.configure(with: vm)
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -351,11 +365,11 @@ extension BottomSheetView {
 extension BottomSheetView {
     private func fetchTouchCount(with viewModelList: [LeaderBoardTableViewCellViewModel]) -> [String: Int64] {
         var result: [String: Int64] = [:]
-        viewModelList.forEach { vm in
-            let key = vm.nftName
-            let value = vm.touchScore
-            result[key] = value
-        }
+//        viewModelList.forEach { vm in
+//            let key = vm.nftName
+//            let value = vm.touchScore
+//            result[key] = value
+//        }
         return result
     }
 }

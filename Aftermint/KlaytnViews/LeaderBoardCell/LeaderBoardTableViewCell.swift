@@ -26,7 +26,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let nftImageView: UIImageView = {
+    private let userProfileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
@@ -38,6 +38,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     
     private let nftInfoStackView: BasicStackView = {
         let stack = BasicStackView()
+        stack.bottomLabelFont = BellyGomFont.header06
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -74,14 +75,14 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = AftermintColor.backgroundNavy
-        nftImageView.layer.cornerRadius = nftImageView.frame.size.width / 2
+        userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
     }
     
     // MARK: - Private
     private func setUI() {
         contentView.addSubview(rankImageView)
         contentView.addSubview(rankLabel)
-        contentView.addSubview(nftImageView)
+        contentView.addSubview(userProfileImageView)
         contentView.addSubview(nftNameLabel) //Will be replaced
         contentView.addSubview(nftInfoStackView)
         contentView.addSubview(touchScoreLabel)
@@ -93,7 +94,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             self.rankImageView.topAnchor.constraint(equalToSystemSpacingBelow: contentView.topAnchor, multiplier: 1),
-            self.rankImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 4),
+            self.rankImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 2),
             self.rankImageView.widthAnchor.constraint(equalToConstant: height / 2),
             self.rankImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
@@ -101,18 +102,18 @@ final class LeaderBoardTableViewCell: UITableViewCell {
             self.rankLabel.leadingAnchor.constraint(equalTo: self.rankImageView.leadingAnchor),
             contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.rankLabel.bottomAnchor, multiplier: 1),
             
-            self.nftImageView.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
-            self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
-            self.nftImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankImageView.trailingAnchor, multiplier: 2),
+            self.userProfileImageView.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
+            self.userProfileImageView.widthAnchor.constraint(equalTo: self.userProfileImageView.heightAnchor),
+            self.userProfileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            self.userProfileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankImageView.trailingAnchor, multiplier: 2),
             
             self.nftInfoStackView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.nftInfoStackView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
-            self.nftInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 2),
+            self.nftInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userProfileImageView.trailingAnchor, multiplier: 2),
             
             self.touchScoreLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            self.touchScoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftNameLabel.trailingAnchor, multiplier: 2),
-            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.touchScoreLabel.trailingAnchor, multiplier: 4)
+            self.touchScoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftInfoStackView.trailingAnchor, multiplier: 2),
+            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.touchScoreLabel.trailingAnchor, multiplier: 2)
                                                        
         ])
     }
@@ -125,7 +126,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     
     internal func resetCell() {
         self.rankLabel.text = nil
-        self.nftImageView.image = nil
+        self.userProfileImageView.image = nil
         self.nftNameLabel.text = nil
         self.touchScoreLabel.text = nil
         self.contentView.backgroundColor = nil
@@ -135,21 +136,25 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     public func configure(with vm: LeaderBoardTableViewCellViewModel) {
         rankImageView.image = vm.rankImage
         rankLabel.text = String(describing: vm.rank)
-        nftNameLabel.text = vm.nftName //TODO: Change TokenId -> NFTName (e.g. Moono #199)
-        nftInfoStackView.topLabelText = "NFT Project"
+        nftInfoStackView.topLabelText = vm.topLabelText
+        nftInfoStackView.bottomLabelText = vm.topLabelText
         touchScoreLabel.text = String(describing: vm.touchScore)
+        userProfileImageView.image = UIImage(named: vm.userProfileImage)
        
+        //Temporarily inactivated
+        /*
         self.imageStringToImage(with: vm.userProfileImage) { result in
             switch result {
             case .success(let image):
-                self.nftImageView.image = image
+                self.userProfileImageView.image = image
                 return
             case .failure(let error):
                 print("Error configure NftRankCell --- \(error.localizedDescription) --- with result \(result)")
-                self.nftImageView.image = nil
+                self.userProfileImageView.image = nil
                 return
             }
         }
+         */
     }
     
     public func switchRankImageToLabel() {

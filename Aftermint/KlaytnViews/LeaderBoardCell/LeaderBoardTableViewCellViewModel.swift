@@ -9,18 +9,41 @@ import UIKit.UIImage
 
 final class LeaderBoardTableViewCellListViewModel {
     
+    var firstSectionVMList: Box<[LeaderBoardTableViewCellViewModel]>  = Box([])
     var viewModelList: Box<[LeaderBoardTableViewCellViewModel]>  = Box([])
     var touchCount: Box<Int> = Box(0)
+    private let numberOfSection: Int = 2
     
     let fireStoreRepository = FirestoreRepository.shared
     
+    func numberOfSections() -> Int {
+        return self.numberOfSection
+    }
+    
     func numberOfRowsInSection(at section: Int) -> Int {
+        if section == 0 {
+            return self.firstSectionVMList.value?.count ?? 0
+        }
         return self.viewModelList.value?.count ?? 0
     }
     
     func modelAt(_ index: Int) -> LeaderBoardTableViewCellViewModel? {
         guard let viewModel: LeaderBoardTableViewCellViewModel = self.viewModelList.value?[index] else { return nil }
         return viewModel
+    }
+    
+    func modelAt(_ indexPath: IndexPath) -> LeaderBoardTableViewCellViewModel? {
+        var viewModel: LeaderBoardTableViewCellViewModel?
+        if indexPath.section == 0 {
+            viewModel = self.firstSectionVMList.value?[indexPath.row]
+        } else {
+            viewModel = self.viewModelList.value?[indexPath.row]
+        }
+        return viewModel
+    }
+    
+    func getNftProjectScoreViewModels(completion: @escaping (Result<[LeaderBoardTableViewCellViewModel], Error>) -> ()) {
+        
     }
     
     //TODO: Need to add error handler
@@ -42,38 +65,38 @@ final class LeaderBoardTableViewCellListViewModel {
         completion(.success(viewModels))
         return
     }
-}
-
-///TEMP: Using mock data
-let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
-
-/// Save increase touch count of a certain card to Firestore
-func increaseTouchCount(_ number: Int64) {
-    saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
-                          collectionId: randomMoonoData.collectionId,
-                          tokenId: randomMoonoData.tokenId,
-                          count: number)
-}
-
-func saveCountNumberOfCard(imageUri: String,
-                           collectionId: String,
-                           tokenId: String,
-                           count: Int64)
-{
     
-    let card: Card = Card(imageUri: imageUri,
-                          collectionId: collectionId,
-                          tokenId: tokenId,
-                          count: count)
-    let collection: NftCollection = NftCollection(collectionId: K.ContractAddress.moono,
-                                                  collectionLogoImage: "N/A",
-                                                  count: count)
-    fireStoreRepository.saveCard(card)
-    fireStoreRepository.saveCollection(collection)
     
+    ///TEMP: Using mock data
+    let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
+    
+    /// Save increase touch count of a certain card to Firestore
+    func increaseTouchCount(_ number: Int64) {
+        saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
+                              collectionId: randomMoonoData.collectionId,
+                              tokenId: randomMoonoData.tokenId,
+                              count: number)
+    }
+    
+    func saveCountNumberOfCard(imageUri: String,
+                               collectionId: String,
+                               tokenId: String,
+                               count: Int64)
+    {
+        
+        let card: Card = Card(imageUri: imageUri,
+                              collectionId: collectionId,
+                              tokenId: tokenId,
+                              count: count)
+        let collection: NftCollection = NftCollection(collectionId: K.ContractAddress.moono,
+                                                      collectionLogoImage: "N/A",
+                                                      count: count)
+        fireStoreRepository.saveCard(card)
+        fireStoreRepository.saveCollection(collection)
+        
+    }
 }
 
-}
 // MARK: - Custom Error type
 extension LeaderBoardTableViewCellListViewModel {
     
@@ -117,6 +140,6 @@ final class LeaderBoardTableViewCellViewModel {
         self.rank = indexPathRow
     }
     
+    
 }
-
 
