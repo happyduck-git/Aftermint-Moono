@@ -118,13 +118,31 @@ final class BottomSheetView: PassThroughView {
         setLayout()
         setDelegate()
         
-        self.viewModel?.getAllNftRankCellViewModels { result in
+//        self.viewModel?.getAllNftRankCellViewModels { result in
+//            switch result {
+//            case .success(let viewModels):
+//                self.viewModel?.viewModelList.value = viewModels
+//                self.tempTouchCountList = self.fetchTouchCount(with: viewModels)
+//                self.bottomSheetDelegate?.dataFetched()
+//
+//                DispatchQueue.main.async {
+//                    UIView.animate(withDuration: 0.6) {
+//                        self.leaderBoardTableView.reloadData()
+//                        self.leaderBoardTableView.alpha = 1.0
+//                    }
+//
+//                }
+//
+//            case .failure(let failure):
+//                print("Error getting viewmodels : \(failure)")
+//            }
+//        }
+        
+        self.viewModel?.getNftProjectScoreViewModels { result in
             switch result {
             case .success(let viewModels):
                 self.viewModel?.viewModelList.value = viewModels
-                self.tempTouchCountList = self.fetchTouchCount(with: viewModels)
                 self.bottomSheetDelegate?.dataFetched()
-                
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.6) {
                         self.leaderBoardTableView.reloadData()
@@ -132,7 +150,6 @@ final class BottomSheetView: PassThroughView {
                     }
                     
                 }
-                
             case .failure(let failure):
                 print("Error getting viewmodels : \(failure)")
             }

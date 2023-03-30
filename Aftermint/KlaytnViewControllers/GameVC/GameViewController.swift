@@ -150,7 +150,7 @@ final class GameViewController: UIViewController {
         setLayout()
         setGameScene()
 
-        configureProfileInfo()
+//        configureProfileInfo()
         self.bottomSheetView.bottomSheetDelegate = self
 
     }
@@ -160,16 +160,16 @@ final class GameViewController: UIViewController {
         self.navigationBarSetup()
     }
     
-    var timer: Timer = Timer()
+//    var timer: Timer = Timer()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         ///Set Timer scheduler to repeat certain action
-        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
-            print("Accumulated touchCount: \(self.touchCount)")
-            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
-        }
+//        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+//            print("Accumulated touchCount: \(self.touchCount)")
+//            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
+//        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -179,7 +179,7 @@ final class GameViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         ///Disable the timer when the view disappeared
-        timer.invalidate()
+//        timer.invalidate()
     }
     private func navigationBarSetup() {
         
@@ -257,16 +257,16 @@ extension GameViewController {
         gameSKView.presentScene(scene)
     }
     
-    private func configureProfileInfo() {
-        let card = leaderBoardListViewModel.randomMoonoData
-        let url = URL(string: card.imageUri)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            self.userImageView.image = image
-        }
-        
-        let nftName = card.tokenId.replacingOccurrences(of: "___", with: " #")
-        self.walletAddressLabel.text = "\(nftName) "
-    }
+//    private func configureProfileInfo() {
+//        let card = leaderBoardListViewModel.randomMoonoData
+//        let url = URL(string: card.imageUrl)
+//        NukeImageLoader.loadImageUsingNuke(url: url) { image in
+//            self.userImageView.image = image
+//        }
+//
+//        let nftName = card.tokenId.replacingOccurrences(of: "___", with: " #")
+//        self.walletAddressLabel.text = "\(nftName) "
+//    }
 }
 
 extension GameViewController: MoonoGameSceneDelegate {
@@ -275,6 +275,20 @@ extension GameViewController: MoonoGameSceneDelegate {
         print("Touch received: \(number)")
         self.touchCountToShow += number
         self.touchCount += number
+        
+        let ownerAddress: String = KasWalletRepository.shared.getCurrentWallet()
+        let mockUserData: AftermintUser = MoonoMockUserData().getOneUserData()
+        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
+        
+        self.leaderBoardListViewModel.saveCountNumber(collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
+                                                      collectionImageUrl: "fake url",
+                                                      popScore: touchCount * 10,
+                                                      actionCount: touchCount,
+                                                      ownerAddress: ownerAddress,
+                                                      nftImageUrl: mockCardData.imageUrl,
+                                                      nftTokenId: mockCardData.tokenId,
+                                                      totalNfts: mockUserData.totalOwned,
+                                                      ofCollectionType: .moono)
     }
 
 }

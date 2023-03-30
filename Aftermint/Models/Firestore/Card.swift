@@ -8,9 +8,11 @@
 import Foundation
 
 struct Card: Storable, Codable {
-    let imageUri: String
-    let collectionId: String
+    let ownerAddress: String
+    let imageUrl: String
+    let collectionAddress: String
     let tokenId: String
-    let count: Int64
+    let actionCount: Int64
+    let popScore: Int64
 }
 

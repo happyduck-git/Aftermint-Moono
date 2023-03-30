@@ -20,11 +20,18 @@ struct K {
     
     /// Firebase firestore related constants
     struct FStore {
+        /// Collection names
         static let nftCardCollectionName: String = "NFT"
-        static let nftCollectionCollectionName: String = "Collection"
+        static let nftAddressCollectionName: String = "Address"
+        static let secondDepthCollectionName: String = "to"
+        /// Document names
         static let nftCollectionDocumentName: String = "Moono"
+        /// Field keys
         static let collectionIdFieldKey: String = "collectionId"
-        static let imageUriFieldKey: String = "imageUrl"
+        static let actionCountFieldKey: String = "actionCount"
+        static let imageUrlFieldKey: String = "imageUrl"
+        static let popScoreFieldKey: String = "popScore"
+        static let ownerAddressFieldKey: String = "ownerAddress"
         static let collectionLogoImageFieldKey: String = "collectionLogoImage"
         static let tokenIdFieldKey: String = "tokenId"
         static let countFieldKey: String = "touchCount"

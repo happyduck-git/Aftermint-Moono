@@ -387,6 +387,8 @@
 		9300BB7629C840FD00C67A29 /* MoonoMockMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */; };
 		93199EF12989EDE1008D532B /* KASConnectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93199EF02989EDE1008D532B /* KASConnectService.swift */; };
 		93199EF4298A06A4008D532B /* KasWalletRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93199EF3298A06A4008D532B /* KasWalletRepository.swift */; };
+		93266CA629D5510200D351DC /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93266CA529D5510200D351DC /* Address.swift */; };
+		93266CA829D5525400D351DC /* CollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93266CA729D5525400D351DC /* CollectionType.swift */; };
 		932977862987990700C76AB5 /* LoginViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932977852987990700C76AB5 /* LoginViewReactor.swift */; };
 		935E6A742980BC1900D94DA6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935E6A732980BC1900D94DA6 /* LoginViewController.swift */; };
 		935E6A762980CE0800D94DA6 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935E6A752980CE0800D94DA6 /* StartViewController.swift */; };
@@ -792,6 +794,8 @@
 		9300BB7529C840FD00C67A29 /* MoonoMockMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoMockMetaData.swift; sourceTree = "<group>"; };
 		93199EF02989EDE1008D532B /* KASConnectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KASConnectService.swift; sourceTree = "<group>"; };
 		93199EF3298A06A4008D532B /* KasWalletRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KasWalletRepository.swift; sourceTree = "<group>"; };
+		93266CA529D5510200D351DC /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+		93266CA729D5525400D351DC /* CollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionType.swift; sourceTree = "<group>"; };
 		932977852987990700C76AB5 /* LoginViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewReactor.swift; sourceTree = "<group>"; };
 		935E6A732980BC1900D94DA6 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		935E6A752980CE0800D94DA6 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -2186,6 +2190,8 @@
 			children = (
 				9300BB6229C8222300C67A29 /* Card.swift */,
 				9300BB6829C8280100C67A29 /* NftCollection.swift */,
+				93266CA529D5510200D351DC /* Address.swift */,
+				93266CA729D5525400D351DC /* CollectionType.swift */,
 			);
 			path = Firestore;
 			sourceTree = "<group>";
@@ -2630,6 +2636,7 @@
 				3619B1C529790AC60051C387 /* KeyedDecodingContainerExtensions.swift in Sources */,
 				2481E1D0297A878900187BB9 /* WelcomeUpperView.swift in Sources */,
 				3619B0FB29790AC50051C387 /* TweetEntity.swift in Sources */,
+				93266CA829D5525400D351DC /* CollectionType.swift in Sources */,
 				3619B19329790AC60051C387 /* EllipseNode.swift in Sources */,
 				3619B1CF29790AC60051C387 /* AssetLibrary.swift in Sources */,
 				3619B1B429790AC60051C387 /* Repeater.swift in Sources */,
@@ -2869,6 +2876,7 @@
 				3619B1D229790AC60051C387 /* SnapshotTestSupport.swift in Sources */,
 				3619B0F929790AC50051C387 /* MediaUploadVideoType.swift in Sources */,
 				9300BB6029C8214000C67A29 /* FirestoreRepository.swift in Sources */,
+				93266CA629D5510200D351DC /* Address.swift in Sources */,
 				3619B0F329790AC50051C387 /* MediaUploadFinalizeResponse.swift in Sources */,
 				3619AF13297908F90051C387 /* AppDelegate.swift in Sources */,
 				3619B17329790AC60051C387 /* StarAnimation.swift in Sources */,

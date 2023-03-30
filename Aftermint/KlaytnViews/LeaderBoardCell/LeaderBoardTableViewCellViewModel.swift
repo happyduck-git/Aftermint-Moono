@@ -43,7 +43,23 @@ final class LeaderBoardTableViewCellListViewModel {
     }
     
     func getNftProjectScoreViewModels(completion: @escaping (Result<[LeaderBoardTableViewCellViewModel], Error>) -> ()) {
-        
+        self.fireStoreRepository.getAllAddress(ofNftCollectionType: .moono) { addressList in
+            guard let addressList = addressList else { return }
+            guard let rankImage = UIImage(named: LeaderBoard.firstPlace.rawValue) else { return }
+            
+            let initialRank = 1
+            
+            let viewModels = addressList.map { address in
+                let viewModel = LeaderBoardTableViewCellViewModel(rankImage: rankImage,
+                                                                  rank: initialRank,
+                                                                  userProfileImage: "rebecca",
+                                                                  topLabelText: address.ownerAddress,
+                                                                  bottomLabelText: "Nfts 17",
+                                                                  touchScore: address.popScore)
+                return viewModel
+            }
+            completion(.success(viewModels))
+        }
     }
     
     //TODO: Need to add error handler
@@ -68,33 +84,72 @@ final class LeaderBoardTableViewCellListViewModel {
     
     
     ///TEMP: Using mock data
-    let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
+//    let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
     
     /// Save increase touch count of a certain card to Firestore
-    func increaseTouchCount(_ number: Int64) {
-        saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
-                              collectionId: randomMoonoData.collectionId,
-                              tokenId: randomMoonoData.tokenId,
-                              count: number)
+    
+    
+//    func increaseTouchCount(_ number: Int64) {
+//        saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
+//                              collectionId: randomMoonoData.collectionId,
+//                              tokenId: randomMoonoData.tokenId,
+//                              count: number)
+//    }
+    
+    func saveCountNumber(collectionAddress: String,
+                         collectionImageUrl: String,
+                         popScore: Int64,
+                         actionCount: Int64,
+                         ownerAddress: String,
+                         nftImageUrl: String,
+                         nftTokenId: String,
+                         totalNfts: Int,
+                         ofCollectionType collectionType: CollectionType) {
+        
+        let nftCollection = NftCollection(name: collectionType.rawValue,
+                                          address: collectionAddress,
+                                          imageUrl: collectionImageUrl,
+                                          totalPopCount: popScore,
+                                          totalActionCount: actionCount,
+                                          card: [],
+                                          totalNfts: totalNfts)
+        
+        let card = Card(ownerAddress: ownerAddress,
+                        imageUrl: nftImageUrl,
+                        collectionAddress: collectionAddress,
+                        tokenId: nftTokenId,
+                        actionCount: actionCount,
+                        popScore: popScore)
+        
+        let address = Address(ownerAddress: ownerAddress,
+                              actionCount: actionCount,
+                              popScore: popScore,
+                              collections: [])
+        
+        
+        fireStoreRepository.save(collection: nftCollection,
+                                 card: card,
+                                 address: address,
+                                 ofType: collectionType)
     }
     
-    func saveCountNumberOfCard(imageUri: String,
-                               collectionId: String,
-                               tokenId: String,
-                               count: Int64)
-    {
-        
-        let card: Card = Card(imageUri: imageUri,
-                              collectionId: collectionId,
-                              tokenId: tokenId,
-                              count: count)
-        let collection: NftCollection = NftCollection(collectionId: K.ContractAddress.moono,
-                                                      collectionLogoImage: "N/A",
-                                                      count: count)
-        fireStoreRepository.saveCard(card)
-        fireStoreRepository.saveCollection(collection)
-        
-    }
+//    func saveCountNumberOfCard(imageUri: String,
+//                               collectionId: String,
+//                               tokenId: String,
+//                               count: Int64)
+//    {
+//        
+//        let card: Card = Card(imageUri: imageUri,
+//                              collectionId: collectionId,
+//                              tokenId: tokenId,
+//                              count: count)
+//        let collection: NftCollection = NftCollection(collectionId: K.ContractAddress.moono,
+//                                                      collectionLogoImage: "N/A",
+//                                                      count: count)
+//        fireStoreRepository.saveCard(card)
+//        fireStoreRepository.saveCollection(collection)
+//        
+//    }
 }
 
 // MARK: - Custom Error type
