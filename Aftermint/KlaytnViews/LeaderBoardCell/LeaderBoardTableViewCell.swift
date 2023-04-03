@@ -52,7 +52,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let touchScoreLabel: UILabel = {
+    private let popScoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.font = BellyGomFont.header03
@@ -85,7 +85,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         contentView.addSubview(userProfileImageView)
         contentView.addSubview(nftNameLabel) //Will be replaced
         contentView.addSubview(nftInfoStackView)
-        contentView.addSubview(touchScoreLabel)
+        contentView.addSubview(popScoreLabel)
     }
     
     private func setLayout() {
@@ -111,11 +111,13 @@ final class LeaderBoardTableViewCell: UITableViewCell {
             self.nftInfoStackView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
             self.nftInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userProfileImageView.trailingAnchor, multiplier: 2),
             
-            self.touchScoreLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            self.touchScoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftInfoStackView.trailingAnchor, multiplier: 2),
-            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.touchScoreLabel.trailingAnchor, multiplier: 2)
+            self.popScoreLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            self.popScoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftInfoStackView.trailingAnchor, multiplier: 1),
+            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreLabel.trailingAnchor, multiplier: 1)
                                                        
         ])
+        
+        self.popScoreLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
     
     override func prepareForReuse() {
@@ -128,7 +130,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         self.rankLabel.text = nil
         self.userProfileImageView.image = nil
         self.nftNameLabel.text = nil
-        self.touchScoreLabel.text = nil
+        self.popScoreLabel.text = nil
         self.contentView.backgroundColor = nil
     }
     
@@ -136,9 +138,9 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     public func configure(with vm: LeaderBoardTableViewCellViewModel) {
         rankImageView.image = vm.rankImage
         rankLabel.text = String(describing: vm.rank)
-        nftInfoStackView.topLabelText = vm.topLabelText
-        nftInfoStackView.bottomLabelText = vm.topLabelText
-        touchScoreLabel.text = String(describing: vm.touchScore)
+        nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 10)
+        nftInfoStackView.bottomLabelText = vm.bottomLabelText
+        popScoreLabel.text = String(describing: vm.popScore)
         userProfileImageView.image = UIImage(named: vm.userProfileImage)
        
         //Temporarily inactivated
@@ -155,6 +157,11 @@ final class LeaderBoardTableViewCell: UITableViewCell {
             }
         }
          */
+    }
+    
+    public func setAsCollectionInfoCell() {
+        self.rankImageView.isHidden = true
+        self.rankLabel.isHidden = true
     }
     
     public func switchRankImageToLabel() {

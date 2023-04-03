@@ -7,7 +7,16 @@
 
 import UIKit
 
-class SettingViewController: UIViewController {
+final class SettingViewController: UIViewController {
+    
+    private let gameLogoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "gamecontroller")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

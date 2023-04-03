@@ -13,5 +13,5 @@ struct AftermintUser {
     let userProfileImageUrl: String
     let totalOwned: Int
     let popScore: Int64 //
-    let actionCount: Int64 //
+//    let actionCount: Int64 //
 }

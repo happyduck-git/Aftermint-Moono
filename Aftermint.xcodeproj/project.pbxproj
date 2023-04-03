@@ -16,6 +16,8 @@
 		24097B7E29913EFD00F92366 /* BenefitTabBottomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */; };
 		24097B80299154E200F92366 /* UtilityClaimBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B7F299154E200F92366 /* UtilityClaimBottomSheet.swift */; };
 		24097BC12998C44700F92366 /* BookmarkViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097BC02998C44700F92366 /* BookmarkViewReactor.swift */; };
+		2419EE1129D6814A00457954 /* DemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2419EE1029D6814A00457954 /* DemoModel.swift */; };
+		245A4DA829DA9B48004B28A2 /* SettingViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */; };
 		245AC14D29A91AFE00CE7857 /* NFTCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */; };
 		245AC15029A9348E00CE7857 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14F29A9348E00CE7857 /* Box.swift */; };
 		245AC15229A934DC00CE7857 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC15129A934DC00CE7857 /* Constants.swift */; };
@@ -440,6 +442,8 @@
 		24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitTabBottomViewController.swift; sourceTree = "<group>"; };
 		24097B7F299154E200F92366 /* UtilityClaimBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityClaimBottomSheet.swift; sourceTree = "<group>"; };
 		24097BC02998C44700F92366 /* BookmarkViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewReactor.swift; sourceTree = "<group>"; };
+		2419EE1029D6814A00457954 /* DemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoModel.swift; sourceTree = "<group>"; };
+		245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewControllerViewModel.swift; sourceTree = "<group>"; };
 		245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCardViewModel.swift; sourceTree = "<group>"; };
 		245AC14F29A9348E00CE7857 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		245AC15129A934DC00CE7857 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -897,6 +901,15 @@
 				93A4B7F52990809600146FD8 /* MarketDetailViewController.swift */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		245A4DA629DA9B30004B28A2 /* SettingVC */ = {
+			isa = PBXGroup;
+			children = (
+				939DE057297A24A400EFA71E /* SettingViewController.swift */,
+				245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */,
+			);
+			path = SettingVC;
 			sourceTree = "<group>";
 		};
 		2481E1CC297A870000187BB9 /* KlaytnViews */ = {
@@ -2280,6 +2293,7 @@
 		939DE04E297A223100EFA71E /* KlaytnViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				245A4DA629DA9B30004B28A2 /* SettingVC */,
 				93C32FBC29B9A68700DB3CB3 /* GameVC */,
 				93C32FBB29B9A52500DB3CB3 /* TabBarVC */,
 				93C32FBA29B9A4B400DB3CB3 /* HomeVC */,
@@ -2292,7 +2306,6 @@
 				24F9FFB62986612500E534A1 /* LottieTemplateVC */,
 				939DE053297A242500EFA71E /* BenefitViewController.swift */,
 				24097B7D29913EFD00F92366 /* BenefitTabBottomViewController.swift */,
-				939DE057297A24A400EFA71E /* SettingViewController.swift */,
 				360D739F2987CA2A00D109C3 /* DevHankViewController.swift */,
 				93A4B7F72990C0C600146FD8 /* BottomSheetViewController.swift */,
 				93A4B7F92990C50700146FD8 /* BasicTabBarController.swift */,
@@ -2313,6 +2326,7 @@
 				3620690529B88699008764BE /* MoonoNftMetadata.swift */,
 				3620690729B88789008764BE /* MoonoNft.swift */,
 				93BAFF1129D4051100596999 /* AftermintUser.swift */,
+				2419EE1029D6814A00457954 /* DemoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2561,6 +2575,7 @@
 				3619B19529790AC60051C387 /* RectNode.swift in Sources */,
 				3619B1DA29790AC60051C387 /* BezierPath.swift in Sources */,
 				3619B14B29790AC60051C387 /* Interpolatable.swift in Sources */,
+				245A4DA829DA9B48004B28A2 /* SettingViewControllerViewModel.swift in Sources */,
 				3619B14F29790AC60051C387 /* AnimationTextProvider.swift in Sources */,
 				3619B1A629790AC60051C387 /* ItemsExtension.swift in Sources */,
 				93A4B7FF2990CEFC00146FD8 /* UtilityCell.swift in Sources */,
@@ -2699,6 +2714,7 @@
 				3619B16A29790AC60051C387 /* Keyframes+combinedIfPossible.swift in Sources */,
 				3619B10229790AC50051C387 /* MarketPlaceKind.swift in Sources */,
 				24F9FFB329841DEC00E534A1 /* GradientLabel.swift in Sources */,
+				2419EE1129D6814A00457954 /* DemoModel.swift in Sources */,
 				3619B0C729790AC50051C387 /* NFTRepository.swift in Sources */,
 				3619B18029790AC60051C387 /* ShapeCompositionLayer.swift in Sources */,
 				93A4B8032990D1E400146FD8 /* BenefitMenuBar.swift in Sources */,

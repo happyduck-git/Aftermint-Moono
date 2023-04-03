@@ -16,7 +16,7 @@ final class BottomSheetView: PassThroughView {
     
     let prefetcher = ImagePrefetcher()
     
-    var firstSectionVM: LeaderBoardTableViewCellListViewModel?
+//    var firstSectionVM: LeaderBoardTableViewCellListViewModel?
     var viewModel: LeaderBoardTableViewCellListViewModel?
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
@@ -118,42 +118,10 @@ final class BottomSheetView: PassThroughView {
         setLayout()
         setDelegate()
         
-//        self.viewModel?.getAllNftRankCellViewModels { result in
-//            switch result {
-//            case .success(let viewModels):
-//                self.viewModel?.viewModelList.value = viewModels
-//                self.tempTouchCountList = self.fetchTouchCount(with: viewModels)
-//                self.bottomSheetDelegate?.dataFetched()
-//
-//                DispatchQueue.main.async {
-//                    UIView.animate(withDuration: 0.6) {
-//                        self.leaderBoardTableView.reloadData()
-//                        self.leaderBoardTableView.alpha = 1.0
-//                    }
-//
-//                }
-//
-//            case .failure(let failure):
-//                print("Error getting viewmodels : \(failure)")
-//            }
-//        }
+        getFirstSectionViewModel()
+        getSecondSectionViewModel()
         
-        self.viewModel?.getNftProjectScoreViewModels { result in
-            switch result {
-            case .success(let viewModels):
-                self.viewModel?.viewModelList.value = viewModels
-                self.bottomSheetDelegate?.dataFetched()
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6) {
-                        self.leaderBoardTableView.reloadData()
-                        self.leaderBoardTableView.alpha = 1.0
-                    }
-                    
-                }
-            case .failure(let failure):
-                print("Error getting viewmodels : \(failure)")
-            }
-        }
+        
     }
     
     override func layoutSubviews() {
@@ -246,6 +214,49 @@ final class BottomSheetView: PassThroughView {
 // MARK: - TableView Delegate & DataSource
 extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     
+    private func getFirstSectionViewModel() {
+        self.viewModel?.getFirstSectionViewModel(completion: { result in
+            switch result {
+            case .success(let viewModel):
+                if self.viewModel?.firstSectionVMList.value?.count == 0 {
+                    self.viewModel?.firstSectionVMList.value?.append(viewModel)
+                } else {
+                    self.viewModel?.firstSectionVMList.value?[0] = viewModel
+                }
+                
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.6) {
+                        self.leaderBoardTableView.reloadData()
+                        self.leaderBoardTableView.alpha = 1.0
+                    }
+                }
+            case .failure(let failure):
+                print("Error getting first section view model: \(failure)")
+            }
+        })
+    }
+    
+    private func getSecondSectionViewModel() {
+        self.viewModel?.getAddressSectionViewModel(completion: { result in
+            switch result {
+            case .success(let viewModels):
+                self.viewModel?.secondSectionVMList.value = viewModels
+//                self.bottomSheetDelegate?.dataFetched()
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.6) {
+                        self.leaderBoardTableView.reloadData()
+                        self.bottomSheetDelegate?.dataFetched()
+                        self.leaderBoardTableView.alpha = 1.0
+                    }
+                }
+
+            case .failure(let failure):
+                print("Error getting viewmodels : \(failure)")
+            }
+        })
+
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let vm = viewModel else { return 0 }
         return vm.numberOfSections()
@@ -264,12 +275,16 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section == 0 {
             
-            guard let vm = self.firstSectionVM?.modelAt(indexPath) else { return UITableViewCell() }
+            guard let vm = self.viewModel?.modelAt(indexPath) else { return UITableViewCell() }
+            DispatchQueue.main.async {
+                cell.backgroundColor = .systemOrange.withAlphaComponent(0.3)
+            }
+            cell.setAsCollectionInfoCell()
             cell.configure(with: vm)
             
         } else {
 
-            guard let vm = self.viewModel?.modelAt(indexPath.row) else {
+            guard let vm = self.viewModel?.modelAt(indexPath) else {
                 fatalError("ViewModel found to be nil")
             }
             
@@ -300,7 +315,11 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        if indexPath.section == 0 {
+            return 70
+        } else {
+            return 50
+        }
     }
     
     /// Determine cell image
@@ -330,7 +349,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
     /// PretchImageAt
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.viewModel?.modelAt($0.row)?.userProfileImage
+            self.viewModel?.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)
@@ -340,7 +359,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.viewModel?.modelAt($0.row)?.userProfileImage
+            self.viewModel?.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)

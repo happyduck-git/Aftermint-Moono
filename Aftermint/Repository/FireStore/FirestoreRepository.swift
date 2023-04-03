@@ -17,6 +17,53 @@ class FirestoreRepository {
     
     let db = Firestore.firestore()
     
+    ///Model 대신 property를 arguments로 받는 function으로 대체
+    func save(actionCount: Int64,
+              popScore: Int64,
+              collectionImageUrl: String,
+              nftImageUrl: String,
+              nftTokenId: String,
+              ownerAddress: String,
+              ownerProfileImage: String,
+              collectionType: CollectionType
+    ) {
+        ///Save NFT collection
+        ///1st collection
+        let docRefForNftCollection = db.collection(K.FStore.nftCardCollectionName).document(collectionType.rawValue)
+        docRefForNftCollection.setData([
+            K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+            K.FStore.imageUrlFieldKey: collectionImageUrl,
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
+        ], merge: true)
+        
+        ///2nd depth collection
+        let docRefForToCollection = docRefForNftCollection.collection(K.FStore.secondDepthCollectionName).document(nftTokenId)
+        docRefForToCollection.setData([
+            K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+            K.FStore.imageUrlFieldKey: nftImageUrl,
+            K.FStore.ownerAddressFieldKey: ownerAddress,
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
+        ], merge: true)
+        
+        ///Save Address collection
+        ///1st collection
+        let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName).document(ownerAddress)
+        docRefForAddress.setData([
+            K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
+            K.FStore.profileImageUrlFieldKey: ownerProfileImage
+        ], merge: true)
+        
+        ///2nd depth collection
+        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document() //Autogenerate docID로 merge=true 가능?
+        docRefForCollection.setData([
+            K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+            K.FStore.imageUrlFieldKey: nftImageUrl,
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
+            K.FStore.tokenIdFieldKey: nftTokenId
+        ], merge: true)
+    }
+    
     func save(collection: NftCollection,
               card: Card,
               address: Address,
@@ -59,56 +106,44 @@ class FirestoreRepository {
         
     }
     
-//    func saveAddress(_ address: Address, collection: NftCollection, ofType collectionType: CollectionType) {
-//
-//        ///1st collection
-//        let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName).document(address.walletAddress)
-//        docRefForAddress.setData([
-//            K.FStore.actionCountFieldKey: FieldValue.increment(address.actionCount),
-//            K.FStore.popScoreFieldKey: FieldValue.increment(address.popScore)
-//        ], merge: true)
-//
-//        ///2nd depth collection
-//        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document()
-//        docRefForCollection.setData([
-//            K.FStore.actionCountFieldKey: FieldValue.increment(collection.totalActionCount),
-//            K.FStore.imageUrlFieldKey: collection.imageUrl,
-//            "score": FieldValue.increment(collection.totalPopCount),
-//            K.FStore.tokenIdFieldKey: collection.card.
-//        ], merge: true)
-//    }
-    
-    func getAllAddress(ofNftCollectionType collectionType: CollectionType, completion: @escaping (([Address]?) -> ())) {
-        
-//        let docRefForCollection = db.collection(K.FStore.nftCardCollectionName)
-//        var nftCollection: [NftCollection] = []
-//        docRefForCollection
-//            .addSnapshotListener { snapshot, error in
-//                guard let snapshot = snapshot, error == nil else {
-//                    print("Error fetching cards list: \(String(describing: error))")
-//                    completion(nil)
-//                    return
-//                }
-//                let documents = snapshot.documents
-//                if !documents.isEmpty {
-//                    nftCollection = documents
-//                        .map { doc in
-//                            let data = doc.data()
-//                            let documentId = doc.documentID
-//                            return NftCollection(name: documentId,
-//                                                 address: collectionType.rawValue,
-//                                                 imageUrl: data[K.FStore.actionCountFieldKey] as? String ?? "N/A",
-//                                                 totalPopCount: data[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
-//                                                 totalActionCount: data[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-//                                                 card: data[K.FStore.secondDepthCollectionName] as? [Card] ?? [],
-//                                                 totalNfts: 0)
-//                        }
-//                }
-//            }
-        
+    func getAllAddress2(completion: @escaping (([AddressTest]?) -> ())) {
         let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName)
-        
         docRefForAddress
+            .addSnapshotListener { snapshot, error in
+                guard let snapshot = snapshot, error == nil else {
+                    print("Error fetching cards list: \(String(describing: error))")
+                    completion(nil)
+                    return
+                }
+                let documents = snapshot.documents
+                if !documents.isEmpty {
+                    let result: [AddressTest] = documents.map { doc in
+                        let ownerAddress = doc.documentID
+                        
+                        return AddressTest(
+                            ownerAddress: ownerAddress,
+                            actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
+                            popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
+                            profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? "david",
+                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David"
+                        )
+                    }
+                    completion(result)
+                    return
+                } else {
+                    completion(nil)
+                    return
+                }
+            }
+    }
+    
+    
+    
+    
+    //Get all the collection data from Nft Collection in Firestore
+    func getNftCollection(completion: @escaping ((NftCollectionTest?) -> ())) {
+        let docRefForNftCollection = db.collection(K.FStore.nftCardCollectionName)
+        docRefForNftCollection
             .addSnapshotListener { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
@@ -118,17 +153,25 @@ class FirestoreRepository {
                 
                 let documents = snapshot.documents
                 if !documents.isEmpty {
-                    let address: [Address] = documents
-                        .map{ doc in
-                            let data = doc.data()
-                            let documentId = doc.documentID
-                            return Address(ownerAddress: documentId,
-                                           actionCount: data[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-                                           popScore: data[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
-                                           collections: [])
-                        }
-                    completion(address)
-                    return
+                    let moonoDocuments = documents.filter { doc in
+                        return doc.documentID == "Moono"
+                    }
+                    if !moonoDocuments.isEmpty {
+                        let moonoDocument = moonoDocuments[0]
+                        let collection = NftCollectionTest(name: moonoDocument.documentID,
+                                                           address: K.ContractAddress.moono,
+                                                           imageUrl: moonoDocument[K.FStore.imageUrlFieldKey] as? String ?? "N/A",
+                                                           totalPopCount: moonoDocument[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
+                                                           totalActionCount: moonoDocument[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
+                                                           totalNfts: 1000, //NOTE: Need to add to firestore later on?
+                                                           totalHolders: 200) //NOTE: Need to add to firestore later on?
+                        completion(collection)
+                        return
+                    } else {
+                        completion(nil)
+                        return
+                    }
+                    
                 } else {
                     completion(nil)
                     return

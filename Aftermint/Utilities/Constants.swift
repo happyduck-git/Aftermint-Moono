@@ -35,6 +35,8 @@ struct K {
         static let collectionLogoImageFieldKey: String = "collectionLogoImage"
         static let tokenIdFieldKey: String = "tokenId"
         static let countFieldKey: String = "touchCount"
+        static let usernameFieldKey: String = "username"
+        static let profileImageUrlFieldKey: String = "profileImageUrl"
         ///Currently not in use
         static let totalDocumentName: String = "Total Count"
     }

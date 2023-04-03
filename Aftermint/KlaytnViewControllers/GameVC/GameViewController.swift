@@ -95,7 +95,6 @@ final class GameViewController: UIViewController {
         let stack = BasicStackView()
         stack.topLabelText = "Action Count"
         stack.topLabelFont = BellyGomFont.header05
-        stack.bottomLabelText = "5,000+"
         stack.bottomLabelFont = BellyGomFont.header05
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -152,7 +151,8 @@ final class GameViewController: UIViewController {
 
 //        configureProfileInfo()
         self.bottomSheetView.bottomSheetDelegate = self
-
+        //Correct loction to call this?
+//        getCurrentUserViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -241,6 +241,20 @@ final class GameViewController: UIViewController {
         ])
     }
     
+    /// Get viewModel for current user information
+    private func getCurrentUserViewModel() {
+        let currentUserViewModel = self.leaderBoardListViewModel.currentUserViewModel()
+        DispatchQueue.main.async {
+            /// User information part
+            self.userImageView.image = UIImage(named: currentUserViewModel?.userProfileImage ?? "rebecca")
+            self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
+            self.nickNameLabel.text = currentUserViewModel?.bottomLabelText
+            /// Scoreboard part
+            self.popScoreStack.bottomLabelText = String(describing: currentUserViewModel?.popScore ?? 0)
+            self.actionCountStack.bottomLabelText = String(describing: currentUserViewModel?.actionCount ?? 0)
+        }
+    }
+    
 }
 
 // MARK: - Set GameScene
@@ -277,17 +291,18 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.touchCount += number
         
         let ownerAddress: String = KasWalletRepository.shared.getCurrentWallet()
-        let mockUserData: AftermintUser = MoonoMockUserData().getOneUserData()
+        let mockUserData: AfterMintUserTest = MoonoMockUserData().getOneUserData()
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
         
-        self.leaderBoardListViewModel.saveCountNumber(collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
+        self.leaderBoardListViewModel.saveCountNumber(collectionAddress: K.ContractAddress.moono,
                                                       collectionImageUrl: "fake url",
-                                                      popScore: touchCount * 10,
+                                                      popScore: touchCount * Int64(mockUserData.totalNfts),
                                                       actionCount: touchCount,
-                                                      ownerAddress: ownerAddress,
+                                                      ownerAddress: mockUserData.address,
+                                                      ownerProfileImage: mockUserData.imageUrl,
                                                       nftImageUrl: mockCardData.imageUrl,
                                                       nftTokenId: mockCardData.tokenId,
-                                                      totalNfts: mockUserData.totalOwned,
+                                                      totalNfts: mockUserData.totalNfts,
                                                       ofCollectionType: .moono)
     }
 
@@ -299,6 +314,7 @@ extension GameViewController: BottomSheetViewDelegate {
     ///Get notified when the data saved to firestore
     func dataFetched() {
         self.touchCount = 0
+        self.getCurrentUserViewModel()
     } 
 
 }
