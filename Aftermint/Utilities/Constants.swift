@@ -107,3 +107,12 @@ enum MarketAsset: String {
     case dropDown = "dropdown_image"
     case marketVCLogo = "marketplace_logo"
 }
+
+enum SettingAsset: String {
+    case gameLogo = "gamecontroller"
+    case dashBoardTitle = "POP DASHBOARD"
+    case youButtonTitle = "You"
+    case usersButtonTitle = "Users"
+    case nftsButtonTitle = "NFTs"
+    case projectsButtonTitle = "Projects"
+}

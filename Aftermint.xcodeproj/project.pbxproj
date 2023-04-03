@@ -18,6 +18,7 @@
 		24097BC12998C44700F92366 /* BookmarkViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097BC02998C44700F92366 /* BookmarkViewReactor.swift */; };
 		2419EE1129D6814A00457954 /* DemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2419EE1029D6814A00457954 /* DemoModel.swift */; };
 		245A4DA829DA9B48004B28A2 /* SettingViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */; };
+		245A4DAB29DAA9A2004B28A2 /* SettingMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DAA29DAA9A2004B28A2 /* SettingMenuBar.swift */; };
 		245AC14D29A91AFE00CE7857 /* NFTCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */; };
 		245AC15029A9348E00CE7857 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14F29A9348E00CE7857 /* Box.swift */; };
 		245AC15229A934DC00CE7857 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC15129A934DC00CE7857 /* Constants.swift */; };
@@ -425,7 +426,7 @@
 		93A4B8692994E5A600146FD8 /* CalendarViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A4B8682994E5A600146FD8 /* CalendarViewReactor.swift */; };
 		93BAFF1029D2C93300596999 /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */; };
 		93BAFF1229D4051100596999 /* AftermintUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1129D4051100596999 /* AftermintUser.swift */; };
-		93BAFF1429D411AB00596999 /* BasicStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1329D411AB00596999 /* BasicStackView.swift */; };
+		93BAFF1429D411AB00596999 /* VerticalDoubleStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1329D411AB00596999 /* VerticalDoubleStackView.swift */; };
 		93C32FBE29B9A69700DB3CB3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */; };
 		93C32FC329BB000600DB3CB3 /* NftCardCellPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */; };
 		93C32FC529BB004400DB3CB3 /* NftCardCellPropertyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */; };
@@ -444,6 +445,7 @@
 		24097BC02998C44700F92366 /* BookmarkViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewReactor.swift; sourceTree = "<group>"; };
 		2419EE1029D6814A00457954 /* DemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoModel.swift; sourceTree = "<group>"; };
 		245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewControllerViewModel.swift; sourceTree = "<group>"; };
+		245A4DAA29DAA9A2004B28A2 /* SettingMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingMenuBar.swift; sourceTree = "<group>"; };
 		245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCardViewModel.swift; sourceTree = "<group>"; };
 		245AC14F29A9348E00CE7857 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		245AC15129A934DC00CE7857 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -835,7 +837,7 @@
 		93A4B8682994E5A600146FD8 /* CalendarViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewReactor.swift; sourceTree = "<group>"; };
 		93BAFF0F29D2C93300596999 /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		93BAFF1129D4051100596999 /* AftermintUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AftermintUser.swift; sourceTree = "<group>"; };
-		93BAFF1329D411AB00596999 /* BasicStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStackView.swift; sourceTree = "<group>"; };
+		93BAFF1329D411AB00596999 /* VerticalDoubleStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalDoubleStackView.swift; sourceTree = "<group>"; };
 		93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyView.swift; sourceTree = "<group>"; };
 		93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyItemView.swift; sourceTree = "<group>"; };
@@ -933,7 +935,7 @@
 				24097B7F299154E200F92366 /* UtilityClaimBottomSheet.swift */,
 				93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */,
 				93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */,
-				93BAFF1329D411AB00596999 /* BasicStackView.swift */,
+				93BAFF1329D411AB00596999 /* VerticalDoubleStackView.swift */,
 			);
 			path = KlaytnViews;
 			sourceTree = "<group>";
@@ -2364,6 +2366,7 @@
 			children = (
 				93A4B8102990E70E00146FD8 /* BookmarkMenuBar.swift */,
 				93A4B8022990D1E400146FD8 /* BenefitMenuBar.swift */,
+				245A4DAA29DAA9A2004B28A2 /* SettingMenuBar.swift */,
 			);
 			path = MenuBars;
 			sourceTree = "<group>";
@@ -2759,6 +2762,7 @@
 				24ED33AF29BF29E700C2D4E1 /* NftCardCellViewModel.swift in Sources */,
 				3619B10E29790AC50051C387 /* MarketPlaceEvent.swift in Sources */,
 				3619B11629790AC60051C387 /* TemplateListView.swift in Sources */,
+				245A4DAB29DAA9A2004B28A2 /* SettingMenuBar.swift in Sources */,
 				3619B18929790AC60051C387 /* CompositionLayersInitializer.swift in Sources */,
 				3619B1BA29790AC60051C387 /* SolidLayerModel.swift in Sources */,
 				3619B0F129790AC50051C387 /* TweetResponse.swift in Sources */,
@@ -2852,7 +2856,7 @@
 				3619B14529790AC60051C387 /* AnimationViewBase.swift in Sources */,
 				3619B17529790AC60051C387 /* CALayer+addAnimation.swift in Sources */,
 				3619B0E029790AC50051C387 /* ArtUIProtocol.swift in Sources */,
-				93BAFF1429D411AB00596999 /* BasicStackView.swift in Sources */,
+				93BAFF1429D411AB00596999 /* VerticalDoubleStackView.swift in Sources */,
 				9300BB5A29C8116D00C67A29 /* PassThroughView.swift in Sources */,
 				3619B12129790AC60051C387 /* TwitterUtility.swift in Sources */,
 				3619B10329790AC50051C387 /* OpenSeaCollection.swift in Sources */,

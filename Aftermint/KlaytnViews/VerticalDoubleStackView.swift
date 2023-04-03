@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BasicStackView: UIStackView {
+class VerticalDoubleStackView: UIStackView {
     
     var topLabelText: String = "Title" {
         didSet {
@@ -30,6 +30,18 @@ class BasicStackView: UIStackView {
     var bottomLabelFont: UIFont? = .systemFont(ofSize: 14.0) {
         didSet {
             self.bottomLabel.font = self.bottomLabelFont
+        }
+    }
+    
+    var topLabelTextAlignment: NSTextAlignment = .center {
+        didSet {
+            self.topLabel.textAlignment = self.topLabelTextAlignment
+        }
+    }
+    
+    var bottomLabelTextAlignment: NSTextAlignment = .center {
+        didSet {
+            self.bottomLabel.textAlignment = self.bottomLabelTextAlignment
         }
     }
     

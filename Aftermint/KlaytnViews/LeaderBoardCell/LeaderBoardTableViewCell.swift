@@ -36,8 +36,8 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private let nftInfoStackView: BasicStackView = {
-        let stack = BasicStackView()
+    private let nftInfoStackView: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
         stack.bottomLabelFont = BellyGomFont.header06
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack

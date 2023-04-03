@@ -61,8 +61,8 @@ final class GameViewController: UIViewController {
         return label
     }()
     
-    private let popRankStack: BasicStackView = {
-        let stack = BasicStackView()
+    private let popRankStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
         stack.topLabelText = "Pop Rank"
         stack.topLabelFont = BellyGomFont.header05
         stack.bottomLabelText = "12"
@@ -71,8 +71,8 @@ final class GameViewController: UIViewController {
         return stack
     }()
     
-    private let popScoreStack: BasicStackView = {
-        let stack = BasicStackView()
+    private let popScoreStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
         stack.topLabelText = "Pop Score"
         stack.topLabelFont = BellyGomFont.header05
         stack.bottomLabelText = "358,732"
@@ -81,8 +81,8 @@ final class GameViewController: UIViewController {
         return stack
     }()
     
-    private let nftsStack: BasicStackView = {
-        let stack = BasicStackView()
+    private let nftsStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
         stack.topLabelText = "NFTs"
         stack.topLabelFont = BellyGomFont.header05
         stack.bottomLabelText = "17"
@@ -91,8 +91,8 @@ final class GameViewController: UIViewController {
         return stack
     }()
     
-    private let actionCountStack: BasicStackView = {
-        let stack = BasicStackView()
+    private let actionCountStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
         stack.topLabelText = "Action Count"
         stack.topLabelFont = BellyGomFont.header05
         stack.bottomLabelFont = BellyGomFont.header05

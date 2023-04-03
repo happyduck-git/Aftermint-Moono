@@ -84,7 +84,8 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
         gameVC.tabBarItem.image = UIImage(named: TabBarAsset.gameOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         gameVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.gameOn.rawValue)?.withRenderingMode(.alwaysOriginal)
         
-        let settingVC = SettingViewController()
+        let settingVM = SettingViewControllerViewModel()
+        let settingVC = SettingViewController(ofCollectionType: .moono, vm: settingVM)
         settingVC.tabBarItem.image = UIImage(named: TabBarAsset.settingOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         settingVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.settingOn.rawValue)?.withRenderingMode(.alwaysOriginal)
 
