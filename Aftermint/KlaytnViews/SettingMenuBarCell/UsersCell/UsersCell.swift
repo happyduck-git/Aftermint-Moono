@@ -10,6 +10,15 @@ import UIKit
 final class UsersCell: UICollectionViewCell {
     
     var usersList: [PopScoreRankCellViewModel] = []
+    
+    /// Bool property to check which view should the segmentedControl show
+    var shouldHideFirstSegment: Bool = false {
+        didSet {
+            self.popScoreTableView.isHidden = self.shouldHideFirstSegment
+            self.actionCountTableView.isHidden = !self.shouldHideFirstSegment
+        }
+      }
+    
     //MARK: - UI Elements
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
@@ -43,16 +52,16 @@ final class UsersCell: UICollectionViewCell {
         return label
     }()
     
-    private let segmentedControl: UISegmentedControl = {
+    private lazy var segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Pop score", "Action count"])
         control.selectedSegmentIndex = 0
+        control.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
     
     private let popScoreTableView: UITableView = {
         let table = UITableView()
-        table.backgroundColor = .orange
         table.register(PopScoreRankCell.self, forCellReuseIdentifier: PopScoreRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -126,6 +135,15 @@ final class UsersCell: UICollectionViewCell {
         self.actionCountTableView.dataSource = self
     }
     
+    //MARK: - Private
+    @objc private func didChangeValue(segment: UISegmentedControl) {
+        if segment.selectedSegmentIndex == 0 {
+            self.shouldHideFirstSegment = false
+        } else {
+            self.shouldHideFirstSegment = true
+        }
+    }
+    
     //MARK: - Public
     public func configure(vm: UsersCellViewModel) {
         self.nftImageView.image = UIImage(named: vm.currentNft.value??.imageUrl ?? "N/A")
@@ -142,32 +160,34 @@ final class UsersCell: UICollectionViewCell {
 extension UsersCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == self.popScoreTableView {
+//        if tableView == self.popScoreTableView {
             return self.usersList.count
-        }
-        return 0
+//        }
+//        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell
+        else { return UITableViewCell() }
+        
+        let vm = self.usersList[indexPath.row]
+        /// Set Rank Image for 1st to 3rd rank and give number of rank to below seats
+        if indexPath.row <= 2 {
+            vm.setRankImage(with: cellRankImageAt(indexPath.row))
+        } else {
+            cell.switchRankImageToLabel()
+            vm.setRankNumberWithIndexPath(indexPath.row + 1)
+        }
+        
         if tableView == self.popScoreTableView {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell
-            else { return UITableViewCell() }
-            
-            let vm = self.usersList[indexPath.row]
-            /// Set Rank Image for 1st to 3rd rank and give number of rank to below seats
-            if indexPath.row <= 2 {
-                vm.setRankImage(with: cellRankImageAt(indexPath.row))
-            } else {
-                cell.switchRankImageToLabel()
-                vm.setRankNumberWithIndexPath(indexPath.row + 1)
-            }
-            
-            cell.configure(with: vm)
+            cell.configureRankScoreCell(with: vm)
+            return cell
+        } else if tableView == self.actionCountTableView {
+            cell.configureActionCountCell(with: vm)
             return cell
         }
 
         return UITableViewCell()
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

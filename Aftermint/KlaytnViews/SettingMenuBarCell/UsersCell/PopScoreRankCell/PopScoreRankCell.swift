@@ -135,13 +135,22 @@ final class PopScoreRankCell: UITableViewCell {
     }
     
     // MARK: - Public
-    public func configure(with vm: PopScoreRankCellViewModel) {
+    public func configureRankScoreCell(with vm: PopScoreRankCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
         self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
         self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
         self.popScoreLabel.text = "\(vm.popScore)"
+    }
+    
+    public func configureActionCountCell(with vm: PopScoreRankCellViewModel) {
+        self.rankImageView.image = vm.rankImage
+        self.rankLabel.text = "\(vm.rank)"
+        self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
+        self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
+        self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
+        self.popScoreLabel.text = "\(vm.actioncount)"
     }
     
     public func setAsCollectionInfoCell() {

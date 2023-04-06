@@ -81,12 +81,15 @@ final class SettingViewController: UIViewController {
                 self.vm.addressList.value = addressList
                 /// Users list of UsersCellVM
                 let popScoreVMList = addressList.map { address in
-                    return PopScoreRankCellViewModel(rankImage: UIImage(systemName: "gear"), //NEED TO CHANGE
-                                                     rank: 0, //NEED TO CHANGE
-                                                     profileImageUrl: address.profileImageUrl,
-                                                     owerAddress: address.ownerAddress,
-                                                     totalNfts: 17, //NEED TO CHANGE
-                                                     popScore: address.popScore)
+                    return PopScoreRankCellViewModel(
+                        rankImage: UIImage(systemName: "gear"), //NEED TO CHANGE
+                        rank: 0, //NEED TO CHANGE
+                        profileImageUrl: address.profileImageUrl,
+                        owerAddress: address.ownerAddress,
+                        totalNfts: 17, //NEED TO CHANGE
+                        popScore: address.popScore,
+                        actioncount: address.actionCount
+                    )
                 }
                 self.vm.usersCellViewModel.usersList.value = popScoreVMList
             case .failure(let failure):
