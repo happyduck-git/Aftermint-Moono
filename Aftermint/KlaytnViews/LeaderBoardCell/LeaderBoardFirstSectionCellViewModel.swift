@@ -40,7 +40,7 @@ final class LeaderBoardFirstSectionCellViewModel {
     }
     
     func getFirstSectionViewModel(completion: @escaping (Result<LeaderBoardFirstSectionCellViewModel, Error>) -> ()) {
-        self.fireStoreRepository.getNftCollection { collection in
+        self.fireStoreRepository.getNftCollection(ofType: .moono) { collection in
             guard let collection = collection else {
                 completion(.failure(LeaderBoardError.FirstSectionFetchError))
                 return

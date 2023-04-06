@@ -9,4 +9,13 @@ import Foundation
 
 final class ProjectsCellViewModel {
     
+    let nftCollectionList: Box<[ProjectPopScoreCellViewModel]> = Box([])
+    
+    func getCurrentNftCollection(ofType collectionType: CollectionType) -> ProjectPopScoreCellViewModel? {
+        let filteredCollections = self.nftCollectionList.value?.filter({ vm in
+            vm.nftCollectionName == collectionType.rawValue
+        })
+        return filteredCollections?.first
+    }
+    
 }

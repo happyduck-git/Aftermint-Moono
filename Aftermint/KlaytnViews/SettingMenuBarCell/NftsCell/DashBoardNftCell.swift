@@ -9,6 +9,9 @@ import UIKit
 
 final class DashBoardNftCell: UICollectionViewCell {
     
+    private var nftsList: [NftRankCellViewModel] = []
+    private var highestScoreVM: NftRankCellViewModel?
+    
     //MARK: - UI Elements
     private let nftScoreTableView: UITableView = {
         let table = UITableView()
@@ -51,7 +54,11 @@ final class DashBoardNftCell: UICollectionViewCell {
     
     //MARK: - Public
     public func configure(vm: DashBoardNftCellViewModel) {
-        
+        self.nftsList = vm.nftsList.value ?? []
+        self.highestScoreVM = vm.getTheHighestScoreNftOfCurrentUser()
+        DispatchQueue.main.async {
+            self.nftScoreTableView.reloadData()
+        }
     }
     
 }
@@ -71,12 +78,27 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        if section == 0 {
+            return 1
+        } else {
+            return self.nftsList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) else { return UITableViewCell() }
-        return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell else { return UITableViewCell() }
+        if indexPath.section == 0 {
+            guard let vm = self.highestScoreVM else { return UITableViewCell() }
+            cell.configure(vm: vm)
+            return cell
+        } else {
+            let vm = nftsList[indexPath.row]
+            cell.configure(vm: vm)
+            return cell
+        }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
 }

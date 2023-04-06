@@ -18,7 +18,9 @@ final class NftRankCell: UITableViewCell {
     
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.frame.size = CGSize(width: 10, height: 10)
+        imageView.clipsToBounds = true
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.borderWidth = 2
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -54,6 +56,12 @@ final class NftRankCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let height = self.nftImageView.frame.size.height
+        self.nftImageView.layer.cornerRadius = height / 2
+    }
+    
     //MARK: - Private
     private func setUI() {
         self.contentView.addSubview(rankLabel)
@@ -75,7 +83,7 @@ final class NftRankCell: UITableViewCell {
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.bottomAnchor, multiplier: 1),
             self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
             self.nftNameLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
-            self.nftNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 1),
+            self.nftNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 2),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftNameLabel.bottomAnchor, multiplier: 1),
             self.scoreLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.scoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftNameLabel.trailingAnchor, multiplier: 1),

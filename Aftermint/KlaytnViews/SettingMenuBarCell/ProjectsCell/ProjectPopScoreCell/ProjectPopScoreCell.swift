@@ -1,14 +1,13 @@
 //
-//  PopScoreRankCell.swift
+//  ProjectPopScoreCell.swift
 //  Aftermint
 //
-//  Created by HappyDuck on 2023/04/04.
+//  Created by HappyDuck on 2023/04/06.
 //
 
 import UIKit
 
-final class PopScoreRankCell: UITableViewCell {
-    
+final class ProjectPopScoreCell: UITableViewCell {
     // MARK: - UI Elements
     private let rankImageView: UIImageView = {
         let imageView = UIImageView()
@@ -26,7 +25,7 @@ final class PopScoreRankCell: UITableViewCell {
         return label
     }()
     
-    private let userProfileImageView: UIImageView = {
+    private let collectionImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
@@ -41,15 +40,6 @@ final class PopScoreRankCell: UITableViewCell {
         stack.bottomLabelFont = BellyGomFont.header06
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
-    }()
-    
-    private let nftNameLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .left
-        label.font = BellyGomFont.header03
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     
     private let popScoreLabel: UILabel = {
@@ -75,15 +65,15 @@ final class PopScoreRankCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = AftermintColor.backgroundNavy
-        userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
+        collectionImageView.layer.cornerRadius = collectionImageView.frame.size.width / 2
+        print("Width half: \(collectionImageView.frame.size.width / 2)")
     }
     
     // MARK: - Private
     private func setUI() {
         contentView.addSubview(rankImageView)
         contentView.addSubview(rankLabel)
-        contentView.addSubview(userProfileImageView)
-        contentView.addSubview(nftNameLabel) //Will be replaced
+        contentView.addSubview(collectionImageView)
         contentView.addSubview(nftInfoStackView)
         contentView.addSubview(popScoreLabel)
     }
@@ -102,14 +92,14 @@ final class PopScoreRankCell: UITableViewCell {
             self.rankLabel.leadingAnchor.constraint(equalTo: self.rankImageView.leadingAnchor),
             contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.rankLabel.bottomAnchor, multiplier: 1),
             
-            self.userProfileImageView.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
-            self.userProfileImageView.widthAnchor.constraint(equalTo: self.userProfileImageView.heightAnchor),
-            self.userProfileImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            self.userProfileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankImageView.trailingAnchor, multiplier: 2),
+            self.collectionImageView.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
+            self.collectionImageView.widthAnchor.constraint(equalTo: self.collectionImageView.heightAnchor),
+            self.collectionImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            self.collectionImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankImageView.trailingAnchor, multiplier: 2),
             
             self.nftInfoStackView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.nftInfoStackView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
-            self.nftInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userProfileImageView.trailingAnchor, multiplier: 2),
+            self.nftInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.collectionImageView.trailingAnchor, multiplier: 2),
             
             self.popScoreLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             self.popScoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftInfoStackView.trailingAnchor, multiplier: 1),
@@ -128,29 +118,28 @@ final class PopScoreRankCell: UITableViewCell {
     
     internal func resetCell() {
         self.rankLabel.text = nil
-        self.userProfileImageView.image = nil
-        self.nftNameLabel.text = nil
+        self.collectionImageView.image = nil
         self.popScoreLabel.text = nil
         self.contentView.backgroundColor?.withAlphaComponent(1.0)
         self.contentView.backgroundColor = nil
     }
     
     // MARK: - Public
-    public func configureRankScoreCell(with vm: PopScoreRankCellViewModel) {
+    public func configureRankScoreCell(with vm: ProjectPopScoreCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
-        self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
-        self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
+        self.collectionImageView.image = UIImage(named: vm.nftImageUrl)
+        self.nftInfoStackView.topLabelText = vm.nftCollectionName
+        self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts) / Holders \(vm.totalHolders)"
         self.popScoreLabel.text = "\(vm.popScore)"
     }
     
-    public func configureActionCountCell(with vm: PopScoreRankCellViewModel) {
+    public func configureActionCountCell(with vm: ProjectPopScoreCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
-        self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
-        self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
+        self.collectionImageView.image = UIImage(named: vm.nftImageUrl)
+        self.nftInfoStackView.topLabelText = vm.nftCollectionName
+        self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts) / Holders \(vm.totalHolders)"
         self.popScoreLabel.text = "\(vm.actioncount)"
     }
     

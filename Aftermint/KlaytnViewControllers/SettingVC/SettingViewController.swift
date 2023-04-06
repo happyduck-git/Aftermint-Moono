@@ -97,13 +97,49 @@ final class SettingViewController: UIViewController {
             }
         }
         
-        self.vm.getAllNftsData(ofCollection: .moono) { result in
+        self.vm.getNftData(ofCollection: .moono) { result in
+            switch result {
+            case .success(let collection):
+                self.vm.usersCellViewModel.currentNft.value = collection
+            case .failure(let failure):
+                print("Failed from SettingVC: \(failure.localizedDescription)")
+            }
+        }
+        /// Get all the moono nft card data saved in firestore
+        self.vm.getAllNftData(ofCollection: .moono) { result in
             switch result {
             case .success(let cardList):
-                let currentCard = cardList.filter { card in
-                    card.ownerAddress == self.mockUser.address
+                let nftRankCellVMList = cardList.map { card in
+                    return NftRankCellViewModel(
+                        rank: 0,
+                        nftImageUrl: card.imageUrl,
+                        nftName: "Moono #924", //NEED TO CHANGE
+                        score: card.popScore,
+                        ownerAddress: card.ownerAddress
+                    )
                 }
-                self.vm.usersCellViewModel.currentNft.value = currentCard.first
+                self.vm.nftsCellViewModel.nftsList.value = nftRankCellVMList
+            case .failure(let failure):
+                print("Failed from SettingVC: \(failure.localizedDescription)")
+            }
+        }
+        
+        /// Get all the `NFT collection` documents from firestore
+        self.vm.getAllNftDocument { result in
+            switch result {
+            case .success(let cardList):
+                let nftCollectionList = cardList.map { card in
+                    return ProjectPopScoreCellViewModel(
+                        rank: 0,
+                        nftImageUrl: card.imageUrl,
+                        nftCollectionName: "Moono", //NEED TO CHANGE
+                        totalNfts: 1000, //NEED TO CHANGE
+                        totalHolders: 200, //NEED TO CHANGE
+                        popScore: card.popScore,
+                        actioncount: card.actionCount
+                    )
+                }
+                self.vm.projectsCellViewModel.nftCollectionList.value = nftCollectionList
             case .failure(let failure):
                 print("Failed from SettingVC: \(failure.localizedDescription)")
             }
@@ -180,9 +216,12 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
             
         case .nfts:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DashBoardNftCell.identifier, for: indexPath) as? DashBoardNftCell else { return UICollectionViewCell() }
+            cell.configure(vm: vm.nftsCellViewModel)
             return cell
+            
         case .projects:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProjectsCell.identifier, for: indexPath) as? ProjectsCell else { return UICollectionViewCell() }
+            cell.configure(vm: vm.projectsCellViewModel)
             return cell
         }
     }

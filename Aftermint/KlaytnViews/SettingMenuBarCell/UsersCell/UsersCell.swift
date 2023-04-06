@@ -9,15 +9,15 @@ import UIKit
 
 final class UsersCell: UICollectionViewCell {
     
-    var usersList: [PopScoreRankCellViewModel] = []
+    private var usersList: [PopScoreRankCellViewModel] = []
     
     /// Bool property to check which view should the segmentedControl show
-    var shouldHideFirstSegment: Bool = false {
+    private var shouldHideFirstSegment: Bool = false {
         didSet {
             self.popScoreTableView.isHidden = self.shouldHideFirstSegment
             self.actionCountTableView.isHidden = !self.shouldHideFirstSegment
         }
-      }
+    }
     
     //MARK: - UI Elements
     private let nftImageView: UIImageView = {
@@ -35,6 +35,7 @@ final class UsersCell: UICollectionViewCell {
     
     private let popScoreLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -48,6 +49,7 @@ final class UsersCell: UICollectionViewCell {
     
     private let actionCountLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -78,7 +80,7 @@ final class UsersCell: UICollectionViewCell {
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.backgroundColor = .systemBlue
+        self.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         setUI()
         setLayout()
         setDelegate()
@@ -104,6 +106,9 @@ final class UsersCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             self.nftImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
+            self.nftImageView.widthAnchor.constraint(equalToConstant: 80),
+            self.nftImageView.heightAnchor.constraint(equalTo: self.nftImageView.widthAnchor),
+            
             self.popScoreTitleLabel.topAnchor.constraint(equalTo: self.nftImageView.topAnchor),
             self.popScoreTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 1),
             self.popScoreLabel.topAnchor.constraint(equalTo: self.popScoreTitleLabel.topAnchor),
@@ -146,9 +151,10 @@ final class UsersCell: UICollectionViewCell {
     
     //MARK: - Public
     public func configure(vm: UsersCellViewModel) {
-        self.nftImageView.image = UIImage(named: vm.currentNft.value??.imageUrl ?? "N/A")
-        self.popScoreLabel.text = "\(vm.currentNft.value??.popCount ?? 0)"
-        self.actionCountLabel.text = "\(vm.currentNft.value??.actionCount ?? 0)"
+        guard let image = vm.currentNft.value??.imageUrl else { return }
+        self.nftImageView.image = UIImage(named: image)
+        self.popScoreLabel.text = "\(vm.currentNft.value??.totalPopCount ?? 0)"
+        self.actionCountLabel.text = "\(vm.currentNft.value??.totalActionCount ?? 0)"
         self.usersList = vm.usersList.value ?? []
         DispatchQueue.main.async {
             self.popScoreTableView.reloadData()
@@ -160,10 +166,7 @@ final class UsersCell: UICollectionViewCell {
 extension UsersCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if tableView == self.popScoreTableView {
-            return self.usersList.count
-//        }
-//        return 0
+        return self.usersList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

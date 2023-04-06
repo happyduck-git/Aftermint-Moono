@@ -9,6 +9,9 @@ import UIKit
 
 final class ProjectsCell: UICollectionViewCell {
     
+    private var currentCollection: ProjectPopScoreCellViewModel?
+    private var nftCollectionList: [ProjectPopScoreCellViewModel] = []
+    
     //MARK: - UI Elements
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
@@ -49,7 +52,7 @@ final class ProjectsCell: UICollectionViewCell {
     
     private let popScoreTableView: UITableView = {
         let table = UITableView()
-        table.register(PopScoreRankCell.self, forCellReuseIdentifier: PopScoreRankCell.identifier)
+        table.register(ProjectPopScoreCell.self, forCellReuseIdentifier: ProjectPopScoreCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
@@ -57,7 +60,7 @@ final class ProjectsCell: UICollectionViewCell {
     private let actionCountTableView: UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.register(PopScoreRankCell.self, forCellReuseIdentifier: PopScoreRankCell.identifier)
+        table.register(ProjectPopScoreCell.self, forCellReuseIdentifier: ProjectPopScoreCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
@@ -124,7 +127,8 @@ final class ProjectsCell: UICollectionViewCell {
     
     //MARK: - Public
     public func configure(vm: ProjectsCellViewModel) {
-        
+        self.nftCollectionList = vm.nftCollectionList.value ?? []
+        self.currentCollection = vm.getCurrentNftCollection(ofType: .moono)
     }
     
 }
@@ -132,11 +136,27 @@ final class ProjectsCell: UICollectionViewCell {
 extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        if section == 0 {
+            return 1
+        } else {
+            return self.nftCollectionList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProjectPopScoreCell.identifier, for: indexPath) as? ProjectPopScoreCell else { return UITableViewCell() }
+        if indexPath.section == 0 {
+            guard let vm = self.currentCollection else { return UITableViewCell() }
+            cell.configureRankScoreCell(with: vm)
+            return cell
+        } else {
+            let vm = self.nftCollectionList[indexPath.row]
+            cell.configureRankScoreCell(with: vm)
+            return cell
+        }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }

@@ -5,8 +5,26 @@
 //  Created by HappyDuck on 2023/04/04.
 //
 
-import Foundation
+import UIKit.UIImage
 
 final class DashBoardNftCellViewModel {
+    
+    let mockUser = MoonoMockUserData().getOneUserData()
+    
+    var nftsList: Box<[NftRankCellViewModel]> = Box([])
+    
+    /// Among nftsList, filter and return current user's nfts
+    func getCurrentUsersNfts() -> [NftRankCellViewModel] {
+        let currentUsersNfts = self.nftsList.value?.filter({ vm in
+            vm.ownerAddress == mockUser.address
+        })
+        
+        guard let currentUsersNfts = currentUsersNfts else { return [] }
+        return currentUsersNfts
+    }
+    
+    func getTheHighestScoreNftOfCurrentUser() -> NftRankCellViewModel? {
+        return self.getCurrentUsersNfts().first
+    }
     
 }

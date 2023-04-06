@@ -33,6 +33,8 @@
 		245A4DCA29DCF6C2004B28A2 /* ProjectsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DC929DCF6C2004B28A2 /* ProjectsCellViewModel.swift */; };
 		245A4DCC29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DCB29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift */; };
 		245A4DCE29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DCD29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift */; };
+		245A4DD129DEB4BE004B28A2 /* ProjectPopScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DD029DEB4BE004B28A2 /* ProjectPopScoreCell.swift */; };
+		245A4DD329DEB582004B28A2 /* ProjectPopScoreCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DD229DEB582004B28A2 /* ProjectPopScoreCellViewModel.swift */; };
 		245AC14D29A91AFE00CE7857 /* NFTCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */; };
 		245AC15029A9348E00CE7857 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14F29A9348E00CE7857 /* Box.swift */; };
 		245AC15229A934DC00CE7857 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC15129A934DC00CE7857 /* Constants.swift */; };
@@ -474,6 +476,8 @@
 		245A4DC929DCF6C2004B28A2 /* ProjectsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsCellViewModel.swift; sourceTree = "<group>"; };
 		245A4DCB29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardFirstSectionCell.swift; sourceTree = "<group>"; };
 		245A4DCD29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardFirstSectionCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DD029DEB4BE004B28A2 /* ProjectPopScoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPopScoreCell.swift; sourceTree = "<group>"; };
+		245A4DD229DEB582004B28A2 /* ProjectPopScoreCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPopScoreCellViewModel.swift; sourceTree = "<group>"; };
 		245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCardViewModel.swift; sourceTree = "<group>"; };
 		245AC14F29A9348E00CE7857 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		245AC15129A934DC00CE7857 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -1003,10 +1007,20 @@
 		245A4DC629DC1688004B28A2 /* ProjectsCell */ = {
 			isa = PBXGroup;
 			children = (
+				245A4DCF29DEB4A1004B28A2 /* ProjectPopScoreCell */,
 				245A4DC729DC169E004B28A2 /* ProjectsCell.swift */,
 				245A4DC929DCF6C2004B28A2 /* ProjectsCellViewModel.swift */,
 			);
 			path = ProjectsCell;
+			sourceTree = "<group>";
+		};
+		245A4DCF29DEB4A1004B28A2 /* ProjectPopScoreCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DD029DEB4BE004B28A2 /* ProjectPopScoreCell.swift */,
+				245A4DD229DEB582004B28A2 /* ProjectPopScoreCellViewModel.swift */,
+			);
+			path = ProjectPopScoreCell;
 			sourceTree = "<group>";
 		};
 		2481E1CC297A870000187BB9 /* KlaytnViews */ = {
@@ -2874,11 +2888,13 @@
 				3619B0F129790AC50051C387 /* TweetResponse.swift in Sources */,
 				3619B11B29790AC60051C387 /* TemplateService.swift in Sources */,
 				3619B11A29790AC60051C387 /* IndicatorView.swift in Sources */,
+				245A4DD129DEB4BE004B28A2 /* ProjectPopScoreCell.swift in Sources */,
 				3619B1A529790AC60051C387 /* GroupInterpolator.swift in Sources */,
 				93A4B8012990D0DA00146FD8 /* VoteCell.swift in Sources */,
 				3619B0E229790AC50051C387 /* Template.swift in Sources */,
 				939DE066297A2E0600EFA71E /* KlaytnNFT.swift in Sources */,
 				3619B1C429790AC60051C387 /* Marker.swift in Sources */,
+				245A4DD329DEB582004B28A2 /* ProjectPopScoreCellViewModel.swift in Sources */,
 				240121AA29A7B49200F60BDA /* Coordinator.swift in Sources */,
 				3619B16829790AC60051C387 /* ValueProviderStore.swift in Sources */,
 				935E6A822982619200D94DA6 /* LottieViewController.swift in Sources */,

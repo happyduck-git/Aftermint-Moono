@@ -12,11 +12,13 @@ final class NftRankCellViewModel {
     let nftImageUrl: String
     let nftName: String
     let score: Int64
+    let ownerAddress: String
     
-    init(rank: Int, nftImageUrl: String, nftName: String, score: Int64) {
+    init(rank: Int, nftImageUrl: String, nftName: String, score: Int64, ownerAddress: String) {
         self.rank = rank
         self.nftImageUrl = nftImageUrl
         self.nftName = nftName
         self.score = score
+        self.ownerAddress = ownerAddress
     }
 }

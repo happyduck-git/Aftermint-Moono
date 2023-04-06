@@ -31,13 +31,16 @@ final class YouCellViewModel {
     }
     
     func getAllOwnedNft(collectionType: CollectionType, completion: @escaping (Result<[NftRankCellViewModel], Error>) -> Void) {
-        self.fireStoreRepository.getAllOwnedCardData(ofCollectionType: collectionType) { cardList in
+        self.fireStoreRepository.getAllNftData(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
             let result = cardList.map { card in
-                return NftRankCellViewModel(rank: 0,
-                                            nftImageUrl: card.imageUrl,
-                                            nftName: "Moono #123", //TODO: nft name 수정필요
-                                            score: card.popCount)
+                return NftRankCellViewModel(
+                    rank: 0,
+                    nftImageUrl: card.imageUrl,
+                    nftName: "Moono #123", //TODO: nft name 수정필요
+                    score: card.popScore,
+                    ownerAddress: card.ownerAddress
+                )
             }
             completion(.success(result))
             return

@@ -9,7 +9,7 @@ import Foundation
 
 final class UsersCellViewModel {
     
-    let currentNft: Box<CardTest?> = Box(nil)
+    let currentNft: Box<NftCollectionTest?> = Box(nil)
     let usersList: Box<[PopScoreRankCellViewModel]> = Box([])
     
 }
