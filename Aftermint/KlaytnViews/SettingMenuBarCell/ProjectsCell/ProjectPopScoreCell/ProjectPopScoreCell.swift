@@ -66,7 +66,6 @@ final class ProjectPopScoreCell: UITableViewCell {
         super.layoutSubviews()
         self.backgroundColor = AftermintColor.backgroundNavy
         collectionImageView.layer.cornerRadius = collectionImageView.frame.size.width / 2
-        print("Width half: \(collectionImageView.frame.size.width / 2)")
     }
     
     // MARK: - Private

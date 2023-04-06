@@ -15,6 +15,8 @@ final class YouCell: UICollectionViewCell {
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.borderColor = UIColor.lightGray.cgColor
+        imageView.layer.borderWidth = 1
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -23,6 +25,8 @@ final class YouCell: UICollectionViewCell {
     private let walletAddressStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.walletAddressTitle.rawValue
+        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
+        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -30,6 +34,8 @@ final class YouCell: UICollectionViewCell {
     private let usernameStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.usernameTitle.rawValue
+        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
+        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -37,6 +43,8 @@ final class YouCell: UICollectionViewCell {
     private let popScoreStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.popScoreTitle.rawValue
+        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
+        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -44,6 +52,8 @@ final class YouCell: UICollectionViewCell {
     private let actionCountStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.actionCountTitle.rawValue
+        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
+        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -91,17 +101,17 @@ final class YouCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             self.profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 0),
             self.profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
-            self.profileImageView.heightAnchor.constraint(equalToConstant: 130),
+            self.profileImageView.heightAnchor.constraint(equalToConstant: 90),
             self.profileImageView.widthAnchor.constraint(equalTo: self.profileImageView.heightAnchor),
             self.walletAddressStack.topAnchor.constraint(equalTo: self.profileImageView.topAnchor),
             self.walletAddressStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.profileImageView.trailingAnchor, multiplier: 2),
             self.usernameStack.topAnchor.constraint(equalToSystemSpacingBelow: self.walletAddressStack.bottomAnchor, multiplier: 2),
             self.usernameStack.leadingAnchor.constraint(equalTo: self.walletAddressStack.leadingAnchor),
             
-            self.popScoreStack.topAnchor.constraint(equalToSystemSpacingBelow: self.profileImageView.bottomAnchor, multiplier: 2),
-            self.popScoreStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
+            self.popScoreStack.topAnchor.constraint(equalToSystemSpacingBelow: self.usernameStack.bottomAnchor, multiplier: 2),
+            self.popScoreStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 3),
             self.actionCountStack.topAnchor.constraint(equalTo: self.popScoreStack.topAnchor),
-            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountStack.trailingAnchor, multiplier: 1),
+            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountStack.trailingAnchor, multiplier: 3),
             
             self.nftsTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.popScoreStack.bottomAnchor, multiplier: 2),
             self.nftsTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
@@ -148,12 +158,13 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell,
               let nftRankCellViewModel = vm.nftRankViewModels.value?[indexPath.row]
         else { return UITableViewCell() }
+        nftRankCellViewModel.setRankNumberWithIndexPath(indexPath.row + 1)
         cell.configure(vm: nftRankCellViewModel)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 70
     }
     
     private func fetchTableViewData() {

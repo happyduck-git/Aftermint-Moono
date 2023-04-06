@@ -10,8 +10,16 @@ import UIKit
 final class NftRankCell: UITableViewCell {
     
     //MARK: - UI Elements
+    private let rankImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let rankLabel: UILabel = {
         let label = UILabel()
+        label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -64,6 +72,7 @@ final class NftRankCell: UITableViewCell {
     
     //MARK: - Private
     private func setUI() {
+        self.contentView.addSubview(rankImageView)
         self.contentView.addSubview(rankLabel)
         self.contentView.addSubview(nftImageView)
         self.contentView.addSubview(nftNameLabel)
@@ -78,6 +87,12 @@ final class NftRankCell: UITableViewCell {
             self.rankLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.rankLabel.bottomAnchor, multiplier: 1),
             self.rankLabel.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
+            
+            self.rankImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
+            self.rankImageView.leadingAnchor.constraint(equalTo: self.rankLabel.leadingAnchor),
+            self.rankImageView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
+            self.rankImageView.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
+            
             self.nftImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankLabel.trailingAnchor, multiplier: 0),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.bottomAnchor, multiplier: 1),
@@ -98,6 +113,13 @@ final class NftRankCell: UITableViewCell {
     }
     
     //MARK: - Public
+    
+    public func switchRankImageToLabel() {
+        self.rankImageView.isHidden = true
+        self.rankLabel.isHidden = false
+    }
+
+    
     public func configure(vm: NftRankCellViewModel) {
         self.rankLabel.text = "\(vm.rank)"
         let url = URL(string: vm.nftImageUrl)

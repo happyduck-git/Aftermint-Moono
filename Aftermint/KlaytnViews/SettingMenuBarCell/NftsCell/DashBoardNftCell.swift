@@ -93,6 +93,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let vm = nftsList[indexPath.row]
+            vm.setRankNumberWithIndexPath(indexPath.row + 1)
             cell.configure(vm: vm)
             return cell
         }
@@ -100,5 +101,19 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    /// Determine cell image
+    private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {
+        switch indexPathRow {
+        case 0:
+            return UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
+        case 1:
+            return UIImage(named: LeaderBoardAsset.secondPlace.rawValue)
+        case 2:
+            return UIImage(named: LeaderBoardAsset.thirdPlace.rawValue)
+        default:
+            return UIImage(named: LeaderBoardAsset.markImageName.rawValue)
+        }
     }
 }

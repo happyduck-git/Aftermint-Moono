@@ -8,7 +8,7 @@
 import Foundation
 
 final class NftRankCellViewModel {
-    let rank: Int
+    var rank: Int
     let nftImageUrl: String
     let nftName: String
     let score: Int64
@@ -20,5 +20,11 @@ final class NftRankCellViewModel {
         self.nftName = nftName
         self.score = score
         self.ownerAddress = ownerAddress
+    }
+    
+    //MARK: - Internal Function
+    
+    func setRankNumberWithIndexPath(_ indexPathRow: Int) {
+        self.rank = indexPathRow
     }
 }

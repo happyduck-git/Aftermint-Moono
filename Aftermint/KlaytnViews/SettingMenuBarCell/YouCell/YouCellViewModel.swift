@@ -5,7 +5,7 @@
 //  Created by HappyDuck on 2023/04/04.
 //
 
-import Foundation
+import UIKit.UIImage
 
 final class YouCellViewModel {
     
@@ -37,7 +37,7 @@ final class YouCellViewModel {
                 return NftRankCellViewModel(
                     rank: 0,
                     nftImageUrl: card.imageUrl,
-                    nftName: "Moono #123", //TODO: nft name 수정필요
+                    nftName: "Moono #924", //TODO: nft name 수정필요
                     score: card.popScore,
                     ownerAddress: card.ownerAddress
                 )

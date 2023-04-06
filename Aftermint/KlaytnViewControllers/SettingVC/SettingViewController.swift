@@ -82,7 +82,7 @@ final class SettingViewController: UIViewController {
                 /// Users list of UsersCellVM
                 let popScoreVMList = addressList.map { address in
                     return PopScoreRankCellViewModel(
-                        rankImage: UIImage(systemName: "gear"), //NEED TO CHANGE
+                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue), //NEED TO CHANGE
                         rank: 0, //NEED TO CHANGE
                         profileImageUrl: address.profileImageUrl,
                         owerAddress: address.ownerAddress,

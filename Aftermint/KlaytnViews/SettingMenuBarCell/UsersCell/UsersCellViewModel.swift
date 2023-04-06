@@ -11,5 +11,10 @@ final class UsersCellViewModel {
     
     let currentNft: Box<NftCollectionTest?> = Box(nil)
     let usersList: Box<[PopScoreRankCellViewModel]> = Box([])
-    
+    var currentUserVM: PopScoreRankCellViewModel? {
+        let filteredList = self.usersList.value?.filter({ vm in
+            vm.owerAddress == MoonoMockUserData().getOneUserData().address
+        })
+        return filteredList?.first
+    }
 }

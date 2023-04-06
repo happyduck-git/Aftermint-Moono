@@ -10,6 +10,7 @@ import UIKit
 final class UsersCell: UICollectionViewCell {
     
     private var usersList: [PopScoreRankCellViewModel] = []
+    private var currentUserVM: PopScoreRankCellViewModel?
     
     /// Bool property to check which view should the segmentedControl show
     private var shouldHideFirstSegment: Bool = false {
@@ -28,7 +29,7 @@ final class UsersCell: UICollectionViewCell {
     
     private let popScoreTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = SettingAsset.projectPopScoreTitle.rawValue
+        label.text = SettingAsset.usersPopScoreTitle.rawValue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -42,7 +43,7 @@ final class UsersCell: UICollectionViewCell {
     
     private let actionCountTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = SettingAsset.projectActionScoreTitle.rawValue
+        label.text = SettingAsset.usersActionScoreTitle.rawValue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -80,7 +81,7 @@ final class UsersCell: UICollectionViewCell {
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.5)
+        self.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.3)
         setUI()
         setLayout()
         setDelegate()
@@ -109,16 +110,16 @@ final class UsersCell: UICollectionViewCell {
             self.nftImageView.widthAnchor.constraint(equalToConstant: 80),
             self.nftImageView.heightAnchor.constraint(equalTo: self.nftImageView.widthAnchor),
             
-            self.popScoreTitleLabel.topAnchor.constraint(equalTo: self.nftImageView.topAnchor),
-            self.popScoreTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 1),
+            self.popScoreTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.topAnchor, multiplier: 2),
+            self.popScoreTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 3),
             self.popScoreLabel.topAnchor.constraint(equalTo: self.popScoreTitleLabel.topAnchor),
-            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreLabel.trailingAnchor, multiplier: 1),
+            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreLabel.trailingAnchor, multiplier: 2),
             self.actionCountTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.popScoreTitleLabel.bottomAnchor, multiplier: 1),
             self.actionCountTitleLabel.leadingAnchor.constraint(equalTo: self.popScoreTitleLabel.leadingAnchor),
             self.actionCountLabel.topAnchor.constraint(equalTo: self.actionCountTitleLabel.topAnchor),
-            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountLabel.trailingAnchor, multiplier: 1),
+            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountLabel.trailingAnchor, multiplier: 2),
             
-            self.segmentedControl.topAnchor.constraint(equalToSystemSpacingBelow: self.actionCountTitleLabel.bottomAnchor, multiplier: 2),
+            self.segmentedControl.topAnchor.constraint(equalToSystemSpacingBelow: self.actionCountTitleLabel.bottomAnchor, multiplier: 4),
             self.segmentedControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
             
             self.popScoreTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.segmentedControl.bottomAnchor, multiplier: 1),
@@ -155,6 +156,7 @@ final class UsersCell: UICollectionViewCell {
         self.nftImageView.image = UIImage(named: image)
         self.popScoreLabel.text = "\(vm.currentNft.value??.totalPopCount ?? 0)"
         self.actionCountLabel.text = "\(vm.currentNft.value??.totalActionCount ?? 0)"
+        self.currentUserVM = vm.currentUserVM
         self.usersList = vm.usersList.value ?? []
         DispatchQueue.main.async {
             self.popScoreTableView.reloadData()
@@ -165,12 +167,38 @@ final class UsersCell: UICollectionViewCell {
 
 extension UsersCell: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == popScoreTableView {
+            if section == 0 {
+                return SettingAsset.usersPopScoreFirstSectionHeader.rawValue
+            } else {
+                return SettingAsset.usersPopScoreSecondSectionHeader.rawValue
+            }
+        } else if tableView == actionCountTableView {
+            if section == 0 {
+                return SettingAsset.usersActionCountFirstSectionHeader.rawValue
+            } else {
+                return SettingAsset.usersActionCountSecondSectionHeader.rawValue
+            }
+        }
+        return SettingAsset.emptyTitle.rawValue
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.usersList.count
+        if section == 0 {
+            return 1
+        } else {
+            return self.usersList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell,
+              let currentUserVM = currentUserVM
         else { return UITableViewCell() }
         
         let vm = self.usersList[indexPath.row]
@@ -183,11 +211,23 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         }
         
         if tableView == self.popScoreTableView {
-            cell.configureRankScoreCell(with: vm)
-            return cell
+            if indexPath.section == 0 {
+                print("Rank image of the popScoreTableView: \(currentUserVM.rankImage)")
+                cell.configureRankScoreCell(with: currentUserVM)
+                return cell
+            } else {
+                cell.configureRankScoreCell(with: vm)
+                return cell
+            }
         } else if tableView == self.actionCountTableView {
-            cell.configureActionCountCell(with: vm)
-            return cell
+            if indexPath.section == 0 {
+                print("Rank image of the actionCountTableView: \(currentUserVM.rankImage)")
+                cell.configureActionCountCell(with: currentUserVM)
+                return cell
+            } else {
+                cell.configureActionCountCell(with: vm)
+                return cell
+            }
         }
 
         return UITableViewCell()
