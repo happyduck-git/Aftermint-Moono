@@ -27,8 +27,8 @@ struct AfterMintUserTest: Storable {
 }
 
 struct CardTest: Storable {
-    let tokenId: String
-    let collectionAddress: String
+//    let tokenId: String
+//    let collectionAddress: String
     let ownerAddress: String
     let popCount: Int64
     let actionCount: Int64
@@ -41,4 +41,12 @@ struct AddressTest: Storable {
     let popScore: Int64
     let profileImageUrl: String
     let username: String
+    let card: [CardGameData]
+}
+
+struct CardGameData {
+    let tokenId: String
+    let imageUrl: String
+    let actionCount: Int64
+    let popScore: Int64
 }

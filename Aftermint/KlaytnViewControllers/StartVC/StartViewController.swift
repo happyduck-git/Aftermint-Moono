@@ -156,6 +156,7 @@ class StartViewController: UIViewController {
     @objc private func startButtonTapped() {
         let vc = KlaytnTabViewController(
             vm: mainTabBarViewControllerDependency.leaderBoardListViewModel(),
+            leaderBoardFirstViewModel: mainTabBarViewControllerDependency.firstLeaderBoardViewModel(),
             homeViewControllerDependency: mainTabBarViewControllerDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieViewControllerDependency,
             bookmarkVCDependency: bookmarkVCDependency,

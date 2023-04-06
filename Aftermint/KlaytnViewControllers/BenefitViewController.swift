@@ -219,8 +219,6 @@ extension BenefitViewController: BenefitMenuBarDelegate {
         menuBar.selectItem(at: index)
         collectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
-    
-    
 }
 
 extension BenefitViewController: BenefitTabBottomViewControllerDelegate {

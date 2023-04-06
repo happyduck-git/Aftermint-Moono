@@ -1,13 +1,13 @@
 //
-//  LeaderBoardTableViewCell.swift
+//  PopScoreRankCell.swift
 //  Aftermint
 //
-//  Created by Platfarm on 2023/03/17.
+//  Created by HappyDuck on 2023/04/04.
 //
 
 import UIKit
 
-final class LeaderBoardTableViewCell: UITableViewCell {
+final class PopScoreRankCell: UITableViewCell {
     
     // MARK: - UI Elements
     private let rankImageView: UIImageView = {
@@ -38,16 +38,24 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     
     private let nftInfoStackView: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
-        stack.topLabelFont = BellyGomFont.header05
         stack.bottomLabelFont = BellyGomFont.header06
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
+    private let nftNameLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = BellyGomFont.header03
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let popScoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = BellyGomFont.header04
+        label.font = BellyGomFont.header03
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -75,6 +83,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         contentView.addSubview(rankImageView)
         contentView.addSubview(rankLabel)
         contentView.addSubview(userProfileImageView)
+        contentView.addSubview(nftNameLabel) //Will be replaced
         contentView.addSubview(nftInfoStackView)
         contentView.addSubview(popScoreLabel)
     }
@@ -120,18 +129,19 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     internal func resetCell() {
         self.rankLabel.text = nil
         self.userProfileImageView.image = nil
+        self.nftNameLabel.text = nil
         self.popScoreLabel.text = nil
         self.contentView.backgroundColor = nil
     }
     
     // MARK: - Public
-    public func configure(with vm: LeaderBoardSecondSectionCellViewModel) {
-        rankImageView.image = vm.rankImage
-        rankLabel.text = String(describing: vm.rank)
-        nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 10)
-        nftInfoStackView.bottomLabelText = vm.bottomLabelText
-        popScoreLabel.text = String(describing: vm.popScore)
-        userProfileImageView.image = UIImage(named: vm.userProfileImage)
+    public func configure(with vm: PopScoreRankCellViewModel) {
+        self.rankImageView.image = vm.rankImage
+        self.rankLabel.text = "\(vm.rank)"
+        self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
+        self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
+        self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
+        self.popScoreLabel.text = "\(vm.popScore)"
     }
     
     public func setAsCollectionInfoCell() {
@@ -154,4 +164,5 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     enum ImageError: Error {
         case nukeImageLoadingError
     }
+    
 }

@@ -16,8 +16,8 @@ final class BottomSheetView: PassThroughView {
     
     let prefetcher = ImagePrefetcher()
     
-//    var firstSectionVM: LeaderBoardTableViewCellListViewModel?
-    var viewModel: LeaderBoardTableViewCellListViewModel?
+    var firstSectionVM: LeaderBoardFirstSectionCellViewModel
+    var viewModel: LeaderBoardSecondSectionCellListViewModel?
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
     var tempTouchCountList: [String: Int64] = [:]
@@ -52,7 +52,7 @@ final class BottomSheetView: PassThroughView {
     private let leaderBoardLogoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: LeaderBoard.markImageName.rawValue)
+        imageView.image = UIImage(named: LeaderBoardAsset.markImageName.rawValue)
         return imageView
     }()
     
@@ -60,7 +60,7 @@ final class BottomSheetView: PassThroughView {
         let label = UILabel()
         label.font = BellyGomFont.header03
         label.textColor = .white
-        label.text = LeaderBoard.title.rawValue
+        label.text = LeaderBoardAsset.title.rawValue
         return label
     }()
     
@@ -68,6 +68,7 @@ final class BottomSheetView: PassThroughView {
         let table = UITableView()
         table.backgroundColor = AftermintColor.backgroundNavy
         table.alpha = 0.0
+        table.register(LeaderBoardFirstSectionCell.self, forCellReuseIdentifier: LeaderBoardFirstSectionCell.identifier)
         table.register(LeaderBoardTableViewCell.self, forCellReuseIdentifier: LeaderBoardTableViewCell.identifier)
         table.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10.0, right: 0)
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -102,7 +103,11 @@ final class BottomSheetView: PassThroughView {
         fatalError("init() has not been implemented")
     }
     
-    init(frame: CGRect, vm: LeaderBoardTableViewCellListViewModel) {
+    init(frame: CGRect,
+         vm: LeaderBoardSecondSectionCellListViewModel,
+         firstSectionVM: LeaderBoardFirstSectionCellViewModel
+    ) {
+        self.firstSectionVM = firstSectionVM
         super.init(frame: frame)
         
         self.viewModel = vm
@@ -215,14 +220,14 @@ final class BottomSheetView: PassThroughView {
 extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     
     private func getFirstSectionViewModel() {
-        self.viewModel?.getFirstSectionViewModel(completion: { result in
+        
+        self.firstSectionVM.getFirstSectionViewModel { result in
             switch result {
-            case .success(let viewModel):
-                if self.viewModel?.firstSectionVMList.value?.count == 0 {
-                    self.viewModel?.firstSectionVMList.value?.append(viewModel)
-                } else {
-                    self.viewModel?.firstSectionVMList.value?[0] = viewModel
-                }
+            case .success(let vm):
+                self.firstSectionVM.nftImage = vm.nftImage
+                self.firstSectionVM.nftCollectionName = vm.nftCollectionName
+                self.firstSectionVM.totalActionCount = vm.totalActionCount
+                self.firstSectionVM.totalPopScore = vm.totalPopScore
                 
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.6) {
@@ -233,14 +238,15 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             case .failure(let failure):
                 print("Error getting first section view model: \(failure)")
             }
-        })
+        }
+      
     }
     
     private func getSecondSectionViewModel() {
         self.viewModel?.getAddressSectionViewModel(completion: { result in
             switch result {
             case .success(let viewModels):
-                self.viewModel?.secondSectionVMList.value = viewModels
+                self.viewModel?.leaderBoardVMList.value = viewModels
 //                self.bottomSheetDelegate?.dataFetched()
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.6) {
@@ -258,49 +264,37 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard let vm = viewModel else { return 0 }
-        return vm.numberOfSections()
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let numberOfSection = self.viewModel?.numberOfRowsInSection(at: section) else { return 0 }
-        return numberOfSection
+        if section == 0 {
+            return 1
+        } else {
+            guard let numberOfSection = self.viewModel?.numberOfRowsInSection(at: section) else { return 0 }
+            return numberOfSection
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell else { return UITableViewCell()
-        }
-        cell.resetCell()
-        
         if indexPath.section == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardFirstSectionCell.identifier) as? LeaderBoardFirstSectionCell else { return UITableViewCell() }
+            cell.resetCell()
+            cell.configure(with: firstSectionVM)
             
-            guard let vm = self.viewModel?.modelAt(indexPath) else { return UITableViewCell() }
-            DispatchQueue.main.async {
-                cell.backgroundColor = .systemOrange.withAlphaComponent(0.3)
-            }
-            cell.setAsCollectionInfoCell()
-            cell.configure(with: vm)
+            return cell
             
         } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell else { return UITableViewCell()
+            }
+            cell.resetCell()
 
             guard let vm = self.viewModel?.modelAt(indexPath) else {
                 fatalError("ViewModel found to be nil")
             }
-            
-            //TODO: Make below logic as a separate function -- (1)
-            ///Find currently used moononft's name from viewModels
-    //        if vm.nftName == MoonoMockMetaData().getOneMockData().tokenId {
-    //            DispatchQueue.main.async {
-    //                cell.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.5)
-    //                cell.contentView.alpha = 0.5
-    //                UIView.animate(withDuration: 0.6) {
-    //                    cell.contentView.alpha = 1.0
-    //                }
-    //            }
-    //        }
-         
-            //TODO: Make below logic as a separate function -- (2)
+ 
+            //TODO: Make below logic as a separate function
             if indexPath.row <= 2 {
                 vm.setRankImage(with: cellRankImageAt(indexPath.row))
             } else {
@@ -309,16 +303,16 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             }
             
             cell.configure(with: vm)
-            
+            return cell
         }
-        return cell
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 70
+            return 60
         } else {
-            return 50
+            return 40
         }
     }
     
@@ -326,13 +320,13 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {
         switch indexPathRow {
         case 0:
-            return UIImage(named: LeaderBoard.firstPlace.rawValue)
+            return UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
         case 1:
-            return UIImage(named: LeaderBoard.secondPlace.rawValue)
+            return UIImage(named: LeaderBoardAsset.secondPlace.rawValue)
         case 2:
-            return UIImage(named: LeaderBoard.thirdPlace.rawValue)
+            return UIImage(named: LeaderBoardAsset.thirdPlace.rawValue)
         default:
-            return UIImage(named: LeaderBoard.markImageName.rawValue)
+            return UIImage(named: LeaderBoardAsset.markImageName.rawValue)
         }
     }
     
@@ -399,7 +393,7 @@ extension BottomSheetView {
 
 //TEMP
 extension BottomSheetView {
-    private func fetchTouchCount(with viewModelList: [LeaderBoardTableViewCellViewModel]) -> [String: Int64] {
+    private func fetchTouchCount(with viewModelList: [LeaderBoardSecondSectionCellViewModel]) -> [String: Int64] {
         var result: [String: Int64] = [:]
 //        viewModelList.forEach { vm in
 //            let key = vm.nftName

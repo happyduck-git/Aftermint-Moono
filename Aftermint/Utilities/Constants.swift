@@ -74,12 +74,13 @@ enum GameAsset: String {
 }
 
 /// GameViewController Bottom LeaderBoard related constants
-enum LeaderBoard: String {
+enum LeaderBoardAsset: String {
     case title = "Leader board"
     case markImageName = "leader-board-mark"
     case firstPlace = "1st_place_medal"
     case secondPlace = "2nd_place_medal"
     case thirdPlace = "3rd_place_medal"
+    case moonoImage = "game_moono_mock"
 }
 
 /// GameScene related constants
@@ -108,6 +109,7 @@ enum MarketAsset: String {
     case marketVCLogo = "marketplace_logo"
 }
 
+/// SettingController related constants
 enum SettingAsset: String {
     case gameLogo = "gamecontroller"
     case dashBoardTitle = "POP DASHBOARD"
@@ -115,4 +117,16 @@ enum SettingAsset: String {
     case usersButtonTitle = "Users"
     case nftsButtonTitle = "NFTs"
     case projectsButtonTitle = "Projects"
+    case walletAddressTitle = "Wallet Address"
+    case usernameTitle = "Nickname"
+    case popScoreTitle = "Total Pop Score"
+    case actionCountTitle = "Action Count"
+    case tableHeaderTitle = "Owned NFTs"
+    case pointLabel = "point"
+    case projectPopScoreTitle = "Project Pop Score"
+    case projectActionScoreTitle = "Project Action Score"
+    case usersFirstSectionHeader = "Your Action Count"
+    case usersSecondSectionHeader = "Users Action Count Rank"
+    case nftsFirstSectionHeader = "Your Top NFT Pop Score"
+    case nftsSecondSectionHeader = "NFT Pop Score"
 }

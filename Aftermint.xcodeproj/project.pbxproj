@@ -19,6 +19,20 @@
 		2419EE1129D6814A00457954 /* DemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2419EE1029D6814A00457954 /* DemoModel.swift */; };
 		245A4DA829DA9B48004B28A2 /* SettingViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */; };
 		245A4DAB29DAA9A2004B28A2 /* SettingMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DAA29DAA9A2004B28A2 /* SettingMenuBar.swift */; };
+		245A4DAE29DBDAE2004B28A2 /* YouCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DAD29DBDAE1004B28A2 /* YouCell.swift */; };
+		245A4DB029DBF83A004B28A2 /* YouCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DAF29DBF83A004B28A2 /* YouCellViewModel.swift */; };
+		245A4DB229DBFA83004B28A2 /* NftRankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DB129DBFA83004B28A2 /* NftRankCell.swift */; };
+		245A4DB629DBFEED004B28A2 /* NftRankCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DB529DBFEED004B28A2 /* NftRankCellViewModel.swift */; };
+		245A4DB929DC079D004B28A2 /* UsersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DB829DC079D004B28A2 /* UsersCell.swift */; };
+		245A4DBB29DC08D4004B28A2 /* UsersCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DBA29DC08D4004B28A2 /* UsersCellViewModel.swift */; };
+		245A4DBE29DC0C40004B28A2 /* PopScoreRankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DBD29DC0C40004B28A2 /* PopScoreRankCell.swift */; };
+		245A4DC029DC0C7C004B28A2 /* PopScoreRankCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DBF29DC0C7C004B28A2 /* PopScoreRankCellViewModel.swift */; };
+		245A4DC329DC13F8004B28A2 /* DashBoardNftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DC229DC13F8004B28A2 /* DashBoardNftCell.swift */; };
+		245A4DC529DC148F004B28A2 /* DashBoardNftCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DC429DC148F004B28A2 /* DashBoardNftCellViewModel.swift */; };
+		245A4DC829DC169E004B28A2 /* ProjectsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DC729DC169E004B28A2 /* ProjectsCell.swift */; };
+		245A4DCA29DCF6C2004B28A2 /* ProjectsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DC929DCF6C2004B28A2 /* ProjectsCellViewModel.swift */; };
+		245A4DCC29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DCB29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift */; };
+		245A4DCE29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A4DCD29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift */; };
 		245AC14D29A91AFE00CE7857 /* NFTCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */; };
 		245AC15029A9348E00CE7857 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC14F29A9348E00CE7857 /* Box.swift */; };
 		245AC15229A934DC00CE7857 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AC15129A934DC00CE7857 /* Constants.swift */; };
@@ -375,7 +389,7 @@
 		36A8CEED2983C238007BF65A /* KlaytnNftRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */; };
 		36A8CEF02983CB9C007BF65A /* LLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEF2983CB9C007BF65A /* LLog.swift */; };
 		9300BB1B29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */; };
-		9300BB1F29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1E29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift */; };
+		9300BB1F29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1E29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift */; };
 		9300BB2829C44AD400C67A29 /* MoonoGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */; };
 		9300BB2B29C44C6400C67A29 /* SparkParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9300BB2929C44C6400C67A29 /* SparkParticle.sks */; };
 		9300BB2C29C44C6400C67A29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9300BB2A29C44C6400C67A29 /* Assets.xcassets */; };
@@ -446,6 +460,20 @@
 		2419EE1029D6814A00457954 /* DemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoModel.swift; sourceTree = "<group>"; };
 		245A4DA729DA9B48004B28A2 /* SettingViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewControllerViewModel.swift; sourceTree = "<group>"; };
 		245A4DAA29DAA9A2004B28A2 /* SettingMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingMenuBar.swift; sourceTree = "<group>"; };
+		245A4DAD29DBDAE1004B28A2 /* YouCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouCell.swift; sourceTree = "<group>"; };
+		245A4DAF29DBF83A004B28A2 /* YouCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DB129DBFA83004B28A2 /* NftRankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftRankCell.swift; sourceTree = "<group>"; };
+		245A4DB529DBFEED004B28A2 /* NftRankCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftRankCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DB829DC079D004B28A2 /* UsersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersCell.swift; sourceTree = "<group>"; };
+		245A4DBA29DC08D4004B28A2 /* UsersCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DBD29DC0C40004B28A2 /* PopScoreRankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopScoreRankCell.swift; sourceTree = "<group>"; };
+		245A4DBF29DC0C7C004B28A2 /* PopScoreRankCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopScoreRankCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DC229DC13F8004B28A2 /* DashBoardNftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardNftCell.swift; sourceTree = "<group>"; };
+		245A4DC429DC148F004B28A2 /* DashBoardNftCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardNftCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DC729DC169E004B28A2 /* ProjectsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsCell.swift; sourceTree = "<group>"; };
+		245A4DC929DCF6C2004B28A2 /* ProjectsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsCellViewModel.swift; sourceTree = "<group>"; };
+		245A4DCB29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardFirstSectionCell.swift; sourceTree = "<group>"; };
+		245A4DCD29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardFirstSectionCellViewModel.swift; sourceTree = "<group>"; };
 		245AC14C29A91AFD00CE7857 /* NFTCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCardViewModel.swift; sourceTree = "<group>"; };
 		245AC14F29A9348E00CE7857 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		245AC15129A934DC00CE7857 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -786,7 +814,7 @@
 		36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnNftRequester.swift; sourceTree = "<group>"; };
 		36A8CEEF2983CB9C007BF65A /* LLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLog.swift; sourceTree = "<group>"; };
 		9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardTableViewCell.swift; sourceTree = "<group>"; };
-		9300BB1E29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		9300BB1E29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardSecondSectionCellViewModel.swift; sourceTree = "<group>"; };
 		9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoGameScene.swift; sourceTree = "<group>"; };
 		9300BB2929C44C6400C67A29 /* SparkParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SparkParticle.sks; sourceTree = "<group>"; };
 		9300BB2A29C44C6400C67A29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -914,9 +942,77 @@
 			path = SettingVC;
 			sourceTree = "<group>";
 		};
+		245A4DAC29DBDAAF004B28A2 /* SettingMenuBarCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DC629DC1688004B28A2 /* ProjectsCell */,
+				245A4DC129DC1382004B28A2 /* NftsCell */,
+				245A4DB729DC0786004B28A2 /* UsersCell */,
+				245A4DB329DBFED2004B28A2 /* YouCell */,
+			);
+			path = SettingMenuBarCell;
+			sourceTree = "<group>";
+		};
+		245A4DB329DBFED2004B28A2 /* YouCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DB429DBFEDD004B28A2 /* NftRankCell */,
+				245A4DAD29DBDAE1004B28A2 /* YouCell.swift */,
+				245A4DAF29DBF83A004B28A2 /* YouCellViewModel.swift */,
+			);
+			path = YouCell;
+			sourceTree = "<group>";
+		};
+		245A4DB429DBFEDD004B28A2 /* NftRankCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DB129DBFA83004B28A2 /* NftRankCell.swift */,
+				245A4DB529DBFEED004B28A2 /* NftRankCellViewModel.swift */,
+			);
+			path = NftRankCell;
+			sourceTree = "<group>";
+		};
+		245A4DB729DC0786004B28A2 /* UsersCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DBC29DC0C20004B28A2 /* PopScoreRankCell */,
+				245A4DB829DC079D004B28A2 /* UsersCell.swift */,
+				245A4DBA29DC08D4004B28A2 /* UsersCellViewModel.swift */,
+			);
+			path = UsersCell;
+			sourceTree = "<group>";
+		};
+		245A4DBC29DC0C20004B28A2 /* PopScoreRankCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DBD29DC0C40004B28A2 /* PopScoreRankCell.swift */,
+				245A4DBF29DC0C7C004B28A2 /* PopScoreRankCellViewModel.swift */,
+			);
+			path = PopScoreRankCell;
+			sourceTree = "<group>";
+		};
+		245A4DC129DC1382004B28A2 /* NftsCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DC229DC13F8004B28A2 /* DashBoardNftCell.swift */,
+				245A4DC429DC148F004B28A2 /* DashBoardNftCellViewModel.swift */,
+			);
+			path = NftsCell;
+			sourceTree = "<group>";
+		};
+		245A4DC629DC1688004B28A2 /* ProjectsCell */ = {
+			isa = PBXGroup;
+			children = (
+				245A4DC729DC169E004B28A2 /* ProjectsCell.swift */,
+				245A4DC929DCF6C2004B28A2 /* ProjectsCellViewModel.swift */,
+			);
+			path = ProjectsCell;
+			sourceTree = "<group>";
+		};
 		2481E1CC297A870000187BB9 /* KlaytnViews */ = {
 			isa = PBXGroup;
 			children = (
+				245A4DAC29DBDAAF004B28A2 /* SettingMenuBarCell */,
 				9300BB5629C8104B00C67A29 /* BottomSheetView */,
 				9300BB1929C3FFAE00C67A29 /* LeaderBoardCell */,
 				24ED33AD29BF29D100C2D4E1 /* NftCardCell */,
@@ -2176,7 +2272,9 @@
 			isa = PBXGroup;
 			children = (
 				9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */,
-				9300BB1E29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift */,
+				9300BB1E29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift */,
+				245A4DCB29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift */,
+				245A4DCD29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift */,
 			);
 			path = LeaderBoardCell;
 			sourceTree = "<group>";
@@ -2573,6 +2671,7 @@
 				3619B10129790AC50051C387 /* NFTProtocol.swift in Sources */,
 				245AC15029A9348E00CE7857 /* Box.swift in Sources */,
 				3619B0CA29790AC50051C387 /* UIView.swift in Sources */,
+				245A4DC529DC148F004B28A2 /* DashBoardNftCellViewModel.swift in Sources */,
 				93C32FC529BB004400DB3CB3 /* NftCardCellPropertyItemView.swift in Sources */,
 				3619B11029790AC50051C387 /* MessageImageView.swift in Sources */,
 				3619B19529790AC60051C387 /* RectNode.swift in Sources */,
@@ -2582,6 +2681,7 @@
 				3619B14F29790AC60051C387 /* AnimationTextProvider.swift in Sources */,
 				3619B1A629790AC60051C387 /* ItemsExtension.swift in Sources */,
 				93A4B7FF2990CEFC00146FD8 /* UtilityCell.swift in Sources */,
+				245A4DCE29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift in Sources */,
 				3619B10529790AC50051C387 /* AssetsResponse.swift in Sources */,
 				3619B11C29790AC60051C387 /* AppDependency.swift in Sources */,
 				3619B1C029790AC60051C387 /* Animation.swift in Sources */,
@@ -2596,6 +2696,7 @@
 				3619B18729790AC60051C387 /* LayerImageProvider.swift in Sources */,
 				3619B11329790AC50051C387 /* TemplateCell.swift in Sources */,
 				3619B18229790AC60051C387 /* AnimationContainer.swift in Sources */,
+				245A4DB929DC079D004B28A2 /* UsersCell.swift in Sources */,
 				3619B1E229790AC60051C387 /* AnimationContext.swift in Sources */,
 				3619B15729790AC60051C387 /* PointValueProvider.swift in Sources */,
 				3619B15B29790AC60051C387 /* LayerModel+makeAnimationLayer.swift in Sources */,
@@ -2614,6 +2715,7 @@
 				3619B1A029790AC60051C387 /* NodePropertyMap.swift in Sources */,
 				24097B7E29913EFD00F92366 /* BenefitTabBottomViewController.swift in Sources */,
 				3619B18629790AC60051C387 /* InvertedMatteLayer.swift in Sources */,
+				245A4DB229DBFA83004B28A2 /* NftRankCell.swift in Sources */,
 				9300BB6329C8222300C67A29 /* Card.swift in Sources */,
 				3619B0CF29790AC50051C387 /* UIButton.swift in Sources */,
 				3619B14C29790AC60051C387 /* Keyframe.swift in Sources */,
@@ -2621,6 +2723,7 @@
 				935E6A802982462B00D94DA6 /* CustomeSegmentedControl.swift in Sources */,
 				3619B0DC29790AC50051C387 /* ImageArt.swift in Sources */,
 				93199EF4298A06A4008D532B /* KasWalletRepository.swift in Sources */,
+				245A4DCC29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift in Sources */,
 				3619B0FA29790AC50051C387 /* AccessTokenResponse.swift in Sources */,
 				3619B19829790AC60051C387 /* TextAnimatorNode.swift in Sources */,
 				3619B15129790AC60051C387 /* AnimationKeypath.swift in Sources */,
@@ -2667,6 +2770,7 @@
 				3619B10029790AC50051C387 /* TwitterAccount.swift in Sources */,
 				3619B1D729790AC60051C387 /* StringExtensions.swift in Sources */,
 				3619B1C229790AC60051C387 /* Transform.swift in Sources */,
+				245A4DC029DC0C7C004B28A2 /* PopScoreRankCellViewModel.swift in Sources */,
 				3619B0D029790AC50051C387 /* UIImageView.swift in Sources */,
 				93A4B8692994E5A600146FD8 /* CalendarViewReactor.swift in Sources */,
 				3619B11829790AC60051C387 /* TwitterPreviewView.swift in Sources */,
@@ -2685,6 +2789,7 @@
 				3619B19429790AC60051C387 /* PolygonNode.swift in Sources */,
 				93A4B8072990D6A100146FD8 /* UtilityDetailViewController.swift in Sources */,
 				932977862987990700C76AB5 /* LoginViewReactor.swift in Sources */,
+				245A4DAE29DBDAE2004B28A2 /* YouCell.swift in Sources */,
 				3619B19B29790AC60051C387 /* FillNode.swift in Sources */,
 				3619B1AF29790AC60051C387 /* ShapeItem.swift in Sources */,
 				939DE065297A2E0600EFA71E /* KlaytnAuthResult.swift in Sources */,
@@ -2717,6 +2822,7 @@
 				3619B16A29790AC60051C387 /* Keyframes+combinedIfPossible.swift in Sources */,
 				3619B10229790AC50051C387 /* MarketPlaceKind.swift in Sources */,
 				24F9FFB329841DEC00E534A1 /* GradientLabel.swift in Sources */,
+				245A4DB629DBFEED004B28A2 /* NftRankCellViewModel.swift in Sources */,
 				2419EE1129D6814A00457954 /* DemoModel.swift in Sources */,
 				3619B0C729790AC50051C387 /* NFTRepository.swift in Sources */,
 				3619B18029790AC60051C387 /* ShapeCompositionLayer.swift in Sources */,
@@ -2804,6 +2910,7 @@
 				3619B11429790AC60051C387 /* NFTCell.swift in Sources */,
 				3619B1B129790AC60051C387 /* Group.swift in Sources */,
 				3619B1BD29790AC60051C387 /* TextLayerModel.swift in Sources */,
+				245A4DC329DC13F8004B28A2 /* DashBoardNftCell.swift in Sources */,
 				3619B14829790AC60051C387 /* AnimationTime.swift in Sources */,
 				3619B16629790AC60051C387 /* PreCompLayer.swift in Sources */,
 				2481E1CE297A870F00187BB9 /* NFTCardView.swift in Sources */,
@@ -2826,7 +2933,7 @@
 				3619B14E29790AC60051C387 /* LRUAnimationCache.swift in Sources */,
 				24F9FFB5298424DF00E534A1 /* LottieTemplateCell.swift in Sources */,
 				939DE054297A242500EFA71E /* BenefitViewController.swift in Sources */,
-				9300BB1F29C4057200C67A29 /* LeaderBoardTableViewCellViewModel.swift in Sources */,
+				9300BB1F29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift in Sources */,
 				9300BB2829C44AD400C67A29 /* MoonoGameScene.swift in Sources */,
 				3619B1B829790AC60051C387 /* Rectangle.swift in Sources */,
 				3619B16129790AC60051C387 /* AnimationLayer.swift in Sources */,
@@ -2834,6 +2941,7 @@
 				3619B0CD29790AC50051C387 /* UITableViewCell.swift in Sources */,
 				3619B1FD29790AC60051C387 /* FilesManager.swift in Sources */,
 				3690783C297A6FEF0066530D /* HomeViewController2.swift in Sources */,
+				245A4DC829DC169E004B28A2 /* ProjectsCell.swift in Sources */,
 				9300BB1B29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift in Sources */,
 				2481E1D5297A998F00187BB9 /* CollectNewNFTButton.swift in Sources */,
 				3619B0E129790AC50051C387 /* ImageTemplate.swift in Sources */,
@@ -2854,6 +2962,7 @@
 				3619B11929790AC60051C387 /* TopBar.swift in Sources */,
 				939DE056297A246B00EFA71E /* MarketViewController.swift in Sources */,
 				3619B14529790AC60051C387 /* AnimationViewBase.swift in Sources */,
+				245A4DBE29DC0C40004B28A2 /* PopScoreRankCell.swift in Sources */,
 				3619B17529790AC60051C387 /* CALayer+addAnimation.swift in Sources */,
 				3619B0E029790AC50051C387 /* ArtUIProtocol.swift in Sources */,
 				93BAFF1429D411AB00596999 /* VerticalDoubleStackView.swift in Sources */,
@@ -2873,6 +2982,7 @@
 				3619B0EC29790AC50051C387 /* AccessTokenWithSecret.swift in Sources */,
 				9300BB5829C8106200C67A29 /* BottomSheetView.swift in Sources */,
 				24ED33AC29BEBCDD00C2D4E1 /* NukeImageLoader.swift in Sources */,
+				245A4DB029DBF83A004B28A2 /* YouCellViewModel.swift in Sources */,
 				2481E1DC297C48E700187BB9 /* UIImage.swift in Sources */,
 				3619B15029790AC60051C387 /* LottieLogger.swift in Sources */,
 				3619B15C29790AC60051C387 /* MaskCompositionLayer.swift in Sources */,
@@ -2915,9 +3025,11 @@
 				939DE064297A2E0600EFA71E /* KlaytnTokenResponse.swift in Sources */,
 				3619B15429790AC60051C387 /* FloatValueProvider.swift in Sources */,
 				3619B12229790AC60051C387 /* String+.swift in Sources */,
+				245A4DBB29DC08D4004B28A2 /* UsersCellViewModel.swift in Sources */,
 				3619B17629790AC60051C387 /* GradientAnimations.swift in Sources */,
 				3619B0E529790AC50051C387 /* VideoTemplate.swift in Sources */,
 				3619B13529790AC60051C387 /* BundleImageProvider.macOS.swift in Sources */,
+				245A4DCA29DCF6C2004B28A2 /* ProjectsCellViewModel.swift in Sources */,
 				3619B12A29790AC60051C387 /* NetworkStatus.swift in Sources */,
 				24DDC99C298175ED007A3F63 /* NftCardUtilityCell.swift in Sources */,
 				3619B12029790AC60051C387 /* SafariViewController.swift in Sources */,

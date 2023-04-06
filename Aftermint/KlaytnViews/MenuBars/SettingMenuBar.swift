@@ -15,6 +15,18 @@ final class SettingMenuBar: UIView {
     
     weak var delegate: SettingMenuBarDelegate?
     
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUI()
+        setLayout()
+        setAlpha(for: youButton)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     //MARK: - UI Elements
     private let buttonStack: UIStackView = {
         let stack = UIStackView()
@@ -60,7 +72,32 @@ final class SettingMenuBar: UIView {
         return button
     }()
     
-    //MARK: - Button functions
+    //MARK: - Public functions
+    func selectItem(at index: Int) {
+        animateIndicator(to: index)
+    }
+    
+    private func animateIndicator(to index: Int) {
+        var button: UIButton
+        switch index {
+        case 0:
+            button = youButton
+        case 1:
+            button = usersButton
+        case 2:
+            button = nftsButton
+        default:
+            button = projectsButton
+        }
+        
+        setAlpha(for: button)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
+        }
+    }
+    
+    //MARK: - Private functions
     @objc private func youButtonTapped() {
         delegate?.didSelectItemAt(index: 0)
     }
@@ -77,4 +114,28 @@ final class SettingMenuBar: UIView {
         delegate?.didSelectItemAt(index: 3)
     }
     
+    private func setUI() {
+        addSubview(buttonStack)
+        self.buttonStack.addArrangedSubview(youButton)
+        self.buttonStack.addArrangedSubview(usersButton)
+        self.buttonStack.addArrangedSubview(nftsButton)
+        self.buttonStack.addArrangedSubview(projectsButton)
+    }
+    
+    private func setLayout() {
+        NSLayoutConstraint.activate([
+            buttonStack.topAnchor.constraint(equalTo: self.topAnchor),
+            buttonStack.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            buttonStack.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            buttonStack.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
+    
+    private func setAlpha(for button: UIButton) {
+        youButton.alpha = 0.5
+        usersButton.alpha = 0.5
+        nftsButton.alpha = 0.5
+        projectsButton.alpha = 0.5
+        button.alpha = 1.0
+    }
 }

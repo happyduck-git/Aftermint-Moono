@@ -147,6 +147,7 @@ class LoginViewController: UIViewController, View {
         /// Will connect to FavorletWallet application later in the future
         let homeVC = KlaytnTabViewController(
             vm: mainTabBarVCDependency.leaderBoardListViewModel(),
+            leaderBoardFirstViewModel: mainTabBarVCDependency.firstLeaderBoardViewModel(),
             homeViewControllerDependency: mainTabBarVCDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieVCDependency,
             bookmarkVCDependency: bookmarkVCDependency,

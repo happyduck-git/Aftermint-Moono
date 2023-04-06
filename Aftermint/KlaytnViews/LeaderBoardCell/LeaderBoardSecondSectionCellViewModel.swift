@@ -7,81 +7,41 @@
 
 import UIKit.UIImage
 
-
-
-final class LeaderBoardTableViewCellListViewModel {
+final class LeaderBoardSecondSectionCellListViewModel {
     
-    var firstSectionVMList: Box<[LeaderBoardTableViewCellViewModel]> = Box([])
-    var secondSectionVMList: Box<[LeaderBoardTableViewCellViewModel]> = Box([])
+    private let fireStoreRepository = FirestoreRepository.shared
+    var leaderBoardVMList: Box<[LeaderBoardSecondSectionCellViewModel]> = Box([])
     var touchCount: Box<Int> = Box(0)
-    
-    let fireStoreRepository = FirestoreRepository.shared
-    
-    func numberOfSections() -> Int {
-        return 2
-    }
-    
+
     func numberOfRowsInSection(at section: Int) -> Int {
-        if section == 0 {
-            return self.firstSectionVMList.value?.count ?? 0
-        }
-        return self.secondSectionVMList.value?.count ?? 0
+        return self.leaderBoardVMList.value?.count ?? 0
     }
     
-    func modelAt(_ indexPath: IndexPath) -> LeaderBoardTableViewCellViewModel? {
-        var viewModel: LeaderBoardTableViewCellViewModel?
-        if indexPath.section == 0 {
-            viewModel = self.firstSectionVMList.value?[indexPath.row]
-        } else {
-            viewModel = self.secondSectionVMList.value?[indexPath.row]
-        }
-        return viewModel
+    func modelAt(_ indexPath: IndexPath) -> LeaderBoardSecondSectionCellViewModel? {
+        return self.leaderBoardVMList.value?[indexPath.row]
     }
     
-    func currentUserViewModel() -> LeaderBoardTableViewCellViewModel? {
-        let currentUserViewModel = self.secondSectionVMList.value?.filter({ viewModel in
+    func currentUserViewModel() -> LeaderBoardSecondSectionCellViewModel? {
+        let currentUserViewModel = self.leaderBoardVMList.value?.filter({ viewModel in
             //TODO: Change mock user address to currently logged in user
             let mockUser = MoonoMockUserData().getOneUserData()
             return viewModel.topLabelText == mockUser.address.cutOfRange(length: 10)
         })
         return currentUserViewModel?.first
     }
-    
-    /// Build ViewModels for first section
-    func getFirstSectionViewModel(completion: @escaping (Result<LeaderBoardTableViewCellViewModel, Error>) -> ()) {
-        self.fireStoreRepository.getNftCollection { collection in
-            guard let collection = collection else {
-                completion(.failure(LeaderBoardTableViewCellListError.collectionFetchError))
-                return
-            }
-            guard let rankImage = UIImage(named: LeaderBoard.firstPlace.rawValue) else { return }
-            let initialRank = 1
-            
-            let viewModel = LeaderBoardTableViewCellViewModel(rankImage: rankImage,
-                                                              rank: initialRank,
-                                                              userProfileImage: "game_moono_mock", //TODO: change to `collection.imageUrl`
-                                                              topLabelText: collection.name,
-                                                              bottomLabelText: "Ation count \(collection.totalActionCount)",
-                                                              actionCount: collection.totalActionCount,
-                                                              popScore: collection.totalPopCount)
-            completion(.success(viewModel))
-            return
-        }
-        
-    }
-    
+ 
     /// Build ViewModels for second section
-    func getAddressSectionViewModel(completion: @escaping (Result<[LeaderBoardTableViewCellViewModel], Error>) -> ()) {
-        self.fireStoreRepository.getAllAddress2 { addressList in
+    func getAddressSectionViewModel(completion: @escaping (Result<[LeaderBoardSecondSectionCellViewModel], Error>) -> ()) {
+        self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else {
-                completion(.failure(LeaderBoardTableViewCellListError.addressFetchError))
+                completion(.failure(LeaderBoardError.AddressFetchError))
                 return
             }
-            guard let rankImage = UIImage(named: LeaderBoard.firstPlace.rawValue) else { return }
+            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
             let initialRank = 1
             
             let viewModels = addressList.map { address in
-                let viewModel = LeaderBoardTableViewCellViewModel(rankImage: rankImage,
+                let viewModel = LeaderBoardSecondSectionCellViewModel(rankImage: rankImage,
                                                                   rank: initialRank,
                                                                   userProfileImage: address.profileImageUrl,
                                                                   topLabelText: address.ownerAddress.cutOfRange(length: 10),
@@ -93,19 +53,19 @@ final class LeaderBoardTableViewCellListViewModel {
             completion(.success(viewModels))
             return
         }
-        completion(.failure(LeaderBoardTableViewCellListError.addressFetchError))
+        completion(.failure(LeaderBoardError.AddressFetchError))
     }
     
     //TODO: Need to add error handler
-    func getAllNftRankCellViewModels(completion: @escaping (Result<[LeaderBoardTableViewCellViewModel], Error>) -> ()) {
+    func getAllNftRankCellViewModels(completion: @escaping (Result<[LeaderBoardSecondSectionCellViewModel], Error>) -> ()) {
         
         let userList: [AfterMintUserTest] = MoonoMockUserData().getAllUserData()
-        guard let rankImage = UIImage(named: LeaderBoard.firstPlace.rawValue) else { return }
+        guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
         let initialRank = 1
         
         let viewModels = userList.map { user in
-            let viewModel: LeaderBoardTableViewCellViewModel =
-            LeaderBoardTableViewCellViewModel(rankImage: rankImage,
+            let viewModel: LeaderBoardSecondSectionCellViewModel =
+            LeaderBoardSecondSectionCellViewModel(rankImage: rankImage,
                                               rank: initialRank,
                                               userProfileImage: user.imageUrl,
                                               topLabelText: user.address,
@@ -140,35 +100,10 @@ final class LeaderBoardTableViewCellListViewModel {
      
     }
     
-    
-    ///TEMP: Using mock data
-//    let randomMoonoData: Card = MoonoMockMetaData().getOneMockData()
-    
-    /// Save increase touch count of a certain card to Firestore
-    
-    
-//    func increaseTouchCount(_ number: Int64) {
-//        saveCountNumberOfCard(imageUri: randomMoonoData.imageUri,
-//                              collectionId: randomMoonoData.collectionId,
-//                              tokenId: randomMoonoData.tokenId,
-//                              count: number)
-//    }
-    
-}
-
-// MARK: - Custom Error type
-extension LeaderBoardTableViewCellListViewModel {
-    
-    enum LeaderBoardTableViewCellListError: Error {
-        case addressFetchError
-        case nftFetchError
-        case collectionFetchError
-    }
-    
 }
 
 //MARK: - LeaderBoardTableViewCellViewModel
-final class LeaderBoardTableViewCellViewModel {
+final class LeaderBoardSecondSectionCellViewModel {
     var rankImage: UIImage
     var rank: Int
     let userProfileImage: String
@@ -204,7 +139,6 @@ final class LeaderBoardTableViewCellViewModel {
     func setRankNumberWithIndexPath(_ indexPathRow: Int) {
         self.rank = indexPathRow
     }
-    
     
 }
 

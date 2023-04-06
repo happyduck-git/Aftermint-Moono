@@ -106,9 +106,59 @@ class FirestoreRepository {
         
     }
     
-    func getAllAddress2(completion: @escaping (([AddressTest]?) -> ())) {
+    func getAllOwnedCardData(ofCollectionType collectionType: CollectionType, completion: @escaping(([CardTest]?) -> Void)) {
+        let mockUser = MoonoMockUserData().getOneUserData()
+        
+        let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
+        docRefForNft
+            .addSnapshotListener { snapshot, error in
+                guard let snapshot = snapshot, error == nil else {
+                    print("Error fetching cards list: \(String(describing: error))")
+                    completion(nil)
+                    return
+                }
+                let documents = snapshot.documents
+                if !documents.isEmpty {
+                    let filteredDocs = documents.filter { doc in
+                        doc.documentID == collectionType.rawValue
+                    }
+                    let docRef = filteredDocs.first
+                    docRef?
+                        .reference
+                        .collection(K.FStore.secondDepthCollectionName)
+                        .getDocuments { snapshot, error in
+                            guard let snapshot = snapshot, error == nil else {
+                                completion(nil)
+                                return
+                            }
+                            let cardDocs = snapshot.documents
+                            if !cardDocs.isEmpty {
+                                let result = cardDocs.map { doc in
+                                    return CardTest(ownerAddress: mockUser.address,
+                                                    popCount: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
+                                                    actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
+                                                    imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "")
+                                    
+                                }
+                                completion(result)
+                            } else {
+                                completion(nil)
+                                return
+                            }
+                        }
+                   
+                } else {
+                    completion(nil)
+                    return
+                }
+            }
+        
+    }
+    
+    func getAllAddress(completion: @escaping (([AddressTest]?) -> Void)) {
         let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName)
         docRefForAddress
+            .order(by: K.FStore.popScoreFieldKey, descending: true)
             .addSnapshotListener { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
@@ -125,7 +175,8 @@ class FirestoreRepository {
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? "david",
-                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David"
+                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David",
+                            card: []
                         )
                     }
                     completion(result)
