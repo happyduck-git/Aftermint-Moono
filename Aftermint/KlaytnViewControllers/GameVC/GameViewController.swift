@@ -156,7 +156,6 @@ final class GameViewController: UIViewController {
         setLayout()
         setGameScene()
 
-//        configureProfileInfo()
         self.bottomSheetView.bottomSheetDelegate = self
         //Correct loction to call this?
 //        getCurrentUserViewModel()
@@ -277,17 +276,7 @@ extension GameViewController {
         scene.scaleMode = .aspectFit
         gameSKView.presentScene(scene)
     }
-    
-//    private func configureProfileInfo() {
-//        let card = leaderBoardListViewModel.randomMoonoData
-//        let url = URL(string: card.imageUrl)
-//        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-//            self.userImageView.image = image
-//        }
-//
-//        let nftName = card.tokenId.replacingOccurrences(of: "___", with: " #")
-//        self.walletAddressLabel.text = "\(nftName) "
-//    }
+
 }
 
 extension GameViewController: MoonoGameSceneDelegate {
@@ -297,12 +286,11 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.touchCountToShow += number
         self.touchCount += number
         
-        let ownerAddress: String = KasWalletRepository.shared.getCurrentWallet()
-        let mockUserData: AfterMintUserTest = MoonoMockUserData().getOneUserData()
+        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
         
         self.leaderBoardListViewModel.saveCountNumber(collectionAddress: K.ContractAddress.moono,
-                                                      collectionImageUrl: "fake url",
+                                                      collectionImageUrl: "game_moono_mock",
                                                       popScore: touchCount * Int64(mockUserData.totalNfts),
                                                       actionCount: touchCount,
                                                       ownerAddress: mockUserData.address,

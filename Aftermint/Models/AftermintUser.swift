@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct AftermintUser {
-    let walletAddress: String //
+struct AfterMintUser: Storable {
     let username: String
-    let userProfileImageUrl: String
-    let totalOwned: Int
-    let popScore: Int64 //
-//    let actionCount: Int64 //
+    let address: String
+    let imageUrl: String
+    let popCount: Int64
+    let actionCount: Int64
+    let totalNfts: Int
 }

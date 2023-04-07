@@ -14,12 +14,12 @@ final class YouCellViewModel {
     }
     
     let fireStoreRepository = FirestoreRepository.shared
-    var currentUser: Box<AddressTest?> = Box(nil)
+    var currentUser: Box<Address?> = Box(nil)
     var nftRankViewModels: Box<[NftRankCellViewModel]> = Box([])
-    var addressList: Box<[AddressTest]> = Box([]) /// SettingVM 테스트!
+    var addressList: Box<[Address]> = Box([]) /// SettingVM 테스트!
     
     /// Find a user who has the same wallet address
-    func getCurrentUserData(completion: @escaping (Result<AddressTest, Error>) -> Void) {
+    func getCurrentUserData(completion: @escaping (Result<Address, Error>) -> Void) {
         let mockUser = MoonoMockUserData().getOneUserData()
         
         self.fireStoreRepository.getAllAddress { addressList in
@@ -37,7 +37,7 @@ final class YouCellViewModel {
                 return NftRankCellViewModel(
                     rank: 0,
                     nftImageUrl: card.imageUrl,
-                    nftName: "Moono #924", //TODO: nft name 수정필요
+                    nftName: card.nftName,
                     score: card.popScore,
                     ownerAddress: card.ownerAddress
                 )

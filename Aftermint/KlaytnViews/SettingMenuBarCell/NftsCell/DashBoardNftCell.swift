@@ -23,7 +23,6 @@ final class DashBoardNftCell: UICollectionViewCell {
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.backgroundColor = .systemGray
         setUI()
         setLayout()
         setDelegate()

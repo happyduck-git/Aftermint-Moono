@@ -74,6 +74,54 @@ final class SettingViewController: UIViewController {
         setLayout()
         setDelegate()
         
+        getAllUserData()
+        getNftData()
+        getAllNftData()
+        getAllNftDocument()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    //MARK: - Set UI & Layout
+    private func setUI() {
+        view.backgroundColor = .black
+        
+        view.addSubview(gameLogoImageView)
+        view.addSubview(dashBoardStackView)
+        view.addSubview(menuBar)
+        view.addSubview(collectionView)
+    }
+    
+    private func setLayout() {
+        NSLayoutConstraint.activate([
+            self.gameLogoImageView.centerYAnchor.constraint(equalTo: self.dashBoardStackView.centerYAnchor),
+            self.gameLogoImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            self.dashBoardStackView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
+            self.dashBoardStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.gameLogoImageView.trailingAnchor, multiplier: 2),
+            
+            self.menuBar.topAnchor.constraint(equalToSystemSpacingBelow: self.dashBoardStackView.bottomAnchor, multiplier: 1),
+            self.menuBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.menuBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.menuBar.heightAnchor.constraint(equalToConstant: 50),
+            
+            self.collectionView.topAnchor.constraint(equalTo: self.menuBar.bottomAnchor),
+            self.collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.view.bottomAnchor.constraint(equalToSystemSpacingBelow: self.collectionView.bottomAnchor, multiplier: 0)
+        ])
+    }
+    
+    private func setDelegate() {
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
+        self.menuBar.delegate = self
+    }
+    
+    private func getAllUserData() {
         self.vm.getAllUserData { result in
             switch result {
             case .success(let addressList):
@@ -96,7 +144,9 @@ final class SettingViewController: UIViewController {
                 print("Failed from SettingVC: \(failure.localizedDescription)")
             }
         }
-        
+    }
+    
+    private func getNftData() {
         self.vm.getNftData(ofCollection: .moono) { result in
             switch result {
             case .success(let collection):
@@ -105,6 +155,9 @@ final class SettingViewController: UIViewController {
                 print("Failed from SettingVC: \(failure.localizedDescription)")
             }
         }
+    }
+    
+    private func getAllNftData() {
         /// Get all the moono nft card data saved in firestore
         self.vm.getAllNftData(ofCollection: .moono) { result in
             switch result {
@@ -113,7 +166,7 @@ final class SettingViewController: UIViewController {
                     return NftRankCellViewModel(
                         rank: 0,
                         nftImageUrl: card.imageUrl,
-                        nftName: "Moono #924", //NEED TO CHANGE
+                        nftName: card.nftName,
                         score: card.popScore,
                         ownerAddress: card.ownerAddress
                     )
@@ -123,7 +176,9 @@ final class SettingViewController: UIViewController {
                 print("Failed from SettingVC: \(failure.localizedDescription)")
             }
         }
-        
+    }
+    
+    private func getAllNftDocument() {
         /// Get all the `NFT collection` documents from firestore
         self.vm.getAllNftDocument { result in
             switch result {
@@ -144,44 +199,6 @@ final class SettingViewController: UIViewController {
                 print("Failed from SettingVC: \(failure.localizedDescription)")
             }
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
-    //MARK: - Set UI & Layout
-    private func setUI() {
-        view.addSubview(gameLogoImageView)
-        view.addSubview(dashBoardStackView)
-        view.addSubview(menuBar)
-        view.addSubview(collectionView)
-    }
-    
-    private func setLayout() {
-        NSLayoutConstraint.activate([
-            self.gameLogoImageView.centerYAnchor.constraint(equalTo: self.dashBoardStackView.centerYAnchor),
-            self.gameLogoImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
-            self.dashBoardStackView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
-            self.dashBoardStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.gameLogoImageView.trailingAnchor, multiplier: 2),
-            
-            self.menuBar.topAnchor.constraint(equalToSystemSpacingBelow: self.dashBoardStackView.bottomAnchor, multiplier: 1),
-            self.menuBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            self.menuBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            self.menuBar.heightAnchor.constraint(equalToConstant: 50),
-            
-            self.collectionView.topAnchor.constraint(equalToSystemSpacingBelow: self.menuBar.bottomAnchor, multiplier: 1),
-            self.collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            self.collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            self.view.bottomAnchor.constraint(equalToSystemSpacingBelow: self.collectionView.bottomAnchor, multiplier: 0)
-        ])
-    }
-    
-    private func setDelegate() {
-        self.collectionView.dataSource = self
-        self.collectionView.delegate = self
-        self.menuBar.delegate = self
     }
     
 }
@@ -239,3 +256,4 @@ extension SettingViewController: SettingMenuBarDelegate {
         collectionView.scrollToItem(at: indexPath, at: [], animated: true)
     }
 }
+

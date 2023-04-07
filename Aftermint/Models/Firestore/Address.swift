@@ -11,5 +11,6 @@ struct Address: Storable {
     let ownerAddress: String
     let actionCount: Int64
     let popScore: Int64
-    let collections: [NftCollection]
+    let profileImageUrl: String
+    let username: String
 }

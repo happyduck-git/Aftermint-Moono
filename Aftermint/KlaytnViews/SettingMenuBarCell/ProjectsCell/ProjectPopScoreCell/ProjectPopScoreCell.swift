@@ -11,6 +11,7 @@ final class ProjectPopScoreCell: UITableViewCell {
     // MARK: - UI Elements
     private let rankImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.isHidden = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -21,7 +22,6 @@ final class ProjectPopScoreCell: UITableViewCell {
         label.font = BellyGomFont.header03
         label.textColor = AftermintColor.rankGrey
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.isHidden = true
         return label
     }()
     
@@ -140,16 +140,6 @@ final class ProjectPopScoreCell: UITableViewCell {
         self.nftInfoStackView.topLabelText = vm.nftCollectionName
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts) / Holders \(vm.totalHolders)"
         self.popScoreLabel.text = "\(vm.actioncount)"
-    }
-    
-    public func setAsCollectionInfoCell() {
-        self.rankImageView.isHidden = true
-        self.rankLabel.isHidden = true
-    }
-    
-    public func switchRankImageToLabel() {
-        self.rankImageView.isHidden = true
-        self.rankLabel.isHidden = false
     }
     
     private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {

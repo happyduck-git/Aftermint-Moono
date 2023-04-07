@@ -17,7 +17,7 @@ class FirestoreRepository {
     
     let db = Firestore.firestore()
     
-    ///Model 대신 property를 arguments로 받는 function으로 대체
+    /// Save to firestore
     func save(actionCount: Int64,
               popScore: Int64,
               collectionImageUrl: String,
@@ -64,49 +64,6 @@ class FirestoreRepository {
         ], merge: true)
     }
     
-    func save(collection: NftCollection,
-              card: Card,
-              address: Address,
-              ofType collectionType: CollectionType) {
-        
-        ///Save NFT collection
-        ///1st collection
-        let docRefForNftCollection = db.collection(K.FStore.nftCardCollectionName).document(collectionType.rawValue)
-        docRefForNftCollection.setData([
-            K.FStore.actionCountFieldKey: FieldValue.increment(collection.totalActionCount),
-            K.FStore.imageUrlFieldKey: collection.imageUrl,
-            K.FStore.popScoreFieldKey: FieldValue.increment(collection.totalPopCount)
-        ], merge: true)
-        
-        ///2nd depth collection
-        let docRefForToCollection = docRefForNftCollection.collection(K.FStore.secondDepthCollectionName).document(card.tokenId)
-        docRefForToCollection.setData([
-            K.FStore.actionCountFieldKey: FieldValue.increment(card.actionCount),
-            K.FStore.imageUrlFieldKey: card.imageUrl,
-            K.FStore.ownerAddressFieldKey: card.ownerAddress,
-            K.FStore.popScoreFieldKey: FieldValue.increment(card.popScore)
-        ], merge: true)
-        
-        ///Save Address collection
-        ///1st collection
-        let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName).document(address.ownerAddress)
-        docRefForAddress.setData([
-            K.FStore.actionCountFieldKey: FieldValue.increment(address.actionCount),
-            K.FStore.popScoreFieldKey: FieldValue.increment(address.popScore)
-        ], merge: true)
-        
-        ///2nd depth collection
-        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document() //Autogenerate docID로 merge=true 가능?
-        docRefForCollection.setData([
-            K.FStore.actionCountFieldKey: FieldValue.increment(card.actionCount),
-            K.FStore.imageUrlFieldKey: card.imageUrl,
-            K.FStore.popScoreFieldKey: FieldValue.increment(card.popScore),
-            K.FStore.tokenIdFieldKey: card.tokenId
-        ], merge: true)
-        
-    }
-    
-    
     /// Fetch fields of a specific `NFT collection` type
     /// - Parameters:
     ///   - collectionType: Type of collection
@@ -139,10 +96,14 @@ class FirestoreRepository {
                             let cardDocs = snapshot.documents
                             if !cardDocs.isEmpty {
                                 let result = cardDocs.map { doc in
-                                    return CardTest(ownerAddress: mockUser.address,
-                                                    popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
-                                                    actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-                                                    imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A")
+                                    let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
+                                    return CardTest(
+                                        nftName: nftName,
+                                        ownerAddress: mockUser.address,
+                                        popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
+                                        actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
+                                        imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A"
+                                    )
                                     
                                 }
                                 completion(result)
@@ -175,7 +136,9 @@ class FirestoreRepository {
                 let documents = snapshot.documents
                 if !documents.isEmpty {
                     let result = documents.map { doc in
+                        let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
                         return CardTest(
+                            nftName: nftName,
                             ownerAddress: "N/A", //ownerAddress is not necessary in this case
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
@@ -191,7 +154,7 @@ class FirestoreRepository {
             }
     }
     
-    func getAllAddress(completion: @escaping (([AddressTest]?) -> Void)) {
+    func getAllAddress(completion: @escaping (([Address]?) -> Void)) {
         let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName)
         docRefForAddress
             .order(by: K.FStore.popScoreFieldKey, descending: true)
@@ -203,16 +166,15 @@ class FirestoreRepository {
                 }
                 let documents = snapshot.documents
                 if !documents.isEmpty {
-                    let result: [AddressTest] = documents.map { doc in
+                    let result: [Address] = documents.map { doc in
                         let ownerAddress = doc.documentID
                         
-                        return AddressTest(
+                        return Address(
                             ownerAddress: ownerAddress,
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? "david",
-                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David",
-                            card: []
+                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David"
                         )
                     }
                     completion(result)

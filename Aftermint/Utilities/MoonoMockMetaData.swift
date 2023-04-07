@@ -12,7 +12,7 @@ import Foundation
 struct MoonoMockMetaData {
     
     /// Changing this prorperty value will decide what mock Card object to use from the moonoList property
-    private let mockIndex: Int = 5
+    private let mockIndex: Int = 1
     
     private let moonoList: [Card] = [
         
@@ -74,40 +74,40 @@ struct MoonoMockMetaData {
 struct MoonoMockUserData {
     
     /// Changing this prorperty value will decide what mock AftermintUser object to use from the userList property
-    private let mockIndex: Int = 3
+    private let mockIndex: Int = 1
  
-    private let userList: [AfterMintUserTest] = [
-        AfterMintUserTest(username: "Rebecca",
+    private let userList: [AfterMintUser] = [
+        AfterMintUser(username: "Rebecca",
                           address: "0x015a997c4CA73F9170AE60B1e89ddF703Aa3E2a1",
                           imageUrl: "rebecca",
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 12),
-        AfterMintUserTest(username: "Maine",
+        AfterMintUser(username: "Maine",
                           address: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
                           imageUrl: "maine",
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 45),
-        AfterMintUserTest(username: "Lucy",
+        AfterMintUser(username: "Lucy",
                           address: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
                           imageUrl: "lucy",
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 99),
-        AfterMintUserTest(username: "David",
+        AfterMintUser(username: "David",
                           address: "0x0284DD66FC6D12D4ED26E81EF1c5b56B0410E914",
                           imageUrl: "david",
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 12),
-        AfterMintUserTest(username: "Dorio",
+        AfterMintUser(username: "Dorio",
                           address: "0x8fB1B947E7b9e508C0a1445D1966709C069b6167",
                           imageUrl: "dorio",
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 12),
-        AfterMintUserTest(username: "Kiwi",
+        AfterMintUser(username: "Kiwi",
                           address: "0xcFFA6E1E4092351d58cF8e00FbC3112A13334e45",
                           imageUrl: "kiwi",
                           popCount: 0,
@@ -115,12 +115,12 @@ struct MoonoMockUserData {
                           totalNfts: 12),
     ]
     
-    func getOneUserData() -> AfterMintUserTest {
+    func getOneUserData() -> AfterMintUser {
         let numberOfData = self.userList.count
         return self.userList[mockIndex % numberOfData]
     }
     
-    func getAllUserData() -> [AfterMintUserTest] {
+    func getAllUserData() -> [AfterMintUser] {
         return self.userList
     }
     

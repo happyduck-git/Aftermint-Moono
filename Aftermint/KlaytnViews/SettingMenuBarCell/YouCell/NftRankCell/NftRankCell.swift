@@ -12,6 +12,7 @@ final class NftRankCell: UITableViewCell {
     //MARK: - UI Elements
     private let rankImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.isHidden = true
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -19,7 +20,7 @@ final class NftRankCell: UITableViewCell {
     
     private let rankLabel: UILabel = {
         let label = UILabel()
-        label.isHidden = true
+        label.isHidden = false
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

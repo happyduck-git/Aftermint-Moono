@@ -59,7 +59,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     //TODO: Need to add error handler
     func getAllNftRankCellViewModels(completion: @escaping (Result<[LeaderBoardSecondSectionCellViewModel], Error>) -> ()) {
         
-        let userList: [AfterMintUserTest] = MoonoMockUserData().getAllUserData()
+        let userList: [AfterMintUser] = MoonoMockUserData().getAllUserData()
         guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
         let initialRank = 1
         

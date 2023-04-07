@@ -286,13 +286,10 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             return cell
             
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell else { return UITableViewCell()
-            }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell,
+                  let vm = self.viewModel?.modelAt(indexPath)
+            else { return UITableViewCell()}
             cell.resetCell()
-
-            guard let vm = self.viewModel?.modelAt(indexPath) else {
-                fatalError("ViewModel found to be nil")
-            }
  
             //TODO: Make below logic as a separate function
             if indexPath.row <= 2 {

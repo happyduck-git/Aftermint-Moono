@@ -15,7 +15,6 @@ final class SettingViewControllerViewModel {
         case FetchCollectionError
     }
     
-    
     let fireStoreRepository = FirestoreRepository.shared
     
     /* Cell ViewModels */
@@ -24,19 +23,19 @@ final class SettingViewControllerViewModel {
     var nftsCellViewModel: DashBoardNftCellViewModel
     var projectsCellViewModel: ProjectsCellViewModel
     
-    var addressList: Box<[AddressTest]> = Box([]) {
+    var addressList: Box<[Address]> = Box([]) {
         didSet {
             self.youCellViewModel.addressList = self.addressList
         }
     }
     
     let mockUser = MoonoMockUserData().getOneUserData()
-    var currentUserData: Box<AddressTest?> {
+    var currentUserData: Box<Address?> {
         let filteredUsers = self.addressList.value?.filter { address in
             address.ownerAddress == self.mockUser.address
         }
         let currentUser = filteredUsers?.first
-        let result: Box<AddressTest?> = Box(nil)
+        let result: Box<Address?> = Box(nil)
         result.value = currentUser
         return result
     }
@@ -72,7 +71,7 @@ final class SettingViewControllerViewModel {
         }
     }
     
-    func getAllUserData(completion: @escaping (Result<[AddressTest], Error>) -> Void) {
+    func getAllUserData(completion: @escaping (Result<[Address], Error>) -> Void) {
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else { return }
             completion(.success(addressList))
