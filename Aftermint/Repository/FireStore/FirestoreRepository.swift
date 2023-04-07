@@ -55,7 +55,7 @@ class FirestoreRepository {
         ], merge: true)
         
         ///2nd depth collection
-        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document() //Autogenerate docID로 merge=true 가능?
+        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document(nftTokenId) //Autogenerate docID로 merge=true 가능?
         docRefForCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.imageUrlFieldKey: nftImageUrl,
@@ -99,7 +99,7 @@ class FirestoreRepository {
                                     let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
                                     return CardTest(
                                         nftName: nftName,
-                                        ownerAddress: mockUser.address,
+                                        ownerAddress: doc[K.FStore.ownerAddressFieldKey] as? String ?? "N/A",
                                         popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                                         actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                                         imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A"

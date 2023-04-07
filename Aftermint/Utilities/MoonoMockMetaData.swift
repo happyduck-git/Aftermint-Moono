@@ -12,7 +12,7 @@ import Foundation
 struct MoonoMockMetaData {
     
     /// Changing this prorperty value will decide what mock Card object to use from the moonoList property
-    private let mockIndex: Int = 1
+    private let mockIndex: Int = 2
     
     private let moonoList: [Card] = [
         
@@ -24,35 +24,35 @@ struct MoonoMockMetaData {
              popScore: 0),
         
         Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231126.jpeg?alt=media",
              collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
              tokenId: "Moono___1126",
              actionCount: 0,
              popScore: 0),
         
         Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23618.jpeg?alt=media",
              collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
              tokenId: "Moono___618",
              actionCount: 0,
              popScore: 0),
         
         Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23659.jpeg?alt=media",
              collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
              tokenId: "Moono___659",
              actionCount: 0,
              popScore: 0),
         
         Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231202.jpeg?alt=media",
              collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
              tokenId: "Moono___1202",
              actionCount: 0,
              popScore: 0),
         
         Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23924.jpeg?alt=media",
              collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
              tokenId: "Moono___924",
              actionCount: 0,

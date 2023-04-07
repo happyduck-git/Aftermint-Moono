@@ -11,6 +11,7 @@ final class DashBoardNftCell: UICollectionViewCell {
     
     private var nftsList: [NftRankCellViewModel] = []
     private var highestScoreVM: NftRankCellViewModel?
+    private let mockUser = MoonoMockUserData().getOneUserData()
     
     //MARK: - UI Elements
     private let nftScoreTableView: UITableView = {
@@ -55,7 +56,11 @@ final class DashBoardNftCell: UICollectionViewCell {
     public func configure(vm: DashBoardNftCellViewModel) {
         self.nftsList = vm.nftsList.value ?? []
         self.highestScoreVM = vm.getTheHighestScoreNftOfCurrentUser()
-        DispatchQueue.main.async {
+    }
+    
+    /// Bind function - Test
+    public func bind(with vm: DashBoardNftCellViewModel) {
+        vm.nftsList.bind { _ in
             self.nftScoreTableView.reloadData()
         }
     }
@@ -86,12 +91,19 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell else { return UITableViewCell() }
+        cell.resetCell()
         if indexPath.section == 0 {
             guard let vm = self.highestScoreVM else { return UITableViewCell() }
             cell.configure(vm: vm)
             return cell
         } else {
             let vm = nftsList[indexPath.row]
+            // NOTE: find current user owned nfts and highlight those cells
+            /// ==============================
+            if self.checkCurrentUserOwnedNfts(vm: vm) {
+                cell.showStarBadge()
+            }
+            /// ==============================
             vm.setRankNumberWithIndexPath(indexPath.row + 1)
             cell.configure(vm: vm)
             return cell
@@ -115,4 +127,13 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             return UIImage(named: LeaderBoardAsset.markImageName.rawValue)
         }
     }
+    
+    private func checkCurrentUserOwnedNfts(vm: NftRankCellViewModel) -> Bool {
+        print(vm.ownerAddress)
+        if vm.ownerAddress == mockUser.address {
+            return true
+        }
+        return false
+    }
+    
 }

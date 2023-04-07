@@ -158,7 +158,13 @@ final class UsersCell: UICollectionViewCell {
         self.actionCountLabel.text = "\(vm.currentNft.value??.totalActionCount ?? 0)"
         self.currentUserVM = vm.currentUserVM
         self.usersList = vm.usersList.value ?? []
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
+//            self.popScoreTableView.reloadData()
+//        }
+    }
+    
+    public func bind(with vm: UsersCellViewModel) {
+        vm.usersList.bind { _ in
             self.popScoreTableView.reloadData()
         }
     }

@@ -25,6 +25,15 @@ final class NftRankCell: UITableViewCell {
         return label
     }()
     
+    /// To put start badge on current user's nfts
+    private let starBadge: UIImageView = {
+       let imageView = UIImageView()
+        imageView.isHidden = true
+        imageView.image = UIImage(systemName: "star.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
@@ -79,6 +88,7 @@ final class NftRankCell: UITableViewCell {
         self.contentView.addSubview(nftNameLabel)
         self.contentView.addSubview(scoreLabel)
         self.contentView.addSubview(pointLabel)
+        self.contentView.addSubview(starBadge)
     }
     
     private func setLayout() {
@@ -98,6 +108,14 @@ final class NftRankCell: UITableViewCell {
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankLabel.trailingAnchor, multiplier: 0),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.bottomAnchor, multiplier: 1),
             self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
+            
+            /// ========================
+            self.starBadge.heightAnchor.constraint(equalTo: self.nftImageView.heightAnchor, multiplier: 0.4),
+            self.starBadge.widthAnchor.constraint(equalTo: self.starBadge.heightAnchor),
+            self.starBadge.topAnchor.constraint(equalTo: self.nftImageView.topAnchor),
+            self.starBadge.trailingAnchor.constraint(equalTo: self.nftImageView.trailingAnchor),
+            /// ========================
+            
             self.nftNameLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.nftNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 2),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftNameLabel.bottomAnchor, multiplier: 1),
@@ -120,6 +138,9 @@ final class NftRankCell: UITableViewCell {
         self.rankLabel.isHidden = false
     }
 
+    public func showStarBadge() {
+        self.starBadge.isHidden = false
+    }
     
     public func configure(vm: NftRankCellViewModel) {
         self.rankLabel.text = "\(vm.rank)"
@@ -132,4 +153,9 @@ final class NftRankCell: UITableViewCell {
         self.nftNameLabel.text = vm.nftName
         self.scoreLabel.text = "\(vm.score)"
     }
+    
+    public func resetCell() {
+        self.starBadge.isHidden = true
+    }
+    
 }

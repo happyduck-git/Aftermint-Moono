@@ -141,6 +141,12 @@ final class YouCell: UICollectionViewCell {
         self.actionCountStack.bottomLabelText = "\(currentUser.actionCount)"
     }
     
+    public func bind(with vm: YouCellViewModel) {
+        vm.nftRankViewModels.bind { _ in
+            self.nftsTableView.reloadData()
+        }
+    }
+    
 }
 
 extension YouCell: UITableViewDelegate, UITableViewDataSource {

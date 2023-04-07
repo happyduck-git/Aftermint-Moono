@@ -23,6 +23,7 @@ final class DashBoardNftCellViewModel {
         return currentUsersNfts
     }
     
+    /// Among current user's nfts, get the nft which has the highest score
     func getTheHighestScoreNftOfCurrentUser() -> NftRankCellViewModel? {
         return self.getCurrentUsersNfts().first
     }

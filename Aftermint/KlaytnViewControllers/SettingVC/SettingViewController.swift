@@ -130,8 +130,8 @@ final class SettingViewController: UIViewController {
                 /// Users list of UsersCellVM
                 let popScoreVMList = addressList.map { address in
                     return PopScoreRankCellViewModel(
-                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue), //NEED TO CHANGE
-                        rank: 0, //NEED TO CHANGE
+                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+                        rank: 0,
                         profileImageUrl: address.profileImageUrl,
                         owerAddress: address.ownerAddress,
                         totalNfts: 17, //NEED TO CHANGE
@@ -171,6 +171,7 @@ final class SettingViewController: UIViewController {
                         ownerAddress: card.ownerAddress
                     )
                 }
+                self.vm.youCellViewModel.nftRankViewModels.value = nftRankCellVMList
                 self.vm.nftsCellViewModel.nftsList.value = nftRankCellVMList
             case .failure(let failure):
                 print("Failed from SettingVC: \(failure.localizedDescription)")
@@ -215,24 +216,29 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .you:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: YouCell.identifier, for: indexPath) as? YouCell else { return UICollectionViewCell() }
             
-            vm.youCellViewModel.getCurrentUserData { result in
-                switch result {
-                case .success(let user):
-                    self.vm.youCellViewModel.currentUser.value = user
-                    cell.configure(vm: self.vm.youCellViewModel)
-                case .failure(let failure):
-                    print("Failed to fetch current user: \(failure.localizedDescription)")
-                }
-            }
+//            vm.youCellViewModel.getCurrentUserData { result in
+//                switch result {
+//                case .success(let user):
+//                    self.vm.youCellViewModel.currentUser.value = user
+//                    cell.configure(vm: self.vm.youCellViewModel)
+//                case .failure(let failure):
+//                    print("Failed to fetch current user: \(failure.localizedDescription)")
+//                }
+//            }
+            
+            cell.bind(with: vm.youCellViewModel)
+            cell.configure(vm: vm.youCellViewModel)
             return cell
             
         case .users:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifier, for: indexPath) as? UsersCell else { return UICollectionViewCell() }
+            cell.bind(with: vm.usersCellViewModel)
             cell.configure(vm: vm.usersCellViewModel)
             return cell
             
         case .nfts:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DashBoardNftCell.identifier, for: indexPath) as? DashBoardNftCell else { return UICollectionViewCell() }
+            cell.bind(with: vm.nftsCellViewModel)
             cell.configure(vm: vm.nftsCellViewModel)
             return cell
             
