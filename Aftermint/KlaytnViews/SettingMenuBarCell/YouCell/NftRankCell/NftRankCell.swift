@@ -156,6 +156,8 @@ final class NftRankCell: UITableViewCell {
     
     public func resetCell() {
         self.starBadge.isHidden = true
+        self.nftImageView.image = nil
+        self.rankLabel.text = nil
     }
     
 }
