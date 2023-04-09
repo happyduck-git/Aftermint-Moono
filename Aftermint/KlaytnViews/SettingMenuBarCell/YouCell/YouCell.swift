@@ -142,6 +142,14 @@ final class YouCell: UICollectionViewCell {
     }
     
     public func bind(with vm: YouCellViewModel) {
+        vm.currentUser.bind { address in
+            guard let address = address else { return }
+            self.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
+            self.walletAddressStack.bottomLabelText = address?.ownerAddress ?? "N/A"
+            self.usernameStack.bottomLabelText = address?.username ?? "N/A"
+            self.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
+            self.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
+        }
         vm.nftRankViewModels.bind { _ in
             self.nftsTableView.reloadData()
         }

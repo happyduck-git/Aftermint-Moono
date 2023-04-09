@@ -122,6 +122,8 @@ final class SettingViewController: UIViewController {
     }
     
     private func getAllUserData() {
+        let mockUser = MoonoMockUserData().getOneUserData()
+        
         self.vm.getAllUserData { result in
             switch result {
             case .success(let addressList):
@@ -129,6 +131,11 @@ final class SettingViewController: UIViewController {
                 self.vm.addressList.value = addressList
                 /// Users list of UsersCellVM
                 let popScoreVMList = addressList.map { address in
+                    /// Check if address is the same as current (mock) user's
+                    if address.ownerAddress == mockUser.address {
+                        self.vm.youCellViewModel.currentUser.value = address
+                    }
+                    
                     return PopScoreRankCellViewModel(
                         rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                         rank: 0,
@@ -139,6 +146,7 @@ final class SettingViewController: UIViewController {
                         actioncount: address.actionCount
                     )
                 }
+//                self.vm.youCellViewModel.currentUser.value =
                 self.vm.usersCellViewModel.usersList.value = popScoreVMList
             case .failure(let failure):
                 print("Failed from SettingVC: \(failure.localizedDescription)")
