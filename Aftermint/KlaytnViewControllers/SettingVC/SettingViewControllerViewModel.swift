@@ -23,22 +23,7 @@ final class SettingViewControllerViewModel {
     var nftsCellViewModel: DashBoardNftCellViewModel
     var projectsCellViewModel: ProjectsCellViewModel
     
-    var addressList: Box<[Address]> = Box([]) {
-        didSet {
-            self.youCellViewModel.addressList = self.addressList
-        }
-    }
-    
     let mockUser = MoonoMockUserData().getOneUserData()
-    var currentUserData: Box<Address?> {
-        let filteredUsers = self.addressList.value?.filter { address in
-            address.ownerAddress == self.mockUser.address
-        }
-        let currentUser = filteredUsers?.first
-        let result: Box<Address?> = Box(nil)
-        result.value = currentUser
-        return result
-    }
 
     init(
         youCellVM: YouCellViewModel,

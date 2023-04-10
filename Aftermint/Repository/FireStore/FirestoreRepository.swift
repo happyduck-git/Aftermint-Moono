@@ -88,6 +88,7 @@ class FirestoreRepository {
                     docRef?
                         .reference
                         .collection(K.FStore.secondDepthCollectionName)
+                        .order(by: K.FStore.popScoreFieldKey, descending: true)
                         .getDocuments { snapshot, error in
                             guard let snapshot = snapshot, error == nil else {
                                 completion(nil)

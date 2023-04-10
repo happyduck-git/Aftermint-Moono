@@ -86,6 +86,14 @@ final class SettingViewController: UIViewController {
         self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.itemSize = CGSize(width: self.view.frame.width, height: self.collectionView.frame.height)
+        }
+    }
+    
     //MARK: - Set UI & Layout
     private func setUI() {
         view.backgroundColor = .black
@@ -97,6 +105,8 @@ final class SettingViewController: UIViewController {
     }
     
     private func setLayout() {
+        let tabBarHeight = view.frame.size.height / 8.2
+        
         NSLayoutConstraint.activate([
             self.gameLogoImageView.centerYAnchor.constraint(equalTo: self.dashBoardStackView.centerYAnchor),
             self.gameLogoImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
@@ -111,7 +121,7 @@ final class SettingViewController: UIViewController {
             self.collectionView.topAnchor.constraint(equalTo: self.menuBar.bottomAnchor),
             self.collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             self.collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            self.view.bottomAnchor.constraint(equalToSystemSpacingBelow: self.collectionView.bottomAnchor, multiplier: 0)
+            self.view.bottomAnchor.constraint(equalTo: self.collectionView.bottomAnchor, constant: tabBarHeight)
         ])
     }
     
@@ -127,8 +137,7 @@ final class SettingViewController: UIViewController {
         self.vm.getAllUserData { result in
             switch result {
             case .success(let addressList):
-                /// AddressList in vm
-                self.vm.addressList.value = addressList
+
                 /// Users list of UsersCellVM
                 let popScoreVMList = addressList.map { address in
                     /// Check if address is the same as current (mock) user's
@@ -146,7 +155,6 @@ final class SettingViewController: UIViewController {
                         actioncount: address.actionCount
                     )
                 }
-//                self.vm.youCellViewModel.currentUser.value =
                 self.vm.usersCellViewModel.usersList.value = popScoreVMList
             case .failure(let failure):
                 print("Failed from SettingVC: \(failure.localizedDescription)")
@@ -220,19 +228,10 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cellType = self.vm.cells[indexPath.item]
+        
         switch cellType {
         case .you:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: YouCell.identifier, for: indexPath) as? YouCell else { return UICollectionViewCell() }
-            
-//            vm.youCellViewModel.getCurrentUserData { result in
-//                switch result {
-//                case .success(let user):
-//                    self.vm.youCellViewModel.currentUser.value = user
-//                    cell.configure(vm: self.vm.youCellViewModel)
-//                case .failure(let failure):
-//                    print("Failed to fetch current user: \(failure.localizedDescription)")
-//                }
-//            }
             
             cell.bind(with: vm.youCellViewModel)
             cell.configure(vm: vm.youCellViewModel)
@@ -240,26 +239,29 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
             
         case .users:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifier, for: indexPath) as? UsersCell else { return UICollectionViewCell() }
+            
             cell.bind(with: vm.usersCellViewModel)
             cell.configure(vm: vm.usersCellViewModel)
             return cell
             
         case .nfts:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DashBoardNftCell.identifier, for: indexPath) as? DashBoardNftCell else { return UICollectionViewCell() }
+            
             cell.bind(with: vm.nftsCellViewModel)
             cell.configure(vm: vm.nftsCellViewModel)
             return cell
             
         case .projects:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProjectsCell.identifier, for: indexPath) as? ProjectsCell else { return UICollectionViewCell() }
+            
             cell.configure(vm: vm.projectsCellViewModel)
             return cell
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: collectionView.frame.height)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: view.frame.width, height: collectionView.frame.height)
+//    }
 
 }
 

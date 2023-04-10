@@ -9,7 +9,7 @@ import UIKit
 
 final class YouCell: UICollectionViewCell {
     
-    let vm: YouCellViewModel
+    private var nftsList: [NftRankCellViewModel] = []
     
     //MARK: - UI Elements
     private let profileImageView: UIImageView = {
@@ -67,13 +67,10 @@ final class YouCell: UICollectionViewCell {
     
     //MARK: - Init
     override init(frame: CGRect) {
-        self.vm = YouCellViewModel()
         super.init(frame: frame)
         setUI()
         setLayout()
         setDelegate()
-        fetchTableViewData()
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -99,7 +96,7 @@ final class YouCell: UICollectionViewCell {
     
     private func setLayout() {
         NSLayoutConstraint.activate([
-            self.profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 0),
+            self.profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
             self.profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
             self.profileImageView.heightAnchor.constraint(equalToConstant: 90),
             self.profileImageView.widthAnchor.constraint(equalTo: self.profileImageView.heightAnchor),
@@ -131,6 +128,7 @@ final class YouCell: UICollectionViewCell {
     
     //MARK: - Public
     public func configure(vm: YouCellViewModel) {
+         
         guard let currentUser = vm.currentUser.value,
               let currentUser = currentUser
         else { return }
@@ -139,19 +137,27 @@ final class YouCell: UICollectionViewCell {
         self.usernameStack.bottomLabelText = currentUser.username
         self.popScoreStack.bottomLabelText = "\(currentUser.popScore)"
         self.actionCountStack.bottomLabelText = "\(currentUser.actionCount)"
+        
     }
     
     public func bind(with vm: YouCellViewModel) {
-        vm.currentUser.bind { address in
+        
+        vm.currentUser.bind { [weak self] address in
             guard let address = address else { return }
-            self.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
-            self.walletAddressStack.bottomLabelText = address?.ownerAddress ?? "N/A"
-            self.usernameStack.bottomLabelText = address?.username ?? "N/A"
-            self.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
-            self.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
+            DispatchQueue.main.async {
+                self?.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
+                self?.walletAddressStack.bottomLabelText = address?.ownerAddress ?? "N/A"
+                self?.usernameStack.bottomLabelText = address?.username ?? "N/A"
+                self?.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
+                self?.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
+            }
         }
-        vm.nftRankViewModels.bind { _ in
-            self.nftsTableView.reloadData()
+        
+        vm.nftRankViewModels.bind { [weak self] viewModels in
+            DispatchQueue.main.async {
+                self?.nftsList = viewModels ?? []
+                self?.nftsTableView.reloadData()
+            }
         }
     }
     
@@ -164,43 +170,73 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let numberOfRows = vm.nftRankViewModels.value?.count else { return 0 }
-        return numberOfRows
+        return self.nftsList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell,
-              let nftRankCellViewModel = vm.nftRankViewModels.value?[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell
         else { return UITableViewCell() }
-        nftRankCellViewModel.setRankNumberWithIndexPath(indexPath.row + 1)
-        cell.configure(vm: nftRankCellViewModel)
+        let nftModel = self.nftsList[indexPath.row]
+        nftModel.setRankNumberWithIndexPath(indexPath.row + 1)
+        cell.configure(vm: nftModel)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
-    
-    private func fetchTableViewData() {
-        self.vm.getAllOwnedNft(collectionType: .moono, completion: { result in
-            switch result {
-            case .success(let viewModels):
-                self.vm.nftRankViewModels.value = viewModels
-            case .failure(let failure):
-                print(failure.localizedDescription)
-            }
-        })
-    }
+
 }
 
-extension YouCell {
-    
-    private func bind() {
-        vm.nftRankViewModels.bind { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.nftsTableView.reloadData()
-            }
-        }
-    }
-    
-}
+
+
+//OG Code
+/*
+ extension YouCell: UITableViewDelegate, UITableViewDataSource {
+     
+     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+         return SettingAsset.tableHeaderTitle.rawValue
+     }
+     
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+         guard let numberOfRows = vm.nftRankViewModels.value?.count else { return 0 }
+         return numberOfRows
+     }
+     
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell,
+               let nftRankCellViewModel = vm.nftRankViewModels.value?[indexPath.row]
+         else { return UITableViewCell() }
+         nftRankCellViewModel.setRankNumberWithIndexPath(indexPath.row + 1)
+         cell.configure(vm: nftRankCellViewModel)
+         return cell
+     }
+     
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+         return 70
+     }
+     
+     private func fetchTableViewData() {
+         self.vm.getAllOwnedNft(collectionType: .moono, completion: { result in
+             switch result {
+             case .success(let viewModels):
+                 self.vm.nftRankViewModels.value = viewModels
+             case .failure(let failure):
+                 print(failure.localizedDescription)
+             }
+         })
+     }
+ }
+
+ extension YouCell {
+     
+     private func bind() {
+         vm.nftRankViewModels.bind { [weak self] _ in
+             DispatchQueue.main.async {
+                 self?.nftsTableView.reloadData()
+             }
+         }
+     }
+     
+ }
+ */

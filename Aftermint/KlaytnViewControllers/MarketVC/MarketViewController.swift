@@ -71,7 +71,6 @@ class MarketViewController: UIViewController {
     private func setLayout() {
         let tabBarHeight = view.frame.size.height / 8.2
         
-        
         NSLayoutConstraint.activate([
             
             dropDownView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),

@@ -15,7 +15,6 @@ final class SettingMenuBar: UIView {
     
     weak var delegate: SettingMenuBarDelegate?
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()

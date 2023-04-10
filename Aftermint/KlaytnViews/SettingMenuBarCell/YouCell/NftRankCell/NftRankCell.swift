@@ -97,7 +97,6 @@ final class NftRankCell: UITableViewCell {
             self.rankLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
             self.rankLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.rankLabel.bottomAnchor, multiplier: 1),
-            self.rankLabel.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
             
             self.rankImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.rankImageView.leadingAnchor.constraint(equalTo: self.rankLabel.leadingAnchor),
@@ -105,7 +104,7 @@ final class NftRankCell: UITableViewCell {
             self.rankImageView.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
             
             self.nftImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
-            self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankLabel.trailingAnchor, multiplier: 0),
+            self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankLabel.trailingAnchor, multiplier: 2),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.bottomAnchor, multiplier: 1),
             self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
             
@@ -128,6 +127,8 @@ final class NftRankCell: UITableViewCell {
             self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.pointLabel.trailingAnchor, multiplier: 1)
         ])
         
+        self.rankLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self.scoreLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.pointLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
     
