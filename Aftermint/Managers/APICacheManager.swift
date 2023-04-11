@@ -12,7 +12,6 @@ final class APICacheManager {
     /// 1. Cache per Owner address [Address]
     private var cachedObject: NSCache<NSString, NSObject> = NSCache()
     
-    
     /// Set cache
     /// - Parameters:
     ///   - ownerAddress: wallet address of the owner
@@ -25,7 +24,6 @@ final class APICacheManager {
         let key = ownerAddress as NSString
         return self.cachedObject.object(forKey: key)
     }
-    
     
     
     /// 2. Cache per Moono tokenId

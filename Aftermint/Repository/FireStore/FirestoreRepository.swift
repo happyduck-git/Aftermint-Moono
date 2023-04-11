@@ -162,7 +162,7 @@ class FirestoreRepository {
     func getAllAddress(completion: @escaping (([Address]?) -> Void)) {
         
         /// ================== 1) APICM: Add a logic to get API cache ==================
-        
+        let cachedAddress = self.cacheManager.getCache(ownerAddress: <#T##String#>)
         /// ===============================================================
   
         let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName)
