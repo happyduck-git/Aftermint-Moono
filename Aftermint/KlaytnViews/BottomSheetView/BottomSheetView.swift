@@ -17,7 +17,7 @@ final class BottomSheetView: PassThroughView {
     let prefetcher = ImagePrefetcher()
     
     var firstSectionVM: LeaderBoardFirstSectionCellViewModel
-    var viewModel: LeaderBoardSecondSectionCellListViewModel?
+    var sectionSectionVM: LeaderBoardSecondSectionCellListViewModel?
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
     var tempTouchCountList: [String: Int64] = [:]
@@ -110,7 +110,7 @@ final class BottomSheetView: PassThroughView {
         self.firstSectionVM = firstSectionVM
         super.init(frame: frame)
         
-        self.viewModel = vm
+        self.sectionSectionVM = vm
         self.backgroundColor = .clear
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         self.addGestureRecognizer(panGesture)
@@ -221,7 +221,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     
     private func getFirstSectionViewModel() {
         
-        self.firstSectionVM.getFirstSectionViewModel { result in
+        self.firstSectionVM.getFirstSectionViewModel(ofCollection: .moono) { result in
             switch result {
             case .success(let vm):
                 self.firstSectionVM.nftImage = vm.nftImage
@@ -243,10 +243,10 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func getSecondSectionViewModel() {
-        self.viewModel?.getAddressSectionViewModel(completion: { result in
+        self.sectionSectionVM?.getAddressSectionViewModel(completion: { result in
             switch result {
             case .success(let viewModels):
-                self.viewModel?.leaderBoardVMList.value = viewModels
+                self.sectionSectionVM?.leaderBoardVMList.value = viewModels
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.6) {
                         self.leaderBoardTableView.reloadData()
@@ -270,7 +270,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             return 1
         } else {
-            guard let numberOfSection = self.viewModel?.numberOfRowsInSection(at: section) else { return 0 }
+            guard let numberOfSection = self.sectionSectionVM?.numberOfRowsInSection(at: section) else { return 0 }
             return numberOfSection
         }
     }
@@ -286,7 +286,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell,
-                  let vm = self.viewModel?.modelAt(indexPath)
+                  let vm = self.sectionSectionVM?.modelAt(indexPath)
             else { return UITableViewCell()}
             cell.resetCell()
  
@@ -339,7 +339,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
     /// PretchImageAt
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.viewModel?.modelAt($0)?.userProfileImage
+            self.sectionSectionVM?.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)
@@ -349,7 +349,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.viewModel?.modelAt($0)?.userProfileImage
+            self.sectionSectionVM?.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)

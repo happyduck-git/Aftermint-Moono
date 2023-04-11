@@ -39,8 +39,9 @@ final class LeaderBoardFirstSectionCellViewModel {
         self.totalPopScore = totalPopScore
     }
     
-    func getFirstSectionViewModel(completion: @escaping (Result<LeaderBoardFirstSectionCellViewModel, Error>) -> ()) {
-        self.fireStoreRepository.getNftCollection(ofType: .moono) { collection in
+    func getFirstSectionViewModel(ofCollection collectionType: CollectionType,
+                                  completion: @escaping (Result<LeaderBoardFirstSectionCellViewModel, Error>) -> ()) {
+        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
             guard let collection = collection else {
                 completion(.failure(LeaderBoardError.FirstSectionFetchError))
                 return
