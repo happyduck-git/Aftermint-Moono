@@ -16,6 +16,7 @@ class FirestoreRepository {
     private init() {}
     
     let db = Firestore.firestore()
+    private let cacheManager = APICacheManager()
     
     /// Save to firestore
     func save(actionCount: Int64,
@@ -157,6 +158,11 @@ class FirestoreRepository {
     }
     
     func getAllAddress(completion: @escaping (([Address]?) -> Void)) {
+        
+        /// ================== 1) APICM: Add a logic to get API cache ==================
+        
+        /// ===============================================================
+  
         let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName)
         docRefForAddress
             .order(by: K.FStore.popScoreFieldKey, descending: true)
@@ -171,13 +177,20 @@ class FirestoreRepository {
                     let result: [Address] = documents.map { doc in
                         let ownerAddress = doc.documentID
                         
-                        return Address(
+                        
+                        let address = Address(
                             ownerAddress: ownerAddress,
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? "david",
                             username: doc[K.FStore.usernameFieldKey] as? String ?? "David"
                         )
+                        
+                        /// ================== 2) APICM: Add a logic to set API cache ==================
+                        self.cacheManager.setCache(ownerAddress: ownerAddress,
+                                                   object: address)
+                        /// ===============================================================
+                        return address
                     }
                     completion(result)
                     return
