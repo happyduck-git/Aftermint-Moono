@@ -78,8 +78,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
         return
     }
     
-    func saveCountNumber(collectionAddress: String,
-                         collectionImageUrl: String,
+    func saveCountNumber(collectionImageUrl: String,
                          popScore: Int64,
                          actionCount: Int64,
                          ownerAddress: String,

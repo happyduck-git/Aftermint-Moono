@@ -21,6 +21,7 @@ final class NftRankCell: UITableViewCell {
     private let rankLabel: UILabel = {
         let label = UILabel()
         label.isHidden = false
+        label.font = BellyGomFont.header03
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -115,18 +116,19 @@ final class NftRankCell: UITableViewCell {
             self.starBadge.trailingAnchor.constraint(equalTo: self.nftImageView.trailingAnchor),
             /// ========================
             
-            self.nftNameLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
+            self.nftNameLabel.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
             self.nftNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 2),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.nftNameLabel.bottomAnchor, multiplier: 1),
-            self.scoreLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
+            self.scoreLabel.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
             self.scoreLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftNameLabel.trailingAnchor, multiplier: 1),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.scoreLabel.bottomAnchor, multiplier: 1),
-            self.pointLabel.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
+            self.pointLabel.topAnchor.constraint(equalTo: self.rankImageView.topAnchor),
             self.pointLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.scoreLabel.trailingAnchor, multiplier: 1),
             self.contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.pointLabel.bottomAnchor, multiplier: 1),
             self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.pointLabel.trailingAnchor, multiplier: 1)
         ])
         
+        self.rankImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.rankLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.scoreLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.pointLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -159,6 +161,9 @@ final class NftRankCell: UITableViewCell {
         self.starBadge.isHidden = true
         self.nftImageView.image = nil
         self.rankLabel.text = nil
+        self.nftNameLabel.text = nil
+        self.scoreLabel.text = nil
+        self.pointLabel.text = nil
     }
     
 }

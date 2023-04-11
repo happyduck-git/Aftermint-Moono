@@ -16,47 +16,41 @@ struct MoonoMockMetaData {
     
     private let moonoList: [Card] = [
         
-        Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media",
-             collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
-             tokenId: "Moono___81",
+        Card(tokenId: "Moono___81",
+             ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+             popScore: 0,
              actionCount: 0,
-             popScore: 0),
-        
-        Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231126.jpeg?alt=media",
-             collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
-             tokenId: "Moono___1126",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media"),
+   
+        Card(tokenId: "Moono___1126",
+             ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+             popScore: 0,
              actionCount: 0,
-             popScore: 0),
-        
-        Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23618.jpeg?alt=media",
-             collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
-             tokenId: "Moono___618",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231126.jpeg?alt=media"),
+   
+        Card(tokenId: "Moono___618",
+             ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+             popScore: 0,
              actionCount: 0,
-             popScore: 0),
-        
-        Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23659.jpeg?alt=media",
-             collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
-             tokenId: "Moono___659",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23618.jpeg?alt=media"),
+   
+        Card(tokenId: "Moono___659",
+             ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+             popScore: 0,
              actionCount: 0,
-             popScore: 0),
-        
-        Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231202.jpeg?alt=media",
-             collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
-             tokenId: "Moono___1202",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23659.jpeg?alt=media"),
+   
+        Card(tokenId: "Moono___1202",
+             ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+             popScore: 0,
              actionCount: 0,
-             popScore: 0),
-        
-        Card(ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
-             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23924.jpeg?alt=media",
-             collectionAddress: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
-             tokenId: "Moono___924",
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231202.jpeg?alt=media"),
+   
+        Card(tokenId: "Moono___924",
+             ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
+             popScore: 0,
              actionCount: 0,
-             popScore: 0)
+             imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23924.jpeg?alt=media")
     ]
     
     func getOneMockData() -> Card {

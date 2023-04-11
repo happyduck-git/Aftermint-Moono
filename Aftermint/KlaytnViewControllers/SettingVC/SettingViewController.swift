@@ -77,7 +77,7 @@ final class SettingViewController: UIViewController {
         getAllUserData()
         getNftData()
         getAllNftData()
-        getAllNftDocument()
+        getAllNftDocument(ofCollectionType: .moono)
         
     }
     
@@ -181,8 +181,9 @@ final class SettingViewController: UIViewController {
                 let nftRankCellVMList = cardList.map { card in
                     return NftRankCellViewModel(
                         rank: 0,
+                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                         nftImageUrl: card.imageUrl,
-                        nftName: card.nftName,
+                        nftName: card.tokenId,
                         score: card.popScore,
                         ownerAddress: card.ownerAddress
                     )
@@ -195,18 +196,18 @@ final class SettingViewController: UIViewController {
         }
     }
     
-    private func getAllNftDocument() {
+    private func getAllNftDocument(ofCollectionType collectionType: CollectionType) {
         /// Get all the `NFT collection` documents from firestore
-        self.vm.getAllNftDocument { result in
+        self.vm.getAllNftDocument(ofCollectionType: collectionType) { result in
             switch result {
             case .success(let cardList):
                 let nftCollectionList = cardList.map { card in
                     return ProjectPopScoreCellViewModel(
                         rank: 0,
                         nftImageUrl: card.imageUrl,
-                        nftCollectionName: "Moono", //NEED TO CHANGE
-                        totalNfts: 1000, //NEED TO CHANGE
-                        totalHolders: 200, //NEED TO CHANGE
+                        nftCollectionName: collectionType.rawValue,
+                        totalNfts: 1000, //TODO: NEED TO CHANGE
+                        totalHolders: 200, //TODO: NEED TO CHANGE
                         popScore: card.popScore,
                         actioncount: card.actionCount
                     )

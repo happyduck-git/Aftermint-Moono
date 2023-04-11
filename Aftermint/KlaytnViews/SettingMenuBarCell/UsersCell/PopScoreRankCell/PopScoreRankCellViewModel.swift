@@ -11,7 +11,7 @@ final class PopScoreRankCellViewModel {
     var rankImage: UIImage?
     var rank: Int
     let profileImageUrl: String
-    let owerAddress: String
+    let ownerAddress: String
     let totalNfts: Int
     let popScore: Int64
     let actioncount: Int64
@@ -20,7 +20,7 @@ final class PopScoreRankCellViewModel {
         self.rankImage = rankImage
         self.rank = rank
         self.profileImageUrl = profileImageUrl
-        self.owerAddress = owerAddress
+        self.ownerAddress = owerAddress
         self.totalNfts = totalNfts
         self.popScore = popScore
         self.actioncount = actioncount

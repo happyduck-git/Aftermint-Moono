@@ -179,7 +179,7 @@ final class ProjectsCell: UICollectionViewCell {
             self.popScoreTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.segmentedControl.bottomAnchor, multiplier: 1),
             self.popScoreTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             self.popScoreTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.popScoreTableView.bottomAnchor),
             
             self.actionCountTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.segmentedControl.bottomAnchor, multiplier: 1),
             self.actionCountTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),

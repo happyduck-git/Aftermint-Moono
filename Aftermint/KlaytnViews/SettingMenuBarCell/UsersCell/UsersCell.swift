@@ -125,7 +125,7 @@ final class UsersCell: UICollectionViewCell {
             self.popScoreTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.segmentedControl.bottomAnchor, multiplier: 1),
             self.popScoreTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             self.popScoreTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.popScoreTableView.bottomAnchor),
             
             self.actionCountTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.segmentedControl.bottomAnchor, multiplier: 1),
             self.actionCountTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
@@ -156,17 +156,34 @@ final class UsersCell: UICollectionViewCell {
         self.nftImageView.image = UIImage(named: image)
         self.popScoreLabel.text = "\(vm.currentNft.value??.totalPopCount ?? 0)"
         self.actionCountLabel.text = "\(vm.currentNft.value??.totalActionCount ?? 0)"
-        self.currentUserVM = vm.currentUserVM
+        
         self.usersList = vm.usersList.value ?? []
-//        DispatchQueue.main.async {
-//            self.popScoreTableView.reloadData()
-//        }
     }
     
     public func bind(with vm: UsersCellViewModel) {
-        vm.usersList.bind { _ in
-            self.popScoreTableView.reloadData()
+        
+        vm.currentNft.bind { [weak self] collection in
+            guard let collection = collection else { return }
+            DispatchQueue.main.async {
+                self?.popScoreLabel.text = "\(collection?.totalPopCount ?? 0)"
+                self?.actionCountLabel.text = "\(collection?.totalActionCount ?? 0)"
+            }
         }
+        
+        vm.usersList.bind { [weak self] viewModels in
+            self?.usersList = viewModels ?? []
+          
+            let filteredList = vm.usersList.value?.filter({ vm in
+                vm.ownerAddress == MoonoMockUserData().getOneUserData().address
+            })
+            self?.currentUserVM = filteredList?.first
+            
+            DispatchQueue.main.async {
+                self?.popScoreTableView.reloadData()
+                self?.actionCountTableView.reloadData()
+            }
+        }
+        
     }
     
 }

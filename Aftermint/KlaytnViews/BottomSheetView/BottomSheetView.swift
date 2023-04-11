@@ -247,7 +247,6 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             switch result {
             case .success(let viewModels):
                 self.viewModel?.leaderBoardVMList.value = viewModels
-//                self.bottomSheetDelegate?.dataFetched()
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.6) {
                         self.leaderBoardTableView.reloadData()

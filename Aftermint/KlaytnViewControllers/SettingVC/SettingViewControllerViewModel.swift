@@ -66,7 +66,8 @@ final class SettingViewControllerViewModel {
         return
     }
     
-    func getNftData(ofCollection collectionType: CollectionType, completion: @escaping (Result<NftCollectionTest,Error>) -> Void) {
+    func getNftData(ofCollection collectionType: CollectionType,
+                    completion: @escaping (Result<NftCollectionTest,Error>) -> Void) {
         self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
             guard let collection = collection else { return }
             completion(.success(collection))
@@ -76,8 +77,9 @@ final class SettingViewControllerViewModel {
         return
     }
     
-    func getAllNftData(ofCollection collectionType: CollectionType, completion: @escaping (Result<[CardTest], Error>) -> Void) {
-        self.fireStoreRepository.getAllNftData(ofCollectionType: collectionType) { cardList in
+    func getAllNftData(ofCollection collectionType: CollectionType,
+                       completion: @escaping (Result<[Card], Error>) -> Void) {
+        self.fireStoreRepository.getAllNftFieldData(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
             completion(.success(cardList))
             return
@@ -86,8 +88,9 @@ final class SettingViewControllerViewModel {
         return
     }
     
-    func getAllNftDocument(completion: @escaping (Result<[CardTest], Error>) -> Void) {
-        self.fireStoreRepository.getAllNftData { cardList in
+    func getAllNftDocument(ofCollectionType collectionType: CollectionType,
+                           completion: @escaping (Result<[Card], Error>) -> Void) {
+        self.fireStoreRepository.getAllNftData(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
             completion(.success(cardList))
             return

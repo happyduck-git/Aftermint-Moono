@@ -146,7 +146,7 @@ final class YouCell: UICollectionViewCell {
             guard let address = address else { return }
             DispatchQueue.main.async {
                 self?.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
-                self?.walletAddressStack.bottomLabelText = address?.ownerAddress ?? "N/A"
+                self?.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
                 self?.usernameStack.bottomLabelText = address?.username ?? "N/A"
                 self?.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
                 self?.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
@@ -176,9 +176,14 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell
         else { return UITableViewCell() }
-        let nftModel = self.nftsList[indexPath.row]
-        nftModel.setRankNumberWithIndexPath(indexPath.row + 1)
-        cell.configure(vm: nftModel)
+        
+        let vm = self.nftsList[indexPath.row]
+        if indexPath.row <= 2 {
+        
+        }
+        
+        vm.setRankNumberWithIndexPath(indexPath.row + 1)
+        cell.configure(vm: vm)
         return cell
     }
     
@@ -186,6 +191,20 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
         return 70
     }
 
+    /// Determine cell image
+    private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {
+        switch indexPathRow {
+        case 0:
+            return UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
+        case 1:
+            return UIImage(named: LeaderBoardAsset.secondPlace.rawValue)
+        case 2:
+            return UIImage(named: LeaderBoardAsset.thirdPlace.rawValue)
+        default:
+            return UIImage(named: LeaderBoardAsset.markImageName.rawValue)
+        }
+    }
+    
 }
 
 

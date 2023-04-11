@@ -140,7 +140,7 @@ final class PopScoreRankCell: UITableViewCell {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
         self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
-        self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
+        self.nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
         self.popScoreLabel.text = "\(vm.popScore)"
     }
@@ -149,7 +149,7 @@ final class PopScoreRankCell: UITableViewCell {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
         self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
-        self.nftInfoStackView.topLabelText = vm.owerAddress.cutOfRange(length: 15)
+        self.nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
         self.popScoreLabel.text = "\(vm.actioncount)"
     }

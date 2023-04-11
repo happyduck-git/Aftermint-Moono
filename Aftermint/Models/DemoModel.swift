@@ -17,8 +17,8 @@ struct NftCollectionTest: Storable {
     let totalHolders: Int
 }
 
-struct CardTest: Storable {
-    let nftName: String
+struct Card: Storable {
+    let tokenId: String
     let ownerAddress: String
     let popScore: Int64
     let actionCount: Int64

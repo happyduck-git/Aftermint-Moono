@@ -289,8 +289,7 @@ extension GameViewController: MoonoGameSceneDelegate {
         let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
         
-        self.leaderBoardListViewModel.saveCountNumber(collectionAddress: K.ContractAddress.moono,
-                                                      collectionImageUrl: "game_moono_mock",
+        self.leaderBoardListViewModel.saveCountNumber(collectionImageUrl: "game_moono_mock",
                                                       popScore: touchCount * Int64(mockUserData.totalNfts),
                                                       actionCount: touchCount,
                                                       ownerAddress: mockUserData.address,

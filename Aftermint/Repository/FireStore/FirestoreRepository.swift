@@ -55,7 +55,7 @@ class FirestoreRepository {
         ], merge: true)
         
         ///2nd depth collection
-        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document(nftTokenId) //Autogenerate docID로 merge=true 가능?
+        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document(nftTokenId)
         docRefForCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.imageUrlFieldKey: nftImageUrl,
@@ -68,8 +68,8 @@ class FirestoreRepository {
     /// - Parameters:
     ///   - collectionType: Type of collection
     ///   - completion: callback
-    func getAllNftData(ofCollectionType collectionType: CollectionType, completion: @escaping(([CardTest]?) -> Void)) {
-        let mockUser = MoonoMockUserData().getOneUserData()
+    func getAllNftFieldData(ofCollectionType collectionType: CollectionType, completion: @escaping(([Card]?) -> Void)) {
+//        let mockUser = MoonoMockUserData().getOneUserData()
         
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
@@ -98,8 +98,8 @@ class FirestoreRepository {
                             if !cardDocs.isEmpty {
                                 let result = cardDocs.map { doc in
                                     let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
-                                    return CardTest(
-                                        nftName: nftName,
+                                    return Card(
+                                        tokenId: nftName,
                                         ownerAddress: doc[K.FStore.ownerAddressFieldKey] as? String ?? "N/A",
                                         popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                                         actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
@@ -125,7 +125,8 @@ class FirestoreRepository {
     
     /// Fetch all the document exists in `NFT collection` in firestore
     /// - Parameter completion: callback
-    func getAllNftData(completion: @escaping(([CardTest]?) -> Void)) {
+    func getAllNftData(ofCollectionType collectionType: CollectionType,
+                       completion: @escaping(([Card]?) -> Void)) {
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
             .addSnapshotListener { snapshot, error in
@@ -138,8 +139,8 @@ class FirestoreRepository {
                 if !documents.isEmpty {
                     let result = documents.map { doc in
                         let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
-                        return CardTest(
-                            nftName: nftName,
+                        return Card(
+                            tokenId: nftName,
                             ownerAddress: "N/A", //ownerAddress is not necessary in this case
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
