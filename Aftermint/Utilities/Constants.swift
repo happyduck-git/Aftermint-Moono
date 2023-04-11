@@ -37,6 +37,8 @@ struct K {
         static let countFieldKey: String = "touchCount"
         static let usernameFieldKey: String = "username"
         static let profileImageUrlFieldKey: String = "profileImageUrl"
+        static let totalHolderFieldKey: String = "totalHolder"
+        static let totalMintedNFTsFieldKey: String = "totalMintedNFTs"
         ///Currently not in use
         static let totalDocumentName: String = "Total Count"
     }

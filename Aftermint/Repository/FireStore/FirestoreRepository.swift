@@ -34,7 +34,9 @@ class FirestoreRepository {
         docRefForNftCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.imageUrlFieldKey: collectionImageUrl,
-            K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
+            K.FStore.totalHolderFieldKey: 100, //TODO: add total holder & minted nfts property as method arguments
+            K.FStore.totalMintedNFTsFieldKey: 100,
         ], merge: true)
         
         ///2nd depth collection
