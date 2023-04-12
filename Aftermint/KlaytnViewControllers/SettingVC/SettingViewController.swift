@@ -304,6 +304,10 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
         }
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = targetContentOffset.pointee.x / view.frame.width
+        menuBar.selectItem(at: Int(index))
+    }
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: view.frame.width, height: collectionView.frame.height)
 //    }
