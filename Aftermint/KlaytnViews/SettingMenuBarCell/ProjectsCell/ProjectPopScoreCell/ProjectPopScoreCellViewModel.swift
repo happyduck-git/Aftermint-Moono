@@ -12,12 +12,12 @@ final class ProjectPopScoreCellViewModel {
     var rank: Int
     let nftImageUrl: String
     let nftCollectionName: String
-    let totalNfts: Int
-    let totalHolders: Int
+    let totalNfts: Int64
+    let totalHolders: Int64
     let popScore: Int64
     let actioncount: Int64
     
-    init(rankImage: UIImage? = nil, rank: Int, nftImageUrl: String, nftCollectionName: String, totalNfts: Int, totalHolders: Int, popScore: Int64, actioncount: Int64) {
+    init(rankImage: UIImage? = nil, rank: Int, nftImageUrl: String, nftCollectionName: String, totalNfts: Int64, totalHolders: Int64, popScore: Int64, actioncount: Int64) {
         self.rankImage = rankImage
         self.rank = rank
         self.nftImageUrl = nftImageUrl

@@ -74,6 +74,7 @@ final class SettingViewController: UIViewController {
         setLayout()
         setDelegate()
         
+        getHolderAndNumberOfNFTs()
         getAllUserData()
         getNftData()
         getAllNftData()
@@ -198,18 +199,18 @@ final class SettingViewController: UIViewController {
     
     private func getAllNftDocument(ofCollectionType collectionType: CollectionType) {
         /// Get all the `NFT collection` documents from firestore
-        self.vm.getAllNftDocument(ofCollectionType: collectionType) { result in
+        self.vm.getAllCollectionDataTest(ofCollectionType: collectionType) { result in
             switch result {
-            case .success(let cardList):
-                let nftCollectionList = cardList.map { card in
+            case .success(let collections):
+                let nftCollectionList = collections.map { collection in
                     return ProjectPopScoreCellViewModel(
                         rank: 0,
-                        nftImageUrl: card.imageUrl,
+                        nftImageUrl: collection.imageUrl,
                         nftCollectionName: collectionType.rawValue,
-                        totalNfts: 1000, //TODO: NEED TO CHANGE
-                        totalHolders: 200, //TODO: NEED TO CHANGE
-                        popScore: card.popScore,
-                        actioncount: card.actionCount
+                        totalNfts: collection.totalNfts, //TODO: NEED TO CHANGE
+                        totalHolders: collection.totalHolders, //TODO: NEED TO CHANGE
+                        popScore: collection.totalPopCount,
+                        actioncount: collection.totalActionCount
                     )
                 }
                 self.vm.projectsCellViewModel.nftCollectionList.value = nftCollectionList
@@ -217,6 +218,48 @@ final class SettingViewController: UIViewController {
                 print("Failed from SettingVC: \(failure.localizedDescription)")
             }
         }
+//        self.vm.getAllNftDocument(ofCollectionType: collectionType) { result in
+//            switch result {
+//            case .success(let cardList):
+//                let nftCollectionList = cardList.map { card in
+//                    return ProjectPopScoreCellViewModel(
+//                        rank: 0,
+//                        nftImageUrl: card.imageUrl,
+//                        nftCollectionName: collectionType.rawValue,
+//                        totalNfts: 1000, //TODO: NEED TO CHANGE
+//                        totalHolders: 200, //TODO: NEED TO CHANGE
+//                        popScore: card.popScore,
+//                        actioncount: card.actionCount
+//                    )
+//                }
+//                self.vm.projectsCellViewModel.nftCollectionList.value = nftCollectionList
+//            case .failure(let failure):
+//                print("Failed from SettingVC: \(failure.localizedDescription)")
+//            }
+//        }
+    }
+    
+    private func getHolderAndNumberOfNFTs() {
+        /// =======
+        Task {
+            do {
+                let holders = try await KlaytnNftRequester.getNumberOfHolders(ofCollection: K.ContractAddress.moono)
+                vm.projectsCellViewModel.totalNumberOfHolders.value = holders?.totalHolder
+                
+                let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
+                guard let mintedNFTs = contractInfoResult?.totalSupply.dropFirst(2) else { return }
+                let convertedNumber = Int(mintedNFTs, radix: 16)
+                vm.projectsCellViewModel.totalNumberOfMintedNFTs.value = convertedNumber
+
+                FirestoreRepository.shared.saveNumberOfHoldersAndMintedNfts(collectionType: .moono,
+                                                                            totalHolders: Int64(holders?.totalHolder ?? 0),
+                                                                            totalMintedNFTs: Int64(convertedNumber ?? 0))
+            } catch {
+                print(error.localizedDescription)
+            }
+         
+        }
+        /// =======
     }
     
 }
@@ -255,6 +298,7 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .projects:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProjectsCell.identifier, for: indexPath) as? ProjectsCell else { return UICollectionViewCell() }
             
+            cell.bind(with: vm.projectsCellViewModel)
             cell.configure(vm: vm.projectsCellViewModel)
             return cell
         }

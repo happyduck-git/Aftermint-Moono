@@ -99,4 +99,15 @@ final class SettingViewControllerViewModel {
         return
     }
     
+    func getAllCollectionDataTest(ofCollectionType collectionType: CollectionType,
+                                  completion: @escaping (Result<[NftCollectionTest], Error>) -> Void) {
+        self.fireStoreRepository.getAllCollectionDataTest(ofCollectionType: collectionType) { nftCollections in
+            guard let nftCollections = nftCollections else { return }
+            completion(.success(nftCollections))
+            return
+        }
+        completion(.failure(SettingVMError.FetchCardError))
+        return
+    }
+    
 }

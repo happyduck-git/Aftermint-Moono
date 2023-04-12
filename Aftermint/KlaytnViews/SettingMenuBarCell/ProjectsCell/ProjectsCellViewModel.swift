@@ -10,6 +10,8 @@ import Foundation
 final class ProjectsCellViewModel {
     
     let nftCollectionList: Box<[ProjectPopScoreCellViewModel]> = Box([])
+    let totalNumberOfHolders: Box<Int> = Box(0)
+    let totalNumberOfMintedNFTs: Box<Int> = Box(0)
     
     func getCurrentNftCollection(ofType collectionType: CollectionType) -> ProjectPopScoreCellViewModel? {
         let filteredCollections = self.nftCollectionList.value?.filter({ vm in

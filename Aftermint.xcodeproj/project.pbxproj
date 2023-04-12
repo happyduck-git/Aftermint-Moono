@@ -444,6 +444,8 @@
 		93BAFF1229D4051100596999 /* AftermintUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1129D4051100596999 /* AftermintUser.swift */; };
 		93BAFF1429D411AB00596999 /* VerticalDoubleStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BAFF1329D411AB00596999 /* VerticalDoubleStackView.swift */; };
 		93BDD3EE29DFD7AD00E8AAEC /* bubbles.wav in Resources */ = {isa = PBXBuildFile; fileRef = 93BDD3ED29DFD7AD00E8AAEC /* bubbles.wav */; };
+		93BDD3F329E62AB600E8AAEC /* NFTHolderResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BDD3F229E62AB600E8AAEC /* NFTHolderResponse.swift */; };
+		93BDD3F529E63F2A00E8AAEC /* NFTContractInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BDD3F429E63F2A00E8AAEC /* NFTContractInfoResponse.swift */; };
 		93C32FBE29B9A69700DB3CB3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */; };
 		93C32FC329BB000600DB3CB3 /* NftCardCellPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */; };
 		93C32FC529BB004400DB3CB3 /* NftCardCellPropertyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */; };
@@ -872,6 +874,8 @@
 		93BAFF1129D4051100596999 /* AftermintUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AftermintUser.swift; sourceTree = "<group>"; };
 		93BAFF1329D411AB00596999 /* VerticalDoubleStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalDoubleStackView.swift; sourceTree = "<group>"; };
 		93BDD3ED29DFD7AD00E8AAEC /* bubbles.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bubbles.wav; sourceTree = "<group>"; };
+		93BDD3F229E62AB600E8AAEC /* NFTHolderResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTHolderResponse.swift; sourceTree = "<group>"; };
+		93BDD3F429E63F2A00E8AAEC /* NFTContractInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTContractInfoResponse.swift; sourceTree = "<group>"; };
 		93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		93C32FC229BB000600DB3CB3 /* NftCardCellPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyView.swift; sourceTree = "<group>"; };
 		93C32FC429BB004400DB3CB3 /* NftCardCellPropertyItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellPropertyItemView.swift; sourceTree = "<group>"; };
@@ -2444,6 +2448,8 @@
 				3620690729B88789008764BE /* MoonoNft.swift */,
 				93BAFF1129D4051100596999 /* AftermintUser.swift */,
 				2419EE1029D6814A00457954 /* DemoModel.swift */,
+				93BDD3F229E62AB600E8AAEC /* NFTHolderResponse.swift */,
+				93BDD3F429E63F2A00E8AAEC /* NFTContractInfoResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2795,6 +2801,7 @@
 				3619B1F429790AC60051C387 /* HomeViewReactor.swift in Sources */,
 				3619B10029790AC50051C387 /* TwitterAccount.swift in Sources */,
 				3619B1D729790AC60051C387 /* StringExtensions.swift in Sources */,
+				93BDD3F329E62AB600E8AAEC /* NFTHolderResponse.swift in Sources */,
 				3619B1C229790AC60051C387 /* Transform.swift in Sources */,
 				245A4DC029DC0C7C004B28A2 /* PopScoreRankCellViewModel.swift in Sources */,
 				3619B0D029790AC50051C387 /* UIImageView.swift in Sources */,
@@ -3015,6 +3022,7 @@
 				3619B15029790AC60051C387 /* LottieLogger.swift in Sources */,
 				3619B15C29790AC60051C387 /* MaskCompositionLayer.swift in Sources */,
 				3619B10629790AC50051C387 /* SocialAccountProtocol.swift in Sources */,
+				93BDD3F529E63F2A00E8AAEC /* NFTContractInfoResponse.swift in Sources */,
 				2481E1D9297BDDE400187BB9 /* NftTraitView.swift in Sources */,
 				3619B0EE29790AC50051C387 /* Token.swift in Sources */,
 				3619B1CB29790AC60051C387 /* TextAnimator.swift in Sources */,

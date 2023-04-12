@@ -212,8 +212,17 @@ final class ProjectsCell: UICollectionViewCell {
         self.collectionTitleLabel.text = self.currentCollection?.nftCollectionName
         self.popScoreLabel.text = "\(self.currentCollection?.popScore ?? 0)"
         self.actionCountLabel.text = "\(self.currentCollection?.actioncount ?? 0)"
-        self.totalNftsLabel.text = "\(self.currentCollection?.totalNfts ?? 0)"
-        self.totalHoldersLabel.text = "\(self.currentCollection?.totalHolders ?? 0)"
+//        self.totalNftsLabel.text = "\(self.currentCollection?.totalNfts ?? 0)"
+//        self.totalHoldersLabel.text = "\(self.currentCollection?.totalHolders ?? 0)"
+    }
+    
+    public func bind(with vm: ProjectsCellViewModel) {
+        vm.totalNumberOfHolders.bind { [weak self] numberOfHolder in
+            self?.totalHoldersLabel.text = "\(numberOfHolder ?? 0)"
+        }
+        vm.totalNumberOfMintedNFTs.bind { [weak self] numberOfNFTs in
+            self?.totalNftsLabel.text = "\(numberOfNFTs ?? 0)"
+        }
     }
     
 }
@@ -235,6 +244,7 @@ extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProjectPopScoreCell.identifier, for: indexPath) as? ProjectPopScoreCell else { return UITableViewCell() }
+        
         let vm = self.nftCollectionList[indexPath.row]
         vm.setRankNumberWithIndexPath(indexPath.row + 1)
         if tableView == self.popScoreTableView {

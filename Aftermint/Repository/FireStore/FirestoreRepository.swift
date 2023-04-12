@@ -17,6 +17,22 @@ class FirestoreRepository {
     
     let db = Firestore.firestore()
     
+    /// Save total numbers of holders and total number of minted NFTS of a certain NFT collection
+    func saveNumberOfHoldersAndMintedNfts(
+        collectionType: CollectionType,
+        totalHolders: Int64,
+        totalMintedNFTs: Int64
+    ) {
+        let docRefForNftCollection = db
+            .collection(K.FStore.nftCardCollectionName)
+            .document(collectionType.rawValue)
+        
+        docRefForNftCollection.setData([
+            K.FStore.totalHolderFieldKey: totalHolders,
+            K.FStore.totalMintedNFTsFieldKey: totalMintedNFTs,
+        ], merge: true)
+    }
+    
     /// Save to firestore
     func save(actionCount: Int64,
               popScore: Int64,
@@ -33,9 +49,7 @@ class FirestoreRepository {
         docRefForNftCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.imageUrlFieldKey: collectionImageUrl,
-            K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
-            K.FStore.totalHolderFieldKey: 100, //TODO: add total holder & minted nfts property as method arguments
-            K.FStore.totalMintedNFTsFieldKey: 100,
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
         ], merge: true)
         
         ///2nd depth collection
@@ -66,10 +80,8 @@ class FirestoreRepository {
         ], merge: true)
     }
     
-    /// Fetch fields of a specific `NFT collection` type
-    /// - Parameters:
-    ///   - collectionType: Type of collection
-    ///   - completion: callback
+    /// Fetch all the document exists in `NFT collection` in firestore
+    /// - Parameter completion: callback
     func getAllNftFieldData(ofCollectionType collectionType: CollectionType, completion: @escaping(([Card]?) -> Void)) {
 //        let mockUser = MoonoMockUserData().getOneUserData()
         
@@ -124,9 +136,10 @@ class FirestoreRepository {
         
     }
     
-    
-    /// Fetch all the document exists in `NFT collection` in firestore
-    /// - Parameter completion: callback
+    /// Fetch fields of a specific `NFT collection` type
+    /// - Parameters:
+    ///   - collectionType: Type of collection
+    ///   - completion: callback
     func getAllNftData(ofCollectionType collectionType: CollectionType,
                        completion: @escaping(([Card]?) -> Void)) {
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
@@ -148,6 +161,41 @@ class FirestoreRepository {
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                             imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A"
                         )
+                    }
+                    completion(result)
+                    return
+                } else { // when documents array is empty
+                    completion(nil)
+                    return
+                }
+            }
+    }
+   
+    /// Change return type from Card to NFTCollectionTest
+    func getAllCollectionDataTest(ofCollectionType collectionType: CollectionType,
+                       completion: @escaping(([NftCollectionTest]?) -> Void)) {
+        let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
+        docRefForNft
+            .addSnapshotListener { snapshot, error in
+                guard let snapshot = snapshot, error == nil else {
+                    print("Error fetching cards list: \(String(describing: error))")
+                    completion(nil)
+                    return
+                }
+                let documents = snapshot.documents
+                if !documents.isEmpty {
+                    let result = documents.map { doc in
+                        
+                        return NftCollectionTest(
+                            name: doc.documentID,
+                            address: K.ContractAddress.moono, //Do we need this property?
+                            imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A",
+                            totalPopCount: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
+                            totalActionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
+                            totalNfts: doc[K.FStore.totalMintedNFTsFieldKey] as? Int64 ?? 0,
+                            totalHolders: doc[K.FStore.totalHolderFieldKey] as? Int64 ?? 0
+                        )
+                        
                     }
                     completion(result)
                     return
@@ -214,8 +262,8 @@ class FirestoreRepository {
                                                            imageUrl: moonoDocument[K.FStore.imageUrlFieldKey] as? String ?? "N/A",
                                                            totalPopCount: moonoDocument[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                                                            totalActionCount: moonoDocument[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-                                                           totalNfts: 1000, //NOTE: Need to add to firestore later on?
-                                                           totalHolders: 200) //NOTE: Need to add to firestore later on?
+                                                           totalNfts: moonoDocument[K.FStore.totalMintedNFTsFieldKey] as? Int64 ?? 0, //NOTE: Need to add to firestore later on?
+                                                           totalHolders: moonoDocument[K.FStore.totalHolderFieldKey] as? Int64 ?? 0) //NOTE: Need to add to firestore later on?
                         completion(collection)
                         return
                     } else {

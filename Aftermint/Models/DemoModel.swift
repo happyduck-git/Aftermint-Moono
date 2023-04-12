@@ -13,8 +13,8 @@ struct NftCollectionTest: Storable {
     let imageUrl: String
     let totalPopCount: Int64
     let totalActionCount: Int64
-    let totalNfts: Int
-    let totalHolders: Int
+    let totalNfts: Int64
+    let totalHolders: Int64
 }
 
 struct Card: Storable {
