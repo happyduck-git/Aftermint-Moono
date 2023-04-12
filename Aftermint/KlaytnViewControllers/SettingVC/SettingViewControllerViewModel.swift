@@ -58,17 +58,7 @@ final class SettingViewControllerViewModel {
             return 0
         }
     }
-    
-//    func getAllUserData(completion: @escaping (Result<[Address], Error>) -> Void) {
-//        self.fireStoreRepository.getAllAddress { addressList in
-//            guard let addressList = addressList else { return }
-//            completion(.success(addressList))
-//            return
-//        }
-//        completion(.failure(SettingVMError.FetchUserError))
-//        return
-//    }
-//
+
     func getAllAddressFields() {
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else { return }
@@ -100,28 +90,6 @@ final class SettingViewControllerViewModel {
         }
     }
     
-//    func getNftData(ofCollection collectionType: CollectionType,
-//                    completion: @escaping (Result<NftCollection,Error>) -> Void) {
-//        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
-//            guard let collection = collection else { return }
-//            completion(.success(collection))
-//            return
-//        }
-//        completion(.failure(SettingVMError.FetchCollectionError))
-//        return
-//    }
-
-//    func getAllNftData(ofCollection collectionType: CollectionType,
-//                       completion: @escaping (Result<[Card], Error>) -> Void) {
-//        self.fireStoreRepository.getAllCards(ofCollectionType: collectionType) { cardList in
-//            guard let cardList = cardList else { return }
-//            completion(.success(cardList))
-//            return
-//        }
-//        completion(.failure(SettingVMError.FetchCardError))
-//        return
-//    }
-    
     func getAllCards(ofCollectionType collectionType: CollectionType) {
         self.fireStoreRepository.getAllCards(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
@@ -139,18 +107,6 @@ final class SettingViewControllerViewModel {
             self.nftsCellViewModel.nftsList.value = vmList
         }
     }
-    
-    
-//    func getAllCollectionFields(ofCollectionType collectionType: CollectionType,
-//                                  completion: @escaping (Result<[NftCollection], Error>) -> Void) {
-//        self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType) { nftCollections in
-//            guard let nftCollections = nftCollections else { return }
-//            completion(.success(nftCollections))
-//            return
-//        }
-//        completion(.failure(SettingVMError.FetchCardError))
-//        return
-//    }
     
     func getAllCollectionFields(ofCollectionType collectionType: CollectionType) {
         self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType) { nftCollectionList in

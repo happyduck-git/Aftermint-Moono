@@ -35,6 +35,11 @@ class FirestoreRepository {
         ], merge: true)
     }
     
+    /// Save total numbers of NFTs an owner has
+    func saveTotalNumbersOfNFTs(ofOwner ownerAddress: String) {
+        
+    }
+    
     /// Save to firestore
     func save(
         actionCount: Int64,
@@ -88,7 +93,7 @@ class FirestoreRepository {
     /// Fetch all the document exists in `NFT collection` in firestore
     /// - Parameter completion: callback
     func getAllCards(ofCollectionType collectionType: CollectionType,
-                            completion: @escaping(([Card]?) -> Void)) {
+                     completion: @escaping(([Card]?) -> Void)) {
         
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
