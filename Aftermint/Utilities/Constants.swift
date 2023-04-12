@@ -35,10 +35,11 @@ struct K {
         static let collectionLogoImageFieldKey: String = "collectionLogoImage"
         static let tokenIdFieldKey: String = "tokenId"
         static let countFieldKey: String = "touchCount"
-        static let usernameFieldKey: String = "username"
+        static let usernameFieldKey: String = "userName"
         static let profileImageUrlFieldKey: String = "profileImageUrl"
         static let totalHolderFieldKey: String = "totalHolder"
         static let totalMintedNFTsFieldKey: String = "totalMintedNFTs"
+        static let ownedNFTsFieldKey: String = "ownedNFTs"
         ///Currently not in use
         static let totalDocumentName: String = "Total Count"
     }

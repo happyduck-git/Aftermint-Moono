@@ -17,6 +17,8 @@ class FirestoreRepository {
     
     let db = Firestore.firestore()
     
+    // MARK: - Save data
+    
     /// Save total numbers of holders and total number of minted NFTS of a certain NFT collection
     func saveNumberOfHoldersAndMintedNfts(
         collectionType: CollectionType,
@@ -34,14 +36,15 @@ class FirestoreRepository {
     }
     
     /// Save to firestore
-    func save(actionCount: Int64,
-              popScore: Int64,
-              collectionImageUrl: String,
-              nftImageUrl: String,
-              nftTokenId: String,
-              ownerAddress: String,
-              ownerProfileImage: String,
-              collectionType: CollectionType
+    func save(
+        actionCount: Int64,
+        popScore: Int64,
+        collectionImageUrl: String,
+        nftImageUrl: String,
+        nftTokenId: String,
+        ownerAddress: String,
+        ownerProfileImage: String,
+        collectionType: CollectionType
     ) {
         ///Save NFT collection
         ///1st collection
@@ -80,10 +83,12 @@ class FirestoreRepository {
         ], merge: true)
     }
     
+    // MARK: - Retrieve data
+    
     /// Fetch all the document exists in `NFT collection` in firestore
     /// - Parameter completion: callback
-    func getAllNftFieldData(ofCollectionType collectionType: CollectionType, completion: @escaping(([Card]?) -> Void)) {
-//        let mockUser = MoonoMockUserData().getOneUserData()
+    func getAllCards(ofCollectionType collectionType: CollectionType,
+                            completion: @escaping(([Card]?) -> Void)) {
         
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
@@ -136,44 +141,13 @@ class FirestoreRepository {
         
     }
     
-    /// Fetch fields of a specific `NFT collection` type
+    /// Get all the NFT Collection's fields data;
+    /// [Moono's, Bellygom's, ...]
     /// - Parameters:
-    ///   - collectionType: Type of collection
+    ///   - collectionType: NFT Collection type
     ///   - completion: callback
-    func getAllNftData(ofCollectionType collectionType: CollectionType,
-                       completion: @escaping(([Card]?) -> Void)) {
-        let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
-        docRefForNft
-            .addSnapshotListener { snapshot, error in
-                guard let snapshot = snapshot, error == nil else {
-                    print("Error fetching cards list: \(String(describing: error))")
-                    completion(nil)
-                    return
-                }
-                let documents = snapshot.documents
-                if !documents.isEmpty {
-                    let result = documents.map { doc in
-                        let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
-                        return Card(
-                            tokenId: nftName,
-                            ownerAddress: "N/A", //ownerAddress is not necessary in this case
-                            popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
-                            actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-                            imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A"
-                        )
-                    }
-                    completion(result)
-                    return
-                } else { // when documents array is empty
-                    completion(nil)
-                    return
-                }
-            }
-    }
-   
-    /// Change return type from Card to NFTCollectionTest
-    func getAllCollectionDataTest(ofCollectionType collectionType: CollectionType,
-                       completion: @escaping(([NftCollectionTest]?) -> Void)) {
+    func getAllCollectionFields(ofCollectionType collectionType: CollectionType,
+                       completion: @escaping(([NftCollection]?) -> Void)) {
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
             .addSnapshotListener { snapshot, error in
@@ -186,9 +160,9 @@ class FirestoreRepository {
                 if !documents.isEmpty {
                     let result = documents.map { doc in
                         
-                        return NftCollectionTest(
+                        return NftCollection(
                             name: doc.documentID,
-                            address: K.ContractAddress.moono, //Do we need this property?
+                            address: K.ContractAddress.moono,
                             imageUrl: doc[K.FStore.imageUrlFieldKey] as? String ?? "N/A",
                             totalPopCount: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             totalActionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
@@ -226,7 +200,8 @@ class FirestoreRepository {
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                             profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? "david",
-                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David"
+                            username: doc[K.FStore.usernameFieldKey] as? String ?? "David",
+                            ownedNFTs: doc[K.FStore.ownedNFTsFieldKey] as? Int64 ?? 0
                         )
                     }
                     completion(result)
@@ -239,7 +214,8 @@ class FirestoreRepository {
     }
     
     //Get a specific type of collection data from Nft Collection in Firestore
-    func getNftCollection(ofType collectionType: CollectionType, completion: @escaping ((NftCollectionTest?) -> ())) {
+    func getNftCollection(ofType collectionType: CollectionType,
+                          completion: @escaping ((NftCollection?) -> ())) {
         let docRefForNftCollection = db.collection(K.FStore.nftCardCollectionName)
         docRefForNftCollection
             .addSnapshotListener { snapshot, error in
@@ -257,13 +233,13 @@ class FirestoreRepository {
                     if !moonoDocuments.isEmpty {
                         let moonoDocument = moonoDocuments[0]
                         ///TODO: Currently Fetching Moono Collection Data => Need to generalize this
-                        let collection = NftCollectionTest(name: moonoDocument.documentID,
+                        let collection = NftCollection(name: moonoDocument.documentID,
                                                            address: K.ContractAddress.moono,
                                                            imageUrl: moonoDocument[K.FStore.imageUrlFieldKey] as? String ?? "N/A",
                                                            totalPopCount: moonoDocument[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
                                                            totalActionCount: moonoDocument[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-                                                           totalNfts: moonoDocument[K.FStore.totalMintedNFTsFieldKey] as? Int64 ?? 0, //NOTE: Need to add to firestore later on?
-                                                           totalHolders: moonoDocument[K.FStore.totalHolderFieldKey] as? Int64 ?? 0) //NOTE: Need to add to firestore later on?
+                                                           totalNfts: moonoDocument[K.FStore.totalMintedNFTsFieldKey] as? Int64 ?? 0,
+                                                           totalHolders: moonoDocument[K.FStore.totalHolderFieldKey] as? Int64 ?? 0) 
                         completion(collection)
                         return
                     } else {
@@ -278,39 +254,5 @@ class FirestoreRepository {
             }
     }
     
-//    func getAllCard(completion: @escaping (([Card]?) -> ())) {
-//
-//        let docRefForCard = db.collection(K.FStore.nftCardCollectionName)
-//        
-//        docRefForCard
-//            .order(by: K.FStore.countFieldKey, descending: true)
-//            .addSnapshotListener { snapshot, error in
-//                guard let snapshot = snapshot, error == nil else {
-//                    print("Error fetching cards list: \(String(describing: error))")
-//                    completion(nil)
-//                    return
-//                }
-//                
-//                let documents = snapshot.documents
-//                if !documents.isEmpty {
-//                    let result: [Card] = documents
-//                        .map { doc in
-//                        let data = doc.data()
-//                        let documentId = doc.documentID
-//                        let nftName = documentId.replacingOccurrences(of: "___", with: " #")
-//                            
-//                        return Card(imageUri: data[K.FStore.imageUriFieldKey] as? String ?? "N/A",
-//                                    collectionId: K.ContractAddress.moono,
-//                                    tokenId: nftName,
-//                                    count: data[K.FStore.countFieldKey] as? Int64 ?? 0)
-//                    }
-// 
-//                    completion(result)
-//                    return
-//                } else {
-//                    completion(nil)
-//                }
-//            }
-//    }
   
 }

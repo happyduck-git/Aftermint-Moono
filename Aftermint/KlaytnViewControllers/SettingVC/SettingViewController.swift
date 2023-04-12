@@ -74,11 +74,12 @@ final class SettingViewController: UIViewController {
         setLayout()
         setDelegate()
         
-        getHolderAndNumberOfNFTs()
-        getAllUserData()
-        getNftData()
-        getAllNftData()
-        getAllNftDocument(ofCollectionType: .moono)
+        vm.getHolderAndNumberOfNFTs()
+        
+        vm.getAllAddressFields()
+        vm.getNftData(ofCollectionType: .moono)
+        vm.getAllCards(ofCollectionType: .moono)
+        vm.getAllCollectionFields(ofCollectionType: .moono)
         
     }
     
@@ -132,136 +133,6 @@ final class SettingViewController: UIViewController {
         self.menuBar.delegate = self
     }
     
-    private func getAllUserData() {
-        let mockUser = MoonoMockUserData().getOneUserData()
-        
-        self.vm.getAllUserData { result in
-            switch result {
-            case .success(let addressList):
-
-                /// Users list of UsersCellVM
-                let popScoreVMList = addressList.map { address in
-                    /// Check if address is the same as current (mock) user's
-                    if address.ownerAddress == mockUser.address {
-                        self.vm.youCellViewModel.currentUser.value = address
-                    }
-                    
-                    return PopScoreRankCellViewModel(
-                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
-                        rank: 0,
-                        profileImageUrl: address.profileImageUrl,
-                        owerAddress: address.ownerAddress,
-                        totalNfts: 17, //NEED TO CHANGE
-                        popScore: address.popScore,
-                        actioncount: address.actionCount
-                    )
-                }
-                self.vm.usersCellViewModel.usersList.value = popScoreVMList
-            case .failure(let failure):
-                print("Failed from SettingVC: \(failure.localizedDescription)")
-            }
-        }
-    }
-    
-    private func getNftData() {
-        self.vm.getNftData(ofCollection: .moono) { result in
-            switch result {
-            case .success(let collection):
-                self.vm.usersCellViewModel.currentNft.value = collection
-            case .failure(let failure):
-                print("Failed from SettingVC: \(failure.localizedDescription)")
-            }
-        }
-    }
-    
-    private func getAllNftData() {
-        /// Get all the moono nft card data saved in firestore
-        self.vm.getAllNftData(ofCollection: .moono) { result in
-            switch result {
-            case .success(let cardList):
-                let nftRankCellVMList = cardList.map { card in
-                    return NftRankCellViewModel(
-                        rank: 0,
-                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
-                        nftImageUrl: card.imageUrl,
-                        nftName: card.tokenId,
-                        score: card.popScore,
-                        ownerAddress: card.ownerAddress
-                    )
-                }
-                self.vm.youCellViewModel.nftRankViewModels.value = nftRankCellVMList
-                self.vm.nftsCellViewModel.nftsList.value = nftRankCellVMList
-            case .failure(let failure):
-                print("Failed from SettingVC: \(failure.localizedDescription)")
-            }
-        }
-    }
-    
-    private func getAllNftDocument(ofCollectionType collectionType: CollectionType) {
-        /// Get all the `NFT collection` documents from firestore
-        self.vm.getAllCollectionDataTest(ofCollectionType: collectionType) { result in
-            switch result {
-            case .success(let collections):
-                let nftCollectionList = collections.map { collection in
-                    return ProjectPopScoreCellViewModel(
-                        rank: 0,
-                        nftImageUrl: collection.imageUrl,
-                        nftCollectionName: collectionType.rawValue,
-                        totalNfts: collection.totalNfts, //TODO: NEED TO CHANGE
-                        totalHolders: collection.totalHolders, //TODO: NEED TO CHANGE
-                        popScore: collection.totalPopCount,
-                        actioncount: collection.totalActionCount
-                    )
-                }
-                self.vm.projectsCellViewModel.nftCollectionList.value = nftCollectionList
-            case .failure(let failure):
-                print("Failed from SettingVC: \(failure.localizedDescription)")
-            }
-        }
-//        self.vm.getAllNftDocument(ofCollectionType: collectionType) { result in
-//            switch result {
-//            case .success(let cardList):
-//                let nftCollectionList = cardList.map { card in
-//                    return ProjectPopScoreCellViewModel(
-//                        rank: 0,
-//                        nftImageUrl: card.imageUrl,
-//                        nftCollectionName: collectionType.rawValue,
-//                        totalNfts: 1000, //TODO: NEED TO CHANGE
-//                        totalHolders: 200, //TODO: NEED TO CHANGE
-//                        popScore: card.popScore,
-//                        actioncount: card.actionCount
-//                    )
-//                }
-//                self.vm.projectsCellViewModel.nftCollectionList.value = nftCollectionList
-//            case .failure(let failure):
-//                print("Failed from SettingVC: \(failure.localizedDescription)")
-//            }
-//        }
-    }
-    
-    private func getHolderAndNumberOfNFTs() {
-        /// =======
-        Task {
-            do {
-                let holders = try await KlaytnNftRequester.getNumberOfHolders(ofCollection: K.ContractAddress.moono)
-                vm.projectsCellViewModel.totalNumberOfHolders.value = holders?.totalHolder
-                
-                let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
-                guard let mintedNFTs = contractInfoResult?.totalSupply.dropFirst(2) else { return }
-                let convertedNumber = Int(mintedNFTs, radix: 16)
-                vm.projectsCellViewModel.totalNumberOfMintedNFTs.value = convertedNumber
-
-                FirestoreRepository.shared.saveNumberOfHoldersAndMintedNfts(collectionType: .moono,
-                                                                            totalHolders: Int64(holders?.totalHolder ?? 0),
-                                                                            totalMintedNFTs: Int64(convertedNumber ?? 0))
-            } catch {
-                print(error.localizedDescription)
-            }
-         
-        }
-        /// =======
-    }
-    
 }
 
 extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -308,9 +179,6 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
         let index = targetContentOffset.pointee.x / view.frame.width
         menuBar.selectItem(at: Int(index))
     }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: view.frame.width, height: collectionView.frame.height)
-//    }
 
 }
 

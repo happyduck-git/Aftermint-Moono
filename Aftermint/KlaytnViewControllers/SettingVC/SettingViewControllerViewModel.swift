@@ -5,10 +5,11 @@
 //  Created by HappyDuck on 2023/04/03.
 //
 
-import Foundation
+import UIKit.UIImage
 
 final class SettingViewControllerViewModel {
     
+    // MARK: - Custom Error
     enum SettingVMError: Error {
         case FetchUserError
         case FetchCardError
@@ -16,26 +17,13 @@ final class SettingViewControllerViewModel {
     }
     
     let fireStoreRepository = FirestoreRepository.shared
+    let mockUser = MoonoMockUserData().getOneUserData()
     
-    /* Cell ViewModels */
+    // MARK: - Cell ViewModels
     var youCellViewModel: YouCellViewModel
     var usersCellViewModel: UsersCellViewModel
     var nftsCellViewModel: DashBoardNftCellViewModel
     var projectsCellViewModel: ProjectsCellViewModel
-    
-    let mockUser = MoonoMockUserData().getOneUserData()
-
-    init(
-        youCellVM: YouCellViewModel,
-        usersCellVM: UsersCellViewModel,
-        nftsCellVM: DashBoardNftCellViewModel,
-        projectCellVM: ProjectsCellViewModel
-    ) {
-        self.youCellViewModel = youCellVM
-        self.usersCellViewModel = usersCellVM
-        self.nftsCellViewModel = nftsCellVM
-        self.projectsCellViewModel = projectCellVM
-    }
     
     /// Cell type used in SettingVC collectionView
     enum CellType: CaseIterable {
@@ -47,6 +35,21 @@ final class SettingViewControllerViewModel {
     
     let cells: [CellType] = CellType.allCases
     
+    // MARK: - Init
+    init(
+        youCellVM: YouCellViewModel,
+        usersCellVM: UsersCellViewModel,
+        nftsCellVM: DashBoardNftCellViewModel,
+        projectCellVM: ProjectsCellViewModel
+    ) {
+        self.youCellViewModel = youCellVM
+        self.usersCellViewModel = usersCellVM
+        self.nftsCellViewModel = nftsCellVM
+        self.projectsCellViewModel = projectCellVM
+    }
+
+    // MARK: - Internal functions
+    
     /// Number of items in section
     func numberOfItemsInSection(section: Int) -> Int {
         if section == 0 {
@@ -56,58 +59,136 @@ final class SettingViewControllerViewModel {
         }
     }
     
-    func getAllUserData(completion: @escaping (Result<[Address], Error>) -> Void) {
+//    func getAllUserData(completion: @escaping (Result<[Address], Error>) -> Void) {
+//        self.fireStoreRepository.getAllAddress { addressList in
+//            guard let addressList = addressList else { return }
+//            completion(.success(addressList))
+//            return
+//        }
+//        completion(.failure(SettingVMError.FetchUserError))
+//        return
+//    }
+//
+    func getAllAddressFields() {
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else { return }
-            completion(.success(addressList))
-            return
+            let vmList = addressList.map { address in
+                
+                /// Check if address is the same as current (mock) user's
+                if address.ownerAddress == self.mockUser.address {
+                    self.youCellViewModel.currentUser.value = address
+                }
+                
+                return PopScoreRankCellViewModel(
+                    rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+                    rank: 0,
+                    profileImageUrl: address.profileImageUrl,
+                    owerAddress: address.ownerAddress,
+                    totalNfts: address.ownedNFTs,
+                    popScore: address.popScore,
+                    actioncount: address.actionCount
+                )
+            }
+            self.usersCellViewModel.usersList.value = vmList
         }
-        completion(.failure(SettingVMError.FetchUserError))
-        return
     }
     
-    func getNftData(ofCollection collectionType: CollectionType,
-                    completion: @escaping (Result<NftCollectionTest,Error>) -> Void) {
+    func getNftData(ofCollectionType collectionType: CollectionType) {
         self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
             guard let collection = collection else { return }
-            completion(.success(collection))
-            return
+            self.usersCellViewModel.currentNft.value = collection
         }
-        completion(.failure(SettingVMError.FetchCollectionError))
-        return
     }
     
-    func getAllNftData(ofCollection collectionType: CollectionType,
-                       completion: @escaping (Result<[Card], Error>) -> Void) {
-        self.fireStoreRepository.getAllNftFieldData(ofCollectionType: collectionType) { cardList in
+//    func getNftData(ofCollection collectionType: CollectionType,
+//                    completion: @escaping (Result<NftCollection,Error>) -> Void) {
+//        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
+//            guard let collection = collection else { return }
+//            completion(.success(collection))
+//            return
+//        }
+//        completion(.failure(SettingVMError.FetchCollectionError))
+//        return
+//    }
+
+//    func getAllNftData(ofCollection collectionType: CollectionType,
+//                       completion: @escaping (Result<[Card], Error>) -> Void) {
+//        self.fireStoreRepository.getAllCards(ofCollectionType: collectionType) { cardList in
+//            guard let cardList = cardList else { return }
+//            completion(.success(cardList))
+//            return
+//        }
+//        completion(.failure(SettingVMError.FetchCardError))
+//        return
+//    }
+    
+    func getAllCards(ofCollectionType collectionType: CollectionType) {
+        self.fireStoreRepository.getAllCards(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
-            completion(.success(cardList))
-            return
+            let vmList = cardList.map { card in
+                return NftRankCellViewModel(
+                    rank: 0,
+                    rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+                    nftImageUrl: card.imageUrl,
+                    nftName: card.tokenId,
+                    score: card.popScore,
+                    ownerAddress: card.ownerAddress
+                )
+            }
+            self.youCellViewModel.nftRankViewModels.value = vmList
+            self.nftsCellViewModel.nftsList.value = vmList
         }
-        completion(.failure(SettingVMError.FetchCardError))
-        return
     }
     
-    func getAllNftDocument(ofCollectionType collectionType: CollectionType,
-                           completion: @escaping (Result<[Card], Error>) -> Void) {
-        self.fireStoreRepository.getAllNftData(ofCollectionType: collectionType) { cardList in
-            guard let cardList = cardList else { return }
-            completion(.success(cardList))
-            return
+    
+//    func getAllCollectionFields(ofCollectionType collectionType: CollectionType,
+//                                  completion: @escaping (Result<[NftCollection], Error>) -> Void) {
+//        self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType) { nftCollections in
+//            guard let nftCollections = nftCollections else { return }
+//            completion(.success(nftCollections))
+//            return
+//        }
+//        completion(.failure(SettingVMError.FetchCardError))
+//        return
+//    }
+    
+    func getAllCollectionFields(ofCollectionType collectionType: CollectionType) {
+        self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType) { nftCollectionList in
+            guard let nftCollectionList = nftCollectionList else { return }
+            let vmList = nftCollectionList.map { collection in
+                return ProjectPopScoreCellViewModel(
+                    rank: 0,
+                    nftImageUrl: collection.imageUrl,
+                    nftCollectionName: collectionType.rawValue,
+                    totalNfts: collection.totalNfts,
+                    totalHolders: collection.totalHolders,
+                    popScore: collection.totalPopCount,
+                    actioncount: collection.totalActionCount
+                )
+            }
+            self.projectsCellViewModel.nftCollectionList.value = vmList
         }
-        completion(.failure(SettingVMError.FetchCardError))
-        return
     }
     
-    func getAllCollectionDataTest(ofCollectionType collectionType: CollectionType,
-                                  completion: @escaping (Result<[NftCollectionTest], Error>) -> Void) {
-        self.fireStoreRepository.getAllCollectionDataTest(ofCollectionType: collectionType) { nftCollections in
-            guard let nftCollections = nftCollections else { return }
-            completion(.success(nftCollections))
-            return
+    func getHolderAndNumberOfNFTs() {
+        Task {
+            do {
+                let holders = try await KlaytnNftRequester.getNumberOfHolders(ofCollection: K.ContractAddress.moono)
+                projectsCellViewModel.totalNumberOfHolders.value = holders?.totalHolder
+                
+                let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
+                guard let mintedNFTs = contractInfoResult?.totalSupply.dropFirst(2) else { return }
+                let convertedNumber = Int(mintedNFTs, radix: 16)
+                projectsCellViewModel.totalNumberOfMintedNFTs.value = convertedNumber
+
+                FirestoreRepository.shared.saveNumberOfHoldersAndMintedNfts(collectionType: .moono,
+                                                                            totalHolders: Int64(holders?.totalHolder ?? 0),
+                                                                            totalMintedNFTs: Int64(convertedNumber ?? 0))
+            } catch {
+                print(error.localizedDescription)
+            }
+         
         }
-        completion(.failure(SettingVMError.FetchCardError))
-        return
     }
     
 }
