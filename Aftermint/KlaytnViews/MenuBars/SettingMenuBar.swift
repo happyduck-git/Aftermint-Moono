@@ -39,6 +39,7 @@ final class SettingMenuBar: UIView {
     private lazy var youButton: UIButton = {
         let button = UIButton()
         button.setTitle(SettingAsset.youButtonTitle.rawValue, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(youButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +49,7 @@ final class SettingMenuBar: UIView {
     private lazy var usersButton: UIButton = {
         let button = UIButton()
         button.setTitle(SettingAsset.usersButtonTitle.rawValue, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(usersButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,6 +59,7 @@ final class SettingMenuBar: UIView {
     private lazy var nftsButton: UIButton = {
         let button = UIButton()
         button.setTitle(SettingAsset.nftsButtonTitle.rawValue, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(nftsButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +69,7 @@ final class SettingMenuBar: UIView {
     private lazy var projectsButton: UIButton = {
         let button = UIButton()
         button.setTitle(SettingAsset.projectsButtonTitle.rawValue, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(projectsButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +78,7 @@ final class SettingMenuBar: UIView {
     
     private let indicator: UIView = {
         let view = UIView()
-        view.backgroundColor = AftermintColor.moonoYellow
+        view.backgroundColor = AftermintColor.moonoBlue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -82,7 +86,7 @@ final class SettingMenuBar: UIView {
     private var indicatorLeading: NSLayoutConstraint?
     private var indicatorTrailing: NSLayoutConstraint?
     private let leadPadding: CGFloat = 16
-    private let buttonSpace: CGFloat = 5
+    private let buttonSpace: CGFloat = 6
     private var buttons: [UIButton] = []
     
     //MARK: - Public functions
@@ -251,7 +255,8 @@ final class SettingMenuBar: UIView {
         }
         
         indicatorTrailing?.constant = yTrailing
-        print("\(index) percentScrolled = \(percentScrolled)")
+        /// for debug
+//        print("\(index) percentScrolled = \(percentScrolled)")
     }
     
 }

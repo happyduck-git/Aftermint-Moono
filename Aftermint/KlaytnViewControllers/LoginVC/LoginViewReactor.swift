@@ -100,12 +100,16 @@ extension LoginViewReactor {
                 }
                 
                 /// Notify when the app will enter foreground.
-                self.observer = await NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification,
-                                                                             object: nil,
-                                                                             queue: .main,
-                                                                             using: { notification in
-                    /// When notified that the app will enter foreground,
-                    /// acquire wallet address and save the address to KasWalletRepository.
+                self.observer = await NotificationCenter.default.addObserver(
+                    forName: UIApplication.willEnterForegroundNotification,
+                    object: nil,
+                    queue: .main,
+                    using: { notification in
+                        
+                        /// When notified that the app will enter foreground,
+                        /// acquire wallet address and save the address to KasWalletRepository.
+                        /// ** Also save the address and username to Firestore **
+                        /// ** Username is a demo pupose **
                     Task.init {
                         guard let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken) else { return }
                         self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)

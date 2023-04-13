@@ -74,12 +74,13 @@ final class PopScoreRankCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.backgroundColor = AftermintColor.backgroundNavy
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
     }
     
     // MARK: - Private
     private func setUI() {
+        self.backgroundColor = AftermintColor.backgroundNavy
+        
         contentView.addSubview(rankImageView)
         contentView.addSubview(rankLabel)
         contentView.addSubview(userProfileImageView)
@@ -132,7 +133,7 @@ final class PopScoreRankCell: UITableViewCell {
         self.nftNameLabel.text = nil
         self.popScoreLabel.text = nil
         self.contentView.backgroundColor?.withAlphaComponent(1.0)
-        self.contentView.backgroundColor = nil
+        self.contentView.backgroundColor = AftermintColor.backgroundNavy
     }
     
     // MARK: - Public

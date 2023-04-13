@@ -95,6 +95,8 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section == 0 {
             guard let vm = self.highestScoreVM else { return UITableViewCell() }
+            cell.showStarBadge()
+            cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
             cell.configure(vm: vm)
             return cell
         } else {
@@ -111,6 +113,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             /// Find current user owned nfts and highlight those cells
             if self.checkCurrentUserOwnedNfts(vm: vm) {
                 cell.showStarBadge()
+                cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
             }
             
             cell.configure(vm: vm)
@@ -137,7 +140,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func checkCurrentUserOwnedNfts(vm: NftRankCellViewModel) -> Bool {
-        print(vm.ownerAddress)
+//        print(vm.ownerAddress)
         if vm.ownerAddress == mockUser.address {
             return true
         }

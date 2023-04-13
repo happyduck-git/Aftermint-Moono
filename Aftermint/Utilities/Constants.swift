@@ -15,7 +15,8 @@ struct K {
     
     /// Wallet related constants
     struct Wallet {
-        static let temporaryAddress = "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB"
+//        static let temporaryAddress = "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB"
+        static let temporaryAddress = "0x015a997c4CA73F9170AE60B1e89ddF703Aa3E2a1"
     }
     
     /// Firebase firestore related constants

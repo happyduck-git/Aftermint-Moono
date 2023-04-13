@@ -19,6 +19,14 @@ class FirestoreRepository {
     
     // MARK: - Save data
     
+    func saveWalletAddressAndUsername(
+        collectionType: CollectionType,
+        ownerAddress: String,
+        username: String
+    ) {
+        
+    }
+    
     /// Save total numbers of holders and total number of minted NFTS of a certain NFT collection
     func saveNumberOfHoldersAndMintedNfts(
         collectionType: CollectionType,
@@ -36,7 +44,17 @@ class FirestoreRepository {
     }
     
     /// Save total numbers of NFTs an owner has
-    func saveTotalNumbersOfNFTs(ofOwner ownerAddress: String) {
+    func saveTotalNumbersOfNFTs(
+        ofOwner ownerAddress: String,
+        ownedNFTs: Int64
+    ) {
+        let docRefForAddress = db
+            .collection(K.FStore.nftAddressCollectionName)
+            .document(ownerAddress)
+        
+        docRefForAddress.setData([
+            K.FStore.ownedNFTsFieldKey: ownedNFTs
+        ], merge: true)
         
     }
     
@@ -53,7 +71,10 @@ class FirestoreRepository {
     ) {
         ///Save NFT collection
         ///1st collection
-        let docRefForNftCollection = db.collection(K.FStore.nftCardCollectionName).document(collectionType.rawValue)
+        let docRefForNftCollection = db
+            .collection(K.FStore.nftCardCollectionName)
+            .document(collectionType.rawValue)
+        
         docRefForNftCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.imageUrlFieldKey: collectionImageUrl,
@@ -61,7 +82,10 @@ class FirestoreRepository {
         ], merge: true)
         
         ///2nd depth collection
-        let docRefForToCollection = docRefForNftCollection.collection(K.FStore.secondDepthCollectionName).document(nftTokenId)
+        let docRefForToCollection = docRefForNftCollection
+            .collection(K.FStore.secondDepthCollectionName)
+            .document(nftTokenId)
+        
         docRefForToCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.imageUrlFieldKey: nftImageUrl,
@@ -71,7 +95,10 @@ class FirestoreRepository {
         
         ///Save Address collection
         ///1st collection
-        let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName).document(ownerAddress)
+        let docRefForAddress = db
+            .collection(K.FStore.nftAddressCollectionName)
+            .document(ownerAddress)
+        
         docRefForAddress.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
             K.FStore.popScoreFieldKey: FieldValue.increment(popScore),

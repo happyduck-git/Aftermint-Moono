@@ -13,8 +13,6 @@ final class YouCellViewModel {
         case rankCellFetchError
     }
     
-    let fireStoreRepository = FirestoreRepository.shared
-    
     var currentUser: Box<Address?> = Box(nil)
     var nftRankViewModels: Box<[NftRankCellViewModel]> = Box([])
     

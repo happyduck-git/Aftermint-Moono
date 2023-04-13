@@ -30,7 +30,7 @@ final class NftRankCell: UITableViewCell {
     private let starBadge: UIImageView = {
        let imageView = UIImageView()
         imageView.isHidden = true
-        imageView.image = UIImage(systemName: "star.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
+        imageView.image = UIImage(systemName: "star.fill")?.withTintColor(AftermintColor.moonoBlue, renderingMode: .alwaysOriginal)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -83,6 +83,8 @@ final class NftRankCell: UITableViewCell {
     
     //MARK: - Private
     private func setUI() {
+        self.contentView.backgroundColor = AftermintColor.backgroundNavy
+        
         self.contentView.addSubview(rankImageView)
         self.contentView.addSubview(rankLabel)
         self.contentView.addSubview(nftImageView)
@@ -164,6 +166,8 @@ final class NftRankCell: UITableViewCell {
         self.nftNameLabel.text = nil
         self.scoreLabel.text = nil
         self.pointLabel.text = nil
+        self.contentView.backgroundColor?.withAlphaComponent(1.0)
+        self.contentView.backgroundColor = AftermintColor.backgroundNavy
     }
     
 }

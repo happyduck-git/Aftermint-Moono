@@ -223,6 +223,7 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell,
               let currentUserVM = currentUserVM
         else { return UITableViewCell() }
+        cell.resetCell()
         
         let vm = self.usersList[indexPath.row]
         /// Set Rank Image for 1st to 3rd rank and give number of rank to below seats
@@ -232,19 +233,28 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
             cell.switchRankImageToLabel()
             vm.setRankNumberWithIndexPath(indexPath.row + 1)
         }
+        /// Check if vm is the owner's vm;
+        /// if so, change the cell content background color
+        if vm.ownerAddress == MoonoMockUserData().getOneUserData().address {
+            cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+        }
         
         if tableView == self.popScoreTableView {
             if indexPath.section == 0 {
-                print("Rank image of the popScoreTableView: \(currentUserVM.rankImage)")
+//                print("Rank image of the popScoreTableView: \(String(describing: currentUserVM.rankImage))")
+                cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 cell.configureRankScoreCell(with: currentUserVM)
                 return cell
             } else {
+                
                 cell.configureRankScoreCell(with: vm)
                 return cell
             }
+            
         } else if tableView == self.actionCountTableView {
             if indexPath.section == 0 {
-                print("Rank image of the actionCountTableView: \(currentUserVM.rankImage)")
+//                print("Rank image of the actionCountTableView: \(String(describing: currentUserVM.rankImage))")
+                cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 cell.configureActionCountCell(with: currentUserVM)
                 return cell
             } else {
