@@ -53,6 +53,7 @@ enum LoginAsset: String {
     case loginDescription =  "멤버십 서비스 이용을 위해 NFT 지갑을 연결해주세요."
     case favorletButton = "favorletbutton"
     case kaikasButton = "kaikasbutton"
+    case userPlaceHolderImage = "user_place_holder"
 }
 
 /// LottieController related constants

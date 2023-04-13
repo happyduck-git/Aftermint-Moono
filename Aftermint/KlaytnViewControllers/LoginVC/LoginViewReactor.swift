@@ -13,6 +13,7 @@ final class LoginViewReactor: Reactor {
     
     let kasWalletRepository: KasWalletRepository = KasWalletRepository.shared
     let kasConnectService: KASConnectService = KASConnectService.shared
+    let firestoreRepository: FirestoreRepository = FirestoreRepository.shared
     var requestToken: String?
     
     private var isWaitingTransactionResponse: Bool = false
@@ -47,6 +48,7 @@ final class LoginViewReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .connectWithFavorlet:
+            self.saveWalletAddressAndUsernameToFirestore()
             return Observable.just(Mutation.openFavorlet)
             
         case .connectWithKaikas:
@@ -114,6 +116,13 @@ extension LoginViewReactor {
                         guard let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken) else { return }
                         self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
                         print("walletAddress: \(walletAddress)")
+                        
+                        /// Currently not using this saving to fire store code
+//                        self.firestoreRepository.saveWalletAddressAndUsername(
+//                            ownerAddress: walletAddress,
+//                            username: MoonoMockUserData().getOneUserData().username /// TEMP: Only for demo purpose
+//                        )
+                        
                         completion(.success(walletAddress))
                     }
                 })
@@ -125,5 +134,22 @@ extension LoginViewReactor {
             }
         }
     }
+    
+    /// ** Save the address and username to Firestore **
+    /// ** Username is a demo pupose **
+    private func saveWalletAddressAndUsernameToFirestore() {
+        let mockUser = MoonoMockUserData().getOneUserData()
+        
+        /// TEMP: Only for demo purpose
+        self.firestoreRepository.saveAddressBaseFields(
+            ownerAddress: mockUser.address,
+            username: mockUser.username
+        )
+        self.kasWalletRepository.setUsername(
+            username: mockUser.username
+        )
+
+    }
+    
 }
 

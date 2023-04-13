@@ -45,6 +45,7 @@ final class YouCell: UICollectionViewCell {
         stack.topLabelText = SettingAsset.popScoreTitle.rawValue
         stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
         stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
+        stack.bottomLabelText = "0"
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -54,6 +55,7 @@ final class YouCell: UICollectionViewCell {
         stack.topLabelText = SettingAsset.actionCountTitle.rawValue
         stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
         stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
+        stack.bottomLabelText = "0"
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()

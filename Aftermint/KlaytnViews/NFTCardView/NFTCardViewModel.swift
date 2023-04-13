@@ -22,7 +22,8 @@ class NFTCardViewModel {
         
         /// Save total number of nfts an owner has
         self.fireStoreRepository.saveTotalNumbersOfNFTs(
-            ofOwner: K.Wallet.temporaryAddress, /// Use temporary wallet address for demo purpose
+//            ofOwner: K.Wallet.temporaryAddress, /// Use temporary wallet address for demo purpose
+            ofOwner: MoonoMockUserData().getOneUserData().address,
             ownedNFTs: Int64(numberOfItems)
         )
         

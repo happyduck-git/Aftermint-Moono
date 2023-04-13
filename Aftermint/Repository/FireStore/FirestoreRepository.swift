@@ -18,13 +18,92 @@ class FirestoreRepository {
     let db = Firestore.firestore()
     
     // MARK: - Save data
+   
+    /// Check if document with ownerAddress exist
+    /// - Parameters:
+    ///   - ownerAddress: Logged in user's wallet address.
+    ///   - completion: Callback
+    private func checkIfSavedUser(
+        ownerAddress: String,
+        completion: @escaping (Result<Bool, Error>) -> ()
+    ) {
+        db.collection(K.FStore.nftAddressCollectionName)
+            .whereField(K.FStore.actionCountFieldKey, isNotEqualTo: 0)
+            .getDocuments { snapshot, error in
+                guard let snapshot = snapshot, error == nil else {
+                    completion(.failure(FirestoreError.getDocumentsError))
+                    return
+                }
+                let docs = snapshot.documents
+                for doc in docs {
+                    if doc.documentID == ownerAddress {
+                        completion(.success(true))
+                        return
+                    }
+                }
+                completion(.success(false))
+            }
+        
+        
+//        documentsUnderAddressCollection.getDocuments { snapshot, error in
+//            guard let snapshot = snapshot, error == nil else {
+//                completion(.failure(FirestoreError.getDocumentsError))
+//                return
+//            }
+//            let docs = snapshot.documents
+//            for doc in docs {
+//                if doc.documentID == ownerAddress {
+//                    completion(.success(true))
+//                    return
+//                }
+//            }
+//            completion(.success(false))
+//        }
+    }
     
-    func saveWalletAddressAndUsername(
-        collectionType: CollectionType,
+    func saveUsername(
         ownerAddress: String,
         username: String
     ) {
+        let docRefForAddress = self.db
+            .collection(K.FStore.nftAddressCollectionName)
+            .document(ownerAddress)
         
+        docRefForAddress.setData([
+            K.FStore.usernameFieldKey: username
+        ], merge: true)
+    }
+    
+    /// Save base firestore fields which are saved under documents of `Address` collection
+    /// - Parameters:
+    ///   - ownerAddress: Logged in user's wallet address. Set this as the name of document under Address
+    ///   - username: Logged in user's username.
+    func saveAddressBaseFields(
+        ownerAddress: String,
+        username: String
+    ) {
+        self.checkIfSavedUser(ownerAddress: ownerAddress) { result in
+            switch result {
+            case .success(let isSaved):
+                if isSaved {
+                    return
+                } else {
+                    let docRefForAddress = self.db
+                        .collection(K.FStore.nftAddressCollectionName)
+                        .document(ownerAddress)
+                    
+                    docRefForAddress.setData([
+                        K.FStore.usernameFieldKey: username,
+                        K.FStore.popScoreFieldKey: 0,
+                        K.FStore.actionCountFieldKey: 0
+                    ], merge: true)
+                    return
+                }
+            case .failure(let error):
+                print("Error checking saved user: \(error.localizedDescription)")
+                return
+            }
+        }
     }
     
     /// Save total numbers of holders and total number of minted NFTS of a certain NFT collection
@@ -66,7 +145,6 @@ class FirestoreRepository {
         nftImageUrl: String,
         nftTokenId: String,
         ownerAddress: String,
-        ownerProfileImage: String,
         collectionType: CollectionType
     ) {
         ///Save NFT collection
@@ -101,8 +179,7 @@ class FirestoreRepository {
         
         docRefForAddress.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
-            K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
-            K.FStore.profileImageUrlFieldKey: ownerProfileImage
+            K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
         ], merge: true)
         
         ///2nd depth collection
@@ -231,7 +308,7 @@ class FirestoreRepository {
                             ownerAddress: ownerAddress,
                             actionCount: doc[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
                             popScore: doc[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
-                            profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? "david",
+                            profileImageUrl: doc[K.FStore.profileImageUrlFieldKey] as? String ?? LoginAsset.userPlaceHolderImage.rawValue,
                             username: doc[K.FStore.usernameFieldKey] as? String ?? "David",
                             ownedNFTs: doc[K.FStore.ownedNFTsFieldKey] as? Int64 ?? 0
                         )
@@ -287,4 +364,10 @@ class FirestoreRepository {
     }
     
   
+}
+
+extension FirestoreRepository {
+    enum FirestoreError: Error {
+        case getDocumentsError
+    }
 }

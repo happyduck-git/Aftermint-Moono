@@ -82,7 +82,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
                          popScore: Int64,
                          actionCount: Int64,
                          ownerAddress: String,
-                         ownerProfileImage: String,
                          nftImageUrl: String,
                          nftTokenId: String,
                          totalNfts: Int,
@@ -94,9 +93,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
                                  nftImageUrl: nftImageUrl,
                                  nftTokenId: nftTokenId,
                                  ownerAddress: ownerAddress,
-                                 ownerProfileImage: ownerProfileImage,
                                  collectionType: collectionType)
-     
     }
     
 }

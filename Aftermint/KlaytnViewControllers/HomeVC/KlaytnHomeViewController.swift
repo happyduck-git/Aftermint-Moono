@@ -65,6 +65,8 @@ class KlaytnHomeViewController: UIViewController {
         view.addSubview(collectNewNFTButton)
         layout()
         
+        //TEMP
+        welcomeUpperView.usernameLabel.text = KasWalletRepository.shared.getUsername()
     }
     
     override func viewWillAppear(_ animated: Bool) {

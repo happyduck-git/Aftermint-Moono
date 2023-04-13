@@ -157,6 +157,7 @@ final class GameViewController: UIViewController {
         setGameScene()
 
         self.bottomSheetView.bottomSheetDelegate = self
+        
         //Correct loction to call this?
 //        getCurrentUserViewModel()
     }
@@ -293,7 +294,6 @@ extension GameViewController: MoonoGameSceneDelegate {
                                                       popScore: touchCount * Int64(mockUserData.totalNfts),
                                                       actionCount: touchCount,
                                                       ownerAddress: mockUserData.address,
-                                                      ownerProfileImage: mockUserData.imageUrl,
                                                       nftImageUrl: mockCardData.imageUrl,
                                                       nftTokenId: mockCardData.tokenId,
                                                       totalNfts: mockUserData.totalNfts,
