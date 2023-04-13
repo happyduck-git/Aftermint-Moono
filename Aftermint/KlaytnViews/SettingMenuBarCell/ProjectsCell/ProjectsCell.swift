@@ -29,13 +29,16 @@ final class ProjectsCell: UICollectionViewCell {
     
     private let collectionTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 23, weight: .bold)
+        label.font = BellyGomFont.header02
+        label.textColor = AftermintColor.moonoYellow
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let popScoreTitleLabel: UILabel = {
         let label = UILabel()
+        label.font = BellyGomFont.header04
+        label.textColor = AftermintColor.moonoBlue
         label.text = SettingAsset.projectsPopScoreTitle.rawValue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -43,13 +46,15 @@ final class ProjectsCell: UICollectionViewCell {
     
     private let popScoreLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .heavy)
+        label.font = BellyGomFont.header03
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let actionCountTitleLabel: UILabel = {
         let label = UILabel()
+        label.font = BellyGomFont.header04
+        label.textColor = AftermintColor.moonoBlue
         label.text = SettingAsset.actionCountTitle.rawValue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -57,7 +62,7 @@ final class ProjectsCell: UICollectionViewCell {
     
     private let actionCountLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .heavy)
+        label.font = BellyGomFont.header03
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -65,14 +70,15 @@ final class ProjectsCell: UICollectionViewCell {
     private let totalNftsTitleLabel: UILabel = {
         let label = UILabel()
         label.text = SettingAsset.totalNftsTitle.rawValue
-        label.font = .systemFont(ofSize: 17, weight: .light)
+        label.textColor = AftermintColor.bellyGreen
+        label.font = BellyGomFont.header05
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let totalNftsLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .heavy)
+        label.font = BellyGomFont.header04
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -80,14 +86,15 @@ final class ProjectsCell: UICollectionViewCell {
     private let totalHoldersTitleLabel: UILabel = {
         let label = UILabel()
         label.text = SettingAsset.totalHoldersTitle.rawValue
-        label.font = .systemFont(ofSize: 17, weight: .light)
+        label.textColor = AftermintColor.bellyGreen
+        label.font = BellyGomFont.header05
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let totalHoldersLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .heavy)
+        label.font = BellyGomFont.header04
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -148,30 +155,31 @@ final class ProjectsCell: UICollectionViewCell {
     private func setLayout() {
         NSLayoutConstraint.activate([
             self.nftImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 3),
-            self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
+            self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 2),
             self.nftImageView.widthAnchor.constraint(equalToConstant: 80),
             self.nftImageView.heightAnchor.constraint(equalTo: self.nftImageView.widthAnchor),
             
-            self.collectionTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
+            self.collectionTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 2),
             self.collectionTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 3),
             
             self.popScoreTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.collectionTitleLabel.bottomAnchor, multiplier: 1),
             self.popScoreTitleLabel.leadingAnchor.constraint(equalTo: self.collectionTitleLabel.leadingAnchor),
             self.popScoreLabel.topAnchor.constraint(equalTo: self.popScoreTitleLabel.topAnchor),
-            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreLabel.trailingAnchor, multiplier: 2),
+            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreLabel.trailingAnchor, multiplier: 3),
             self.actionCountTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.popScoreTitleLabel.bottomAnchor, multiplier: 1),
             self.actionCountTitleLabel.leadingAnchor.constraint(equalTo: self.popScoreTitleLabel.leadingAnchor),
             self.actionCountLabel.topAnchor.constraint(equalTo: self.actionCountTitleLabel.topAnchor),
-            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountLabel.trailingAnchor, multiplier: 2),
+            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountLabel.trailingAnchor, multiplier: 3),
             
             self.totalNftsTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.bottomAnchor, multiplier: 2),
-            self.totalNftsTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
+
             self.totalNftsLabel.topAnchor.constraint(equalTo: self.totalNftsTitleLabel.topAnchor),
             self.totalNftsLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.totalNftsTitleLabel.trailingAnchor, multiplier: 2),
             self.totalHoldersTitleLabel.topAnchor.constraint(equalTo: self.totalNftsTitleLabel.topAnchor),
             self.totalHoldersTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.totalNftsLabel.trailingAnchor, multiplier: 2),
             self.totalHoldersLabel.topAnchor.constraint(equalTo: self.totalNftsTitleLabel.topAnchor),
             self.totalHoldersLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.totalHoldersTitleLabel.trailingAnchor, multiplier: 2),
+            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.totalHoldersLabel.trailingAnchor, multiplier: 2),
             
             self.segmentedControl.topAnchor.constraint(equalToSystemSpacingBelow: self.totalHoldersTitleLabel.bottomAnchor, multiplier: 3),
             self.segmentedControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
@@ -244,7 +252,7 @@ extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProjectPopScoreCell.identifier, for: indexPath) as? ProjectPopScoreCell else { return UITableViewCell() }
-        
+        cell.selectionStyle = .none
         let vm = self.nftCollectionList[indexPath.row]
         vm.setRankNumberWithIndexPath(indexPath.row + 1)
         if tableView == self.popScoreTableView {
@@ -259,6 +267,8 @@ extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+    
+    
     
     /// Determine cell image
     private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {

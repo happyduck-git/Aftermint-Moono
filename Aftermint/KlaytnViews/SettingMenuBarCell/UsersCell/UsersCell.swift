@@ -29,6 +29,8 @@ final class UsersCell: UICollectionViewCell {
     
     private let popScoreTitleLabel: UILabel = {
         let label = UILabel()
+        label.font = BellyGomFont.header04
+        label.textColor = AftermintColor.moonoBlue
         label.text = SettingAsset.usersPopScoreTitle.rawValue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -36,13 +38,15 @@ final class UsersCell: UICollectionViewCell {
     
     private let popScoreLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = BellyGomFont.header03
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let actionCountTitleLabel: UILabel = {
         let label = UILabel()
+        label.font = BellyGomFont.header04
+        label.textColor = AftermintColor.moonoBlue
         label.text = SettingAsset.usersActionScoreTitle.rawValue
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -50,7 +54,7 @@ final class UsersCell: UICollectionViewCell {
     
     private let actionCountLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = BellyGomFont.header03
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -223,6 +227,7 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell,
               let currentUserVM = currentUserVM
         else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.resetCell()
         
         let vm = self.usersList[indexPath.row]

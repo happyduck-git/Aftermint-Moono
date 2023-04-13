@@ -38,6 +38,7 @@ final class PopScoreRankCell: UITableViewCell {
     
     private let nftInfoStackView: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
+        stack.topLabelFont = BellyGomFont.header04
         stack.bottomLabelFont = BellyGomFont.header06
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -56,7 +57,7 @@ final class PopScoreRankCell: UITableViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.font = BellyGomFont.header03
-        label.textColor = .white
+        label.textColor = AftermintColor.moonoYellow
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

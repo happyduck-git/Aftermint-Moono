@@ -93,8 +93,10 @@ final class SettingViewControllerViewModel {
     func getAllCards(ofCollectionType collectionType: CollectionType) {
         self.fireStoreRepository.getAllCards(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
+            var currentUserCardList: [NftRankCellViewModel] = []
             let vmList = cardList.map { card in
-                return NftRankCellViewModel(
+                
+                let vm = NftRankCellViewModel(
                     rank: 0,
                     rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                     nftImageUrl: card.imageUrl,
@@ -102,8 +104,14 @@ final class SettingViewControllerViewModel {
                     score: card.popScore,
                     ownerAddress: card.ownerAddress
                 )
+                
+                if card.ownerAddress == self.mockUser.address {
+                    currentUserCardList.append(vm)
+                }
+                
+                return vm
             }
-            self.youCellViewModel.nftRankViewModels.value = vmList
+            self.youCellViewModel.nftRankViewModels.value = currentUserCardList
             self.nftsCellViewModel.nftsList.value = vmList
         }
     }
@@ -115,7 +123,7 @@ final class SettingViewControllerViewModel {
                 return ProjectPopScoreCellViewModel(
                     rank: 0,
                     nftImageUrl: collection.imageUrl,
-                    nftCollectionName: collectionType.rawValue,
+                    nftCollectionName: collection.name,
                     totalNfts: collection.totalNfts,
                     totalHolders: collection.totalHolders,
                     popScore: collection.totalPopCount,

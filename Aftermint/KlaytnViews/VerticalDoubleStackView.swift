@@ -45,6 +45,18 @@ class VerticalDoubleStackView: UIStackView {
         }
     }
     
+    var topLabelTextColor: UIColor = .white {
+        didSet {
+            self.topLabel.textColor = self.topLabelTextColor
+        }
+    }
+    
+    var bottomLabelTextColor: UIColor = .white {
+        didSet {
+            self.bottomLabel.textColor = self.bottomLabelTextColor
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()

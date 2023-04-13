@@ -107,7 +107,7 @@ final class SettingMenuBar: UIView {
             button = projectsButton
         }
         
-        setAlpha(for: button)
+//        setAlpha(for: button)
         
         UIView.animate(withDuration: 0.3) {
             self.layoutIfNeeded()
@@ -201,8 +201,6 @@ final class SettingMenuBar: UIView {
         
         // Animate alpha of buttons
         switch index {
-        case 3:
-            break
         default:
             fromButton.alpha = fmax(0.5, (1 - percentScrolled))
             toButton.alpha = fmax(0.5, percentScrolled)

@@ -289,6 +289,10 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                   let vm = self.sectionSectionVM?.modelAt(indexPath)
             else { return UITableViewCell()}
             cell.resetCell()
+            
+            if vm.topLabelText == MoonoMockUserData().getOneUserData().address.cutOfRange(length: 10) {
+                cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+            }
  
             //TODO: Make below logic as a separate function
             if indexPath.row <= 2 {

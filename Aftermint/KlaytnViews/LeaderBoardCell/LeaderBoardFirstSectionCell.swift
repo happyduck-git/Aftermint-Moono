@@ -12,7 +12,7 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
     // MARK: - UI Elements
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
         imageView.layer.borderWidth = 1.0
         imageView.clipsToBounds = true

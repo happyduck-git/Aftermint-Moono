@@ -91,14 +91,19 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.resetCell()
         
         if indexPath.section == 0 {
             guard let vm = self.highestScoreVM else { return UITableViewCell() }
             cell.showStarBadge()
-            cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+            cell.nftImageBorderColor = AftermintColor.moonoBlue.cgColor
+            cell.nftNameLabelColor = AftermintColor.moonoBlue
+            cell.rankLabelColor = AftermintColor.moonoBlue
+            cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.1)
             cell.configure(vm: vm)
             return cell
+            
         } else {
             let vm = nftsList[indexPath.row]
             
@@ -113,7 +118,10 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             /// Find current user owned nfts and highlight those cells
             if self.checkCurrentUserOwnedNfts(vm: vm) {
                 cell.showStarBadge()
-                cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+                cell.nftImageBorderColor = AftermintColor.moonoBlue.cgColor
+                cell.nftNameLabelColor = AftermintColor.moonoBlue
+                cell.rankLabelColor = AftermintColor.moonoBlue
+                cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.1)
             }
             
             cell.configure(vm: vm)

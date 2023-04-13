@@ -25,8 +25,9 @@ final class YouCell: UICollectionViewCell {
     private let walletAddressStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.walletAddressTitle.rawValue
-        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
-        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
+        stack.topLabelFont = BellyGomFont.header04
+        stack.topLabelTextColor = AftermintColor.moonoBlue
+        stack.bottomLabelFont = BellyGomFont.header08
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -34,8 +35,9 @@ final class YouCell: UICollectionViewCell {
     private let usernameStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.usernameTitle.rawValue
-        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
-        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
+        stack.topLabelFont = BellyGomFont.header04
+        stack.topLabelTextColor = AftermintColor.moonoBlue
+        stack.bottomLabelFont = BellyGomFont.header08
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -43,8 +45,9 @@ final class YouCell: UICollectionViewCell {
     private let popScoreStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.popScoreTitle.rawValue
-        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
-        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
+        stack.topLabelFont = BellyGomFont.header04
+        stack.topLabelTextColor = AftermintColor.bellyGreen
+        stack.bottomLabelFont = BellyGomFont.header08
         stack.bottomLabelText = "0"
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -53,8 +56,9 @@ final class YouCell: UICollectionViewCell {
     private let actionCountStack: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = SettingAsset.actionCountTitle.rawValue
-        stack.topLabelFont = .systemFont(ofSize: 20, weight: .light)
-        stack.bottomLabelFont = .systemFont(ofSize: 18, weight: .bold)
+        stack.topLabelFont = BellyGomFont.header04
+        stack.topLabelTextColor = AftermintColor.bellyGreen
+        stack.bottomLabelFont = BellyGomFont.header08
         stack.bottomLabelText = "0"
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -102,7 +106,7 @@ final class YouCell: UICollectionViewCell {
             self.profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
             self.profileImageView.heightAnchor.constraint(equalToConstant: 90),
             self.profileImageView.widthAnchor.constraint(equalTo: self.profileImageView.heightAnchor),
-            self.walletAddressStack.topAnchor.constraint(equalTo: self.profileImageView.topAnchor),
+            self.walletAddressStack.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 2),
             self.walletAddressStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.profileImageView.trailingAnchor, multiplier: 2),
             self.usernameStack.topAnchor.constraint(equalToSystemSpacingBelow: self.walletAddressStack.bottomAnchor, multiplier: 2),
             self.usernameStack.leadingAnchor.constraint(equalTo: self.walletAddressStack.leadingAnchor),
@@ -178,6 +182,7 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell
         else { return UITableViewCell() }
+        cell.selectionStyle = .none
         
         let vm = self.nftsList[indexPath.row]
         if indexPath.row <= 2 {

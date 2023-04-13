@@ -9,6 +9,24 @@ import UIKit
 
 final class NftRankCell: UITableViewCell {
     
+    //MARK: - Init
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: nil)
+        
+        setUI()
+        setLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let height = self.nftImageView.frame.size.height
+        self.nftImageView.layer.cornerRadius = height / 2
+    }
+    
     //MARK: - UI Elements
     private let rankImageView: UIImageView = {
         let imageView = UIImageView()
@@ -46,12 +64,15 @@ final class NftRankCell: UITableViewCell {
     
     private let nftNameLabel: UILabel = {
         let label = UILabel()
+        label.font = BellyGomFont.header08
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let scoreLabel: UILabel = {
         let label = UILabel()
+        label.font = BellyGomFont.header03
+        label.textColor = AftermintColor.moonoYellow
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -59,26 +80,28 @@ final class NftRankCell: UITableViewCell {
     private let pointLabel: UILabel = {
         let label = UILabel()
         label.text = SettingAsset.pointLabel.rawValue
+        label.font = BellyGomFont.header07
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    //MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: nil)
-        
-        setUI()
-        setLayout()
+    //MARK: - Setter
+    var rankLabelColor: UIColor = .white {
+        didSet {
+            self.rankLabel.textColor = self.rankLabelColor
+        }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    var nftImageBorderColor: CGColor = UIColor.white.cgColor {
+        didSet {
+            self.nftImageView.layer.borderColor = self.nftImageBorderColor
+        }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let height = self.nftImageView.frame.size.height
-        self.nftImageView.layer.cornerRadius = height / 2
+    var nftNameLabelColor: UIColor = .white {
+        didSet {
+            self.nftNameLabel.textColor = self.nftNameLabelColor
+        }
     }
     
     //MARK: - Private
@@ -96,6 +119,8 @@ final class NftRankCell: UITableViewCell {
     
     private func setLayout() {
         
+        let height = contentView.frame.size.height
+        
         NSLayoutConstraint.activate([
             self.rankLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
             self.rankLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
@@ -104,7 +129,8 @@ final class NftRankCell: UITableViewCell {
             self.rankImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.rankImageView.leadingAnchor.constraint(equalTo: self.rankLabel.leadingAnchor),
             self.rankImageView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
-            self.rankImageView.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
+//            self.rankImageView.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
+            self.rankImageView.widthAnchor.constraint(equalToConstant: height / 2),
             
             self.nftImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.rankLabel.trailingAnchor, multiplier: 2),
@@ -159,6 +185,12 @@ final class NftRankCell: UITableViewCell {
         self.scoreLabel.text = "\(vm.score)"
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.rankImageView.isHidden = false
+        self.rankLabel.isHidden = true
+    }
+    
     public func resetCell() {
         self.starBadge.isHidden = true
         self.nftImageView.image = nil
@@ -166,6 +198,9 @@ final class NftRankCell: UITableViewCell {
         self.nftNameLabel.text = nil
         self.scoreLabel.text = nil
         self.pointLabel.text = nil
+        self.rankLabel.textColor = .white
+        self.rankImageView.layer.borderColor = UIColor.white.cgColor
+        self.nftNameLabel.textColor = .white
         self.contentView.backgroundColor?.withAlphaComponent(1.0)
         self.contentView.backgroundColor = AftermintColor.backgroundNavy
     }
