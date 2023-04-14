@@ -253,8 +253,14 @@ extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProjectPopScoreCell.identifier, for: indexPath) as? ProjectPopScoreCell else { return UITableViewCell() }
         cell.selectionStyle = .none
+        
         let vm = self.nftCollectionList[indexPath.row]
         vm.setRankNumberWithIndexPath(indexPath.row + 1)
+        
+        if vm.nftCollectionName == K.FStore.nftCollectionDocumentName {
+            cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.2)
+        }
+        
         if tableView == self.popScoreTableView {
             cell.configureRankScoreCell(with: vm)
             return cell

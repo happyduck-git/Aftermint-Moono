@@ -93,6 +93,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.resetCell()
+        cell.switchRankImageToLabel()
         
         if indexPath.section == 0 {
             guard let vm = self.highestScoreVM else { return UITableViewCell() }
@@ -106,14 +107,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             
         } else {
             let vm = nftsList[indexPath.row]
-            
-            /// Set rank image according to its rank
-            if indexPath.row <= 2 {
-                vm.setRankImage(with: cellRankImageAt(indexPath.row))
-            } else {
-                cell.switchRankImageToLabel()
-                vm.setRankNumberWithIndexPath(indexPath.row + 1)
-            }
+            vm.setRankNumberWithIndexPath(indexPath.row + 1)
             
             /// Find current user owned nfts and highlight those cells
             if self.checkCurrentUserOwnedNfts(vm: vm) {
@@ -131,20 +125,6 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
-    }
-    
-    /// Determine cell image
-    private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {
-        switch indexPathRow {
-        case 0:
-            return UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
-        case 1:
-            return UIImage(named: LeaderBoardAsset.secondPlace.rawValue)
-        case 2:
-            return UIImage(named: LeaderBoardAsset.thirdPlace.rawValue)
-        default:
-            return UIImage(named: LeaderBoardAsset.markImageName.rawValue)
-        }
     }
     
     private func checkCurrentUserOwnedNfts(vm: NftRankCellViewModel) -> Bool {

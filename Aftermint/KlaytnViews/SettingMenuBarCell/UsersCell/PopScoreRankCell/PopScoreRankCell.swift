@@ -9,6 +9,22 @@ import UIKit
 
 final class PopScoreRankCell: UITableViewCell {
     
+    // MARK: - Init
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setUI()
+        setLayout()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
+    }
+    
     // MARK: - UI Elements
     private let rankImageView: UIImageView = {
         let imageView = UIImageView()
@@ -62,21 +78,32 @@ final class PopScoreRankCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUI()
-        setLayout()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    // MARK: - Setter
+    var rankImageColor: UIColor = .white {
+        didSet {
+            self.rankImageView.image?.withTintColor(self.rankImageColor)
+        }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
+    var rankLabelColor: UIColor = .white {
+        didSet {
+            self.rankLabel.textColor = self.rankLabelColor
+        }
     }
+    
+    var userProfileImageBorderColor: CGColor = UIColor.white.cgColor {
+        didSet {
+            self.userProfileImageView.layer.borderColor = self.userProfileImageBorderColor
+        }
+    }
+    
+    var nftInfoTextColor: UIColor = UIColor.white {
+        didSet {
+            self.nftInfoStackView.topLabelTextColor = self.nftInfoTextColor
+            self.nftInfoStackView.bottomLabelTextColor = self.nftInfoTextColor
+        }
+    }
+    
     
     // MARK: - Private
     private func setUI() {
@@ -133,6 +160,11 @@ final class PopScoreRankCell: UITableViewCell {
         self.userProfileImageView.image = nil
         self.nftNameLabel.text = nil
         self.popScoreLabel.text = nil
+        self.rankImageView.image?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        self.rankLabel.textColor = .white
+        self.userProfileImageView.layer.borderColor = UIColor.white.cgColor
+        self.nftInfoStackView.topLabelTextColor = .white
+        self.nftInfoStackView.bottomLabelTextColor = .white
         self.contentView.backgroundColor?.withAlphaComponent(1.0)
         self.contentView.backgroundColor = AftermintColor.backgroundNavy
     }

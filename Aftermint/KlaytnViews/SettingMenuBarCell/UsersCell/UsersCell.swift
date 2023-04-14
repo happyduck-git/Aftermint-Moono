@@ -241,12 +241,14 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         /// Check if vm is the owner's vm;
         /// if so, change the cell content background color
         if vm.ownerAddress == MoonoMockUserData().getOneUserData().address {
+            self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
             cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
         }
         
         if tableView == self.popScoreTableView {
             if indexPath.section == 0 {
 //                print("Rank image of the popScoreTableView: \(String(describing: currentUserVM.rankImage))")
+                self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 cell.configureRankScoreCell(with: currentUserVM)
                 return cell
@@ -259,6 +261,7 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         } else if tableView == self.actionCountTableView {
             if indexPath.section == 0 {
 //                print("Rank image of the actionCountTableView: \(String(describing: currentUserVM.rankImage))")
+                self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 cell.configureActionCountCell(with: currentUserVM)
                 return cell
@@ -273,6 +276,14 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    private func setCurrentUserColor(at cell: PopScoreRankCell,
+                             color: UIColor) {
+        cell.rankImageColor = color
+        cell.rankLabelColor = color
+        cell.nftInfoTextColor = color
+        cell.userProfileImageBorderColor = color.cgColor
     }
     
     /// Determine cell image

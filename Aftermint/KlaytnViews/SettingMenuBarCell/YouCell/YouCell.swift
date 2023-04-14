@@ -183,12 +183,9 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell
         else { return UITableViewCell() }
         cell.selectionStyle = .none
+        cell.switchRankImageToLabel()
         
         let vm = self.nftsList[indexPath.row]
-        if indexPath.row <= 2 {
-        
-        }
-        
         vm.setRankNumberWithIndexPath(indexPath.row + 1)
         cell.configure(vm: vm)
         return cell

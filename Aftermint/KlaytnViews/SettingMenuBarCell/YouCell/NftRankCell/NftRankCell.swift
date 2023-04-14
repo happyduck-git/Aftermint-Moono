@@ -30,7 +30,7 @@ final class NftRankCell: UITableViewCell {
     //MARK: - UI Elements
     private let rankImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.isHidden = true
+        imageView.isHidden = false
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -38,7 +38,7 @@ final class NftRankCell: UITableViewCell {
     
     private let rankLabel: UILabel = {
         let label = UILabel()
-        label.isHidden = false
+        label.isHidden = true
         label.font = BellyGomFont.header03
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -129,7 +129,6 @@ final class NftRankCell: UITableViewCell {
             self.rankImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
             self.rankImageView.leadingAnchor.constraint(equalTo: self.rankLabel.leadingAnchor),
             self.rankImageView.bottomAnchor.constraint(equalTo: self.rankLabel.bottomAnchor),
-//            self.rankImageView.widthAnchor.constraint(equalTo: self.rankLabel.heightAnchor),
             self.rankImageView.widthAnchor.constraint(equalToConstant: height / 2),
             
             self.nftImageView.topAnchor.constraint(equalTo: self.rankLabel.topAnchor),
@@ -199,7 +198,7 @@ final class NftRankCell: UITableViewCell {
         self.scoreLabel.text = nil
         self.pointLabel.text = nil
         self.rankLabel.textColor = .white
-        self.rankImageView.layer.borderColor = UIColor.white.cgColor
+        self.nftImageView.layer.borderColor = UIColor.white.cgColor
         self.nftNameLabel.textColor = .white
         self.contentView.backgroundColor?.withAlphaComponent(1.0)
         self.contentView.backgroundColor = AftermintColor.backgroundNavy

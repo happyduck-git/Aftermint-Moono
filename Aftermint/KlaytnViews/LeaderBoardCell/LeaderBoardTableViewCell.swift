@@ -128,7 +128,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     public func configure(with vm: LeaderBoardSecondSectionCellViewModel) {
         rankImageView.image = vm.rankImage
         rankLabel.text = String(describing: vm.rank)
-        nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 10)
+        nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 15)
         nftInfoStackView.bottomLabelText = vm.bottomLabelText
         popScoreLabel.text = String(describing: vm.popScore)
         userProfileImageView.image = UIImage(named: vm.userProfileImage)

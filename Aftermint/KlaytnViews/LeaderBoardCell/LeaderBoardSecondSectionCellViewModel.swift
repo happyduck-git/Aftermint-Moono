@@ -25,7 +25,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
         let currentUserViewModel = self.leaderBoardVMList.value?.filter({ viewModel in
             //TODO: Change mock user address to currently logged in user
             let mockUser = MoonoMockUserData().getOneUserData()
-            return viewModel.topLabelText == mockUser.address.cutOfRange(length: 10)
+            return viewModel.topLabelText == mockUser.address
         })
         return currentUserViewModel?.first
     }
@@ -44,7 +44,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
                 let viewModel = LeaderBoardSecondSectionCellViewModel(rankImage: rankImage,
                                                                   rank: initialRank,
                                                                   userProfileImage: address.profileImageUrl,
-                                                                  topLabelText: address.ownerAddress.cutOfRange(length: 10),
+                                                                  topLabelText: address.ownerAddress,
                                                                   bottomLabelText: "Nfts 17", //Total nft 개수는 어디에서 가져올 것인지?
                                                                   actionCount: address.actionCount,
                                                                   popScore: address.popScore)

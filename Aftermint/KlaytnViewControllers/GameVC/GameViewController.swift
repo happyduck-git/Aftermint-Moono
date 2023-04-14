@@ -30,7 +30,7 @@ final class GameViewController: UIViewController {
     private let userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .tertiarySystemFill
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
         imageView.layer.borderWidth = 1.0
         imageView.clipsToBounds = true
@@ -48,7 +48,7 @@ final class GameViewController: UIViewController {
     private let walletAddressLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = BellyGomFont.header05
+        label.font = BellyGomFont.header08
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -57,7 +57,7 @@ final class GameViewController: UIViewController {
         let label = UILabel()
         label.text = self.nickNameLabelText
         label.textColor = .white
-        label.font = BellyGomFont.header05
+        label.font = BellyGomFont.header04
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -66,6 +66,7 @@ final class GameViewController: UIViewController {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = "Pop Rank"
         stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelText = "12"
         stack.bottomLabelFont = BellyGomFont.header04
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -76,6 +77,7 @@ final class GameViewController: UIViewController {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = "Pop Score"
         stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelText = "358,732"
         stack.bottomLabelFont = BellyGomFont.header04
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -86,6 +88,7 @@ final class GameViewController: UIViewController {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = "NFTs"
         stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelText = "17"
         stack.bottomLabelFont = BellyGomFont.header05
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -96,6 +99,7 @@ final class GameViewController: UIViewController {
         let stack = VerticalDoubleStackView()
         stack.topLabelText = "Action Count"
         stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelFont = BellyGomFont.header05
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack

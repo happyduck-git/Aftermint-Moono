@@ -12,7 +12,7 @@ import Foundation
 struct MoonoMockMetaData {
     
     /// Changing this prorperty value will decide what mock Card object to use from the moonoList property
-    private let mockIndex: Int = 2
+    private let mockIndex: Int = 4
     
     private let moonoList: [Card] = [
         
@@ -76,7 +76,7 @@ struct MoonoMockUserData {
                           imageUrl: "rebecca",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 12),
+                          totalNfts: 1),
         AfterMintUser(username: "Maine",
                           address: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
                           imageUrl: "maine",
@@ -88,7 +88,7 @@ struct MoonoMockUserData {
                           imageUrl: "lucy",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 99),
+                          totalNfts: 17),
         AfterMintUser(username: "David",
                           address: "0x0284DD66FC6D12D4ED26E81EF1c5b56B0410E914",
                           imageUrl: "david",
@@ -106,7 +106,7 @@ struct MoonoMockUserData {
                           imageUrl: "kiwi",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 12),
+                          totalNfts: 7),
     ]
     
     func getOneUserData() -> AfterMintUser {

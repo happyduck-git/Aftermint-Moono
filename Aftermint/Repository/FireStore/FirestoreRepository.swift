@@ -43,22 +43,6 @@ class FirestoreRepository {
                 }
                 completion(.success(false))
             }
-        
-        
-//        documentsUnderAddressCollection.getDocuments { snapshot, error in
-//            guard let snapshot = snapshot, error == nil else {
-//                completion(.failure(FirestoreError.getDocumentsError))
-//                return
-//            }
-//            let docs = snapshot.documents
-//            for doc in docs {
-//                if doc.documentID == ownerAddress {
-//                    completion(.success(true))
-//                    return
-//                }
-//            }
-//            completion(.success(false))
-//        }
     }
     
     func saveUsername(
@@ -259,6 +243,7 @@ class FirestoreRepository {
                        completion: @escaping(([NftCollection]?) -> Void)) {
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
+            .order(by: K.FStore.popScoreFieldKey, descending: true)
             .addSnapshotListener { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
