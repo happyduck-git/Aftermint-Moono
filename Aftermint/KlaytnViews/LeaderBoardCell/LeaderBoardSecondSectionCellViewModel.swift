@@ -41,13 +41,15 @@ final class LeaderBoardSecondSectionCellListViewModel {
             let initialRank = 1
             
             let viewModels = addressList.map { address in
-                let viewModel = LeaderBoardSecondSectionCellViewModel(rankImage: rankImage,
-                                                                  rank: initialRank,
-                                                                  userProfileImage: address.profileImageUrl,
-                                                                  topLabelText: address.ownerAddress,
-                                                                  bottomLabelText: "Nfts 17", //Total nft 개수는 어디에서 가져올 것인지?
-                                                                  actionCount: address.actionCount,
-                                                                  popScore: address.popScore)
+                let viewModel = LeaderBoardSecondSectionCellViewModel(
+                    rankImage: rankImage,
+                    rank: initialRank,
+                    userProfileImage: address.profileImageUrl,
+                    topLabelText: address.ownerAddress,
+                    bottomLabelText: "NFTs \(address.ownedNFTs)",
+                    actionCount: address.actionCount,
+                    popScore: address.popScore
+                )
                 return viewModel
             }
             completion(.success(viewModels))
@@ -65,35 +67,41 @@ final class LeaderBoardSecondSectionCellListViewModel {
         
         let viewModels = userList.map { user in
             let viewModel: LeaderBoardSecondSectionCellViewModel =
-            LeaderBoardSecondSectionCellViewModel(rankImage: rankImage,
-                                              rank: initialRank,
-                                              userProfileImage: user.imageUrl,
-                                              topLabelText: user.address,
-                                              bottomLabelText: "NFTs \(user.totalNfts)",
-                                              actionCount: user.actionCount,
-                                              popScore: user.popCount)
+            LeaderBoardSecondSectionCellViewModel(
+                rankImage: rankImage,
+                rank: initialRank,
+                userProfileImage: user.imageUrl,
+                topLabelText: user.username,
+                bottomLabelText: "NFTs \(user.totalNfts)",
+                actionCount: user.actionCount,
+                popScore: user.popCount
+            )
             return viewModel
         }
         completion(.success(viewModels))
         return
     }
     
-    func saveCountNumber(collectionImageUrl: String,
-                         popScore: Int64,
-                         actionCount: Int64,
-                         ownerAddress: String,
-                         nftImageUrl: String,
-                         nftTokenId: String,
-                         totalNfts: Int,
-                         ofCollectionType collectionType: CollectionType) {
+    func saveCountNumber(
+        collectionImageUrl: String,
+        popScore: Int64,
+        actionCount: Int64,
+        ownerAddress: String,
+        nftImageUrl: String,
+        nftTokenId: String,
+        totalNfts: Int,
+        ofCollectionType collectionType: CollectionType
+    ) {
         
-        fireStoreRepository.save(actionCount: actionCount,
-                                 popScore: popScore,
-                                 collectionImageUrl: collectionImageUrl,
-                                 nftImageUrl: nftImageUrl,
-                                 nftTokenId: nftTokenId,
-                                 ownerAddress: ownerAddress,
-                                 collectionType: collectionType)
+        fireStoreRepository.save(
+            actionCount: actionCount,
+            popScore: popScore,
+            collectionImageUrl: collectionImageUrl,
+            nftImageUrl: nftImageUrl,
+            nftTokenId: nftTokenId,
+            ownerAddress: ownerAddress,
+            collectionType: collectionType
+        )
     }
     
 }

@@ -15,14 +15,19 @@ final class GameViewController: UIViewController {
     private var initialTouchScore: Int = 0
     
     // MARK: - Dependency
-    private var leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel
     private var leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellViewModel
+    private var leaderBoardSecondSectionViewModel: LeaderBoardSecondSectionCellListViewModel
     private var scene: MoonoGameScene?
+    
+    /// TEMP ========================
+    var tempPopScore: Int64 = 0
+    var tempActionCount: Int64 = 0
+    /// ============================
     
     private var touchCount: Int64 = 0
     private var touchCountToShow: Int64 = 0 {
         didSet {
-            self.touchCountLabel.text = "\(self.touchCountToShow)"
+            self.popScoreLabel.text = "\(self.touchCountToShow)"
         }
     }
     
@@ -68,7 +73,7 @@ final class GameViewController: UIViewController {
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelText = "12"
-        stack.bottomLabelFont = BellyGomFont.header04
+        stack.bottomLabelFont = BellyGomFont.header09
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -79,7 +84,7 @@ final class GameViewController: UIViewController {
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelText = "358,732"
-        stack.bottomLabelFont = BellyGomFont.header04
+        stack.bottomLabelFont = BellyGomFont.header09
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -89,7 +94,7 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "NFTs"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-        stack.bottomLabelText = "17"
+        stack.bottomLabelText = "1"
         stack.bottomLabelFont = BellyGomFont.header05
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -106,7 +111,7 @@ final class GameViewController: UIViewController {
     }()
 
     //Change this to Pop Score Label
-    private lazy var touchCountLabel: UILabel = {
+    private lazy var popScoreLabel: UILabel = {
         let label = UILabel()
         label.text = "\(self.initialTouchScore)"
         label.textColor = .white
@@ -126,7 +131,7 @@ final class GameViewController: UIViewController {
     
     private lazy var bottomSheetView: BottomSheetView = {
         let bottomSheet = BottomSheetView(frame: .zero,
-                                          vm: leaderBoardListViewModel,
+                                          vm: leaderBoardSecondSectionViewModel,
                                           firstSectionVM: leaderBoardFirstSectionViewModel)
         bottomSheet.bottomSheetColor = AftermintColor.backgroundNavy
         bottomSheet.barViewColor = .darkGray
@@ -144,7 +149,7 @@ final class GameViewController: UIViewController {
         leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel,
         leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellViewModel
     ) {
-        self.leaderBoardListViewModel = leaderBoardListViewModel
+        self.leaderBoardSecondSectionViewModel = leaderBoardListViewModel
         self.leaderBoardFirstSectionViewModel = leaderBoardFirstSectionViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -171,16 +176,33 @@ final class GameViewController: UIViewController {
         self.navigationBarSetup()
     }
     
-//    var timer: Timer = Timer()
+    var timer: Timer = Timer()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
+        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
+        
         ///Set Timer scheduler to repeat certain action
-//        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
-//            print("Accumulated touchCount: \(self.touchCount)")
+        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+            print("Accumulated touchCount: \(self.touchCount)")
+
+            self.leaderBoardSecondSectionViewModel.saveCountNumber(
+                collectionImageUrl: "game_moono_mock",
+                popScore: self.touchCount * Int64(mockUserData.totalNfts),
+                actionCount: self.touchCount,
+                ownerAddress: mockUserData.address,
+                nftImageUrl: mockCardData.imageUrl,
+                nftTokenId: mockCardData.tokenId,
+                totalNfts: mockUserData.totalNfts,
+                ofCollectionType: .moono
+            )
+        }
+        
+        //OGCode
 //            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
-//        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -190,7 +212,7 @@ final class GameViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         ///Disable the timer when the view disappeared
-//        timer.invalidate()
+        timer.invalidate()
     }
     private func navigationBarSetup() {
         
@@ -254,15 +276,20 @@ final class GameViewController: UIViewController {
     
     /// Get viewModel for current user information
     private func getCurrentUserViewModel() {
-        let currentUserViewModel = self.leaderBoardListViewModel.currentUserViewModel()
+        let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
         DispatchQueue.main.async {
             /// User information part
             self.userImageView.image = UIImage(named: currentUserViewModel?.userProfileImage ?? "rebecca")
             self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
             self.nickNameLabel.text = currentUserViewModel?.bottomLabelText
             /// Scoreboard part
-            self.popScoreStack.bottomLabelText = String(describing: currentUserViewModel?.popScore ?? 0)
-            self.actionCountStack.bottomLabelText = String(describing: currentUserViewModel?.actionCount ?? 0)
+//            self.popScoreStack.bottomLabelText = String(describing: currentUserViewModel?.popScore ?? 0)
+//            self.actionCountStack.bottomLabelText = String(describing: currentUserViewModel?.actionCount ?? 0)
+            
+            self.tempPopScore = currentUserViewModel?.popScore ?? 0
+            self.tempActionCount = currentUserViewModel?.actionCount ?? 0
+            self.popScoreStack.bottomLabelText = String(describing: self.tempPopScore)
+            self.actionCountStack.bottomLabelText = String(describing: self.tempActionCount)
         }
     }
     
@@ -291,17 +318,21 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.touchCountToShow += number
         self.touchCount += number
         
-        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
-        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
+        self.tempPopScore += (number * Int64(MoonoMockUserData().getOneUserData().totalNfts))
+        self.tempActionCount += number
+        self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
+        self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
+//        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
+//        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
         
-        self.leaderBoardListViewModel.saveCountNumber(collectionImageUrl: "game_moono_mock",
-                                                      popScore: touchCount * Int64(mockUserData.totalNfts),
-                                                      actionCount: touchCount,
-                                                      ownerAddress: mockUserData.address,
-                                                      nftImageUrl: mockCardData.imageUrl,
-                                                      nftTokenId: mockCardData.tokenId,
-                                                      totalNfts: mockUserData.totalNfts,
-                                                      ofCollectionType: .moono)
+//        self.leaderBoardListViewModel.saveCountNumber(collectionImageUrl: "game_moono_mock",
+//                                                      popScore: touchCount * Int64(mockUserData.totalNfts),
+//                                                      actionCount: touchCount,
+//                                                      ownerAddress: mockUserData.address,
+//                                                      nftImageUrl: mockCardData.imageUrl,
+//                                                      nftTokenId: mockCardData.tokenId,
+//                                                      totalNfts: mockUserData.totalNfts,
+//                                                      ofCollectionType: .moono)
     }
 
 }

@@ -37,6 +37,7 @@ final class ProjectPopScoreCell: UITableViewCell {
     
     private let nftInfoStackView: VerticalDoubleStackView = {
         let stack = VerticalDoubleStackView()
+        stack.topLabelFont = BellyGomFont.header09
         stack.bottomLabelFont = BellyGomFont.header06
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
