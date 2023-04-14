@@ -12,41 +12,41 @@ import Foundation
 struct MoonoMockMetaData {
     
     /// Changing this prorperty value will decide what mock Card object to use from the moonoList property
-    private let mockIndex: Int = 4
+    private let mockIndex: Int = 5
     
     private let moonoList: [Card] = [
         
-        Card(tokenId: "Moono___81",
+        Card(tokenId: "81",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___1126",
+        Card(tokenId: "1126",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231126.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___618",
+        Card(tokenId: "618",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23618.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___659",
+        Card(tokenId: "659",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23659.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___1202",
+        Card(tokenId: "1202",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231202.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___924",
+        Card(tokenId: "924",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,

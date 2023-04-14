@@ -209,7 +209,7 @@ class FirestoreRepository {
                             let cardDocs = snapshot.documents
                             if !cardDocs.isEmpty {
                                 let result = cardDocs.map { doc in
-                                    let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
+                                    let nftName = "Moono #" + doc.documentID
                                     return Card(
                                         tokenId: nftName,
                                         ownerAddress: doc[K.FStore.ownerAddressFieldKey] as? String ?? "N/A",
