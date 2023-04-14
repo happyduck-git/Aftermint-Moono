@@ -94,7 +94,7 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "NFTs"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-        stack.bottomLabelText = "1"
+        stack.bottomLabelText = "17"
         stack.bottomLabelFont = BellyGomFont.header05
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -322,17 +322,6 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.tempActionCount += number
         self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
         self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
-//        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
-//        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
-        
-//        self.leaderBoardListViewModel.saveCountNumber(collectionImageUrl: "game_moono_mock",
-//                                                      popScore: touchCount * Int64(mockUserData.totalNfts),
-//                                                      actionCount: touchCount,
-//                                                      ownerAddress: mockUserData.address,
-//                                                      nftImageUrl: mockCardData.imageUrl,
-//                                                      nftTokenId: mockCardData.tokenId,
-//                                                      totalNfts: mockUserData.totalNfts,
-//                                                      ofCollectionType: .moono)
     }
 
 }
