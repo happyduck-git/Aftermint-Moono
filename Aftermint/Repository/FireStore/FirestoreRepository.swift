@@ -152,13 +152,26 @@ class FirestoreRepository {
             .collection(K.FStore.secondDepthCollectionName)
             .document(nftTokenId)
         
-        docRefForToCollection.setData([
-            K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
-            K.FStore.imageUrlFieldKey: nftImageUrl,
-            K.FStore.ownerAddressFieldKey: ownerAddress,
-            K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
-        ], merge: true)
-        
+        docRefForToCollection.getDocument { document, error in
+            guard let document = document else {
+                return
+            }
+            guard document.exists else {
+                docRefForToCollection.setData([
+                    K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+                    K.FStore.imageUrlFieldKey: nftImageUrl,
+                    K.FStore.ownerAddressFieldKey: ownerAddress,
+                    K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
+                ], merge: true)
+                return
+            }
+            
+            docRefForToCollection.updateData([
+                K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+                K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
+            ])
+        }
+
         ///Save Address collection
         ///1st collection
         let docRefForAddress = db
@@ -171,13 +184,33 @@ class FirestoreRepository {
         ], merge: true)
         
         ///2nd depth collection
-        let docRefForCollection = docRefForAddress.collection(collectionType.rawValue).document(nftTokenId)
-        docRefForCollection.setData([
-            K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
-            K.FStore.imageUrlFieldKey: nftImageUrl,
-            K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
-            K.FStore.tokenIdFieldKey: nftTokenId
-        ], merge: true)
+        let docRefForCollection = docRefForAddress
+            .collection(collectionType.rawValue)
+            .document(nftTokenId)
+        
+        docRefForCollection.getDocument { document, error in
+            guard let document = document else {
+                return
+            }
+            
+            /// When there is no document named with tokenId exist
+            guard document.exists else {
+                docRefForCollection.setData([
+                    K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+                    K.FStore.imageUrlFieldKey: nftImageUrl,
+                    K.FStore.popScoreFieldKey: FieldValue.increment(popScore),
+                    K.FStore.tokenIdFieldKey: nftTokenId
+                ], merge: true)
+                return
+            }
+            
+            /// When there is document named with tokenId exist
+            docRefForCollection.updateData([
+                K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
+                K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
+            ])
+        }
+        
     }
     
     // MARK: - Retrieve data
@@ -213,6 +246,7 @@ class FirestoreRepository {
                             let cardDocs = snapshot.documents
                             if !cardDocs.isEmpty {
                                 let result = cardDocs.map { doc in
+                                    // TODO: replacingOccurrences 필요한지 확인해보기
                                     let nftName = doc.documentID.replacingOccurrences(of: "___", with: "#")
                                     return Card(
                                         tokenId: nftName,

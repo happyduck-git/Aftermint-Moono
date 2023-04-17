@@ -36,7 +36,7 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
         return label
     }()
     
-    private let popScoreLabel: UILabel = {
+    let popScoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.font = BellyGomFont.header03
@@ -104,7 +104,15 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
     // MARK: - Public
     public func configure(with vm: LeaderBoardFirstSectionCellViewModel) {
     
-        self.nftImageView.image = UIImage(named: vm.nftImage)
+        self.imageStringToImage(with: vm.nftImage) { result in
+            switch result {
+            case .success(let image):
+                self.nftImageView.image = image
+            case .failure(let error):
+                print("Error rendering image \(error)")
+            }
+        }
+
         self.nftInfoStackView.topLabelText = vm.nftCollectionName
         self.nftInfoStackView.bottomLabelText = "Action Count: \(vm.totalActionCount)"
         self.popScoreLabel.text = "\(vm.totalPopScore)"

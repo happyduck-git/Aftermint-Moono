@@ -11,32 +11,32 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
     
     
     struct Dependency {
-        let leaderBoardListViewModel: () -> LeaderBoardSecondSectionCellListViewModel
-        let firstLeaderBoardViewModel: () -> LeaderBoardFirstSectionCellViewModel
+        let leaderBoardFirstListViewModel: () -> LeaderBoardFirstSectionCellListViewModel
+        let leaderBoardSecondListViewModel: () -> LeaderBoardSecondSectionCellListViewModel
         let homeViewControllerDependency: KlaytnHomeViewController.Dependency
 //        let lottieVCDependency: LottieViewController.Dependency
         let bookmarkVCDependency: BookmarkViewController.Dependency
         let calendarVCDependency: CalendarViewController.Dependency
     }
     
-    
-    private let leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel
-    private let leaderBoardFirstViewModel: LeaderBoardFirstSectionCellViewModel
+    private let leaderBoardFirstListViewModel: LeaderBoardFirstSectionCellListViewModel
+    private let leaderBoardSecondListViewModel: LeaderBoardSecondSectionCellListViewModel
     private let homeViewControllerDependency: KlaytnHomeViewController.Dependency
     private let lottieVCDependency: LottieViewController.Dependency
     private let bookmarkVCDependency: BookmarkViewController.Dependency
     private let calendarVCDependency: CalendarViewController.Dependency
     
     // MARK: - Init
-    init(vm: LeaderBoardSecondSectionCellListViewModel,
-         leaderBoardFirstViewModel: LeaderBoardFirstSectionCellViewModel,
+    init(
+         leaderBoardFirstViewModel: LeaderBoardFirstSectionCellListViewModel,
+         leaderBoardSecondViewModel: LeaderBoardSecondSectionCellListViewModel,
          homeViewControllerDependency: KlaytnHomeViewController.Dependency,
          lottieViewControllerDependency: LottieViewController.Dependency,
          bookmarkVCDependency: BookmarkViewController.Dependency,
          calendarVCDependency: CalendarViewController.Dependency
     ) {
-        self.leaderBoardListViewModel = vm
-        self.leaderBoardFirstViewModel = leaderBoardFirstViewModel
+        self.leaderBoardFirstListViewModel = leaderBoardFirstViewModel
+        self.leaderBoardSecondListViewModel = leaderBoardSecondViewModel
         self.homeViewControllerDependency = homeViewControllerDependency
         self.lottieVCDependency = lottieViewControllerDependency
         self.bookmarkVCDependency = bookmarkVCDependency
@@ -84,8 +84,8 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
         marketVC.tabBarItem.image = UIImage(named: TabBarAsset.marketOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         marketVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.marketOn.rawValue)?.withRenderingMode(.alwaysOriginal)
 
-        let gameVC = GameViewController(leaderBoardListViewModel: self.leaderBoardListViewModel,
-                                        leaderBoardFirstSectionViewModel: self.leaderBoardFirstViewModel)
+        let gameVC = GameViewController(leaderBoardListViewModel: self.leaderBoardSecondListViewModel,
+                                        leaderBoardFirstSectionViewModel: self.leaderBoardFirstListViewModel)
         gameVC.tabBarItem.image = UIImage(named: TabBarAsset.gameOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         gameVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.gameOn.rawValue)?.withRenderingMode(.alwaysOriginal)
         

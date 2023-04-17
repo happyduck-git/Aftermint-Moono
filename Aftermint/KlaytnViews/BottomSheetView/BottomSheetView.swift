@@ -16,8 +16,8 @@ final class BottomSheetView: PassThroughView {
     
     let prefetcher = ImagePrefetcher()
     
-    var firstSectionVM: LeaderBoardFirstSectionCellViewModel
-    var sectionSectionVM: LeaderBoardSecondSectionCellListViewModel?
+    var firstSectionVM: LeaderBoardFirstSectionCellListViewModel
+    var secondSectionVM: LeaderBoardSecondSectionCellListViewModel
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
     var tempTouchCountList: [String: Int64] = [:]
@@ -103,14 +103,15 @@ final class BottomSheetView: PassThroughView {
         fatalError("init() has not been implemented")
     }
     
-    init(frame: CGRect,
-         vm: LeaderBoardSecondSectionCellListViewModel,
-         firstSectionVM: LeaderBoardFirstSectionCellViewModel
+    init(
+        frame: CGRect,
+        firstSectionVM: LeaderBoardFirstSectionCellListViewModel,
+        secondSectionVM: LeaderBoardSecondSectionCellListViewModel
     ) {
         self.firstSectionVM = firstSectionVM
+        self.secondSectionVM = secondSectionVM
         super.init(frame: frame)
-        
-        self.sectionSectionVM = vm
+
         self.backgroundColor = .clear
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         self.addGestureRecognizer(panGesture)
@@ -122,11 +123,9 @@ final class BottomSheetView: PassThroughView {
         setUI()
         setLayout()
         setDelegate()
-        
-        getFirstSectionViewModel()
-//        getSecondSectionViewModel()
-        //TODO: Need to change getSecondSectionViewModel() to vm.getAddressSectionVM()
-        vm.getAddressSectionVM()
+
+        firstSectionVM.getFirstSectionVM(ofCollection: .moono)
+        secondSectionVM.getAddressSectionVM()
         bind()
         
     }
@@ -218,14 +217,25 @@ final class BottomSheetView: PassThroughView {
     }
     
     private func bind() {
-        self.sectionSectionVM?.leaderBoardVMList.bind({ [weak self] _ in
+
+        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] _ in
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.6) {
                     self?.leaderBoardTableView.reloadData()
                     self?.leaderBoardTableView.alpha = 1.0
                 }
             }
-        })
+        }
+        
+        self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.6) {
+                    self?.leaderBoardTableView.reloadData()
+                    self?.leaderBoardTableView.alpha = 1.0
+                    self?.bottomSheetDelegate?.dataFetched()
+                }
+            }
+        }
     }
     
 }
@@ -233,58 +243,16 @@ final class BottomSheetView: PassThroughView {
 // MARK: - TableView Delegate & DataSource
 extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     
-    private func getFirstSectionViewModel() {
-        
-        self.firstSectionVM.getFirstSectionViewModel(ofCollection: .moono) { result in
-            switch result {
-            case .success(let vm):
-                self.firstSectionVM.nftImage = vm.nftImage
-                self.firstSectionVM.nftCollectionName = vm.nftCollectionName
-                self.firstSectionVM.totalActionCount = vm.totalActionCount
-                self.firstSectionVM.totalPopScore = vm.totalPopScore
-                
-//                DispatchQueue.main.async {
-//                    UIView.animate(withDuration: 0.6) {
-//                        self.leaderBoardTableView.reloadData()
-//                        self.leaderBoardTableView.alpha = 1.0
-//                    }
-//                }
-            case .failure(let failure):
-                print("Error getting first section view model: \(failure)")
-            }
-        }
-      
-    }
-    
-//    private func getSecondSectionViewModel() {
-//        self.sectionSectionVM?.getAddressSectionViewModel(completion: { result in
-//            switch result {
-//            case .success(let viewModels):
-//                self.sectionSectionVM?.leaderBoardVMList.value = viewModels
-//                DispatchQueue.main.async {
-//                    UIView.animate(withDuration: 0.6) {
-//                        self.leaderBoardTableView.reloadData()
-//                        self.bottomSheetDelegate?.dataFetched()
-//                        self.leaderBoardTableView.alpha = 1.0
-//                    }
-//                }
-//
-//            case .failure(let failure):
-//                print("Error getting viewmodels : \(failure)")
-//            }
-//        })
-//
-//    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1
+            let numberOfSection = self.firstSectionVM.numberOfRowsInSection()
+            return numberOfSection
         } else {
-            guard let numberOfSection = self.sectionSectionVM?.numberOfRowsInSection(at: section) else { return 0 }
+            let numberOfSection = self.secondSectionVM.numberOfRowsInSection()
             return numberOfSection
         }
     }
@@ -294,17 +262,30 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardFirstSectionCell.identifier) as? LeaderBoardFirstSectionCell else { return UITableViewCell() }
             cell.resetCell()
-            cell.configure(with: firstSectionVM)
+            
+            guard let vm = firstSectionVM.modelAt(indexPath) else {
+                return UITableViewCell()
+            }
+            
+            UIView.transition(with: cell.popScoreLabel, duration: 0.8, options: .transitionCrossDissolve) {
+                cell.popScoreLabel.textColor = .systemOrange
+            } completion: { _ in
+                UIView.transition(with: cell.popScoreLabel, duration: 0.8, options: .transitionCrossDissolve) {
+                    cell.popScoreLabel.textColor = .white
+                }
+            }
+            
+            cell.configure(with: vm)
             
             return cell
             
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell,
-                  let vm = self.sectionSectionVM?.modelAt(indexPath)
+                  let vm = self.secondSectionVM.modelAt(indexPath)
             else { return UITableViewCell()}
             cell.resetCell()
 
-            guard let indices = self.sectionSectionVM?.changedIndicies.value else { return UITableViewCell() }
+            guard let indices = self.secondSectionVM.changedIndicies.value else { return UITableViewCell() }
             for index in indices {
                 if indexPath.row == Int(index) {
                     UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
@@ -370,7 +351,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
     /// PretchImageAt
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.sectionSectionVM?.modelAt($0)?.userProfileImage
+            self.secondSectionVM.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)
@@ -380,7 +361,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.sectionSectionVM?.modelAt($0)?.userProfileImage
+            self.secondSectionVM.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)

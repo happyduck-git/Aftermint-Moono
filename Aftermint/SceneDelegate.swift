@@ -62,8 +62,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
             
             let mainTabVC = KlaytnTabViewController(
-                vm: mainTabVCDependency.leaderBoardListViewModel(),
-                leaderBoardFirstViewModel: mainTabVCDependency.firstLeaderBoardViewModel(),
+                leaderBoardFirstViewModel: mainTabVCDependency.leaderBoardFirstListViewModel(),
+                leaderBoardSecondViewModel: mainTabVCDependency.leaderBoardSecondListViewModel(),
                 homeViewControllerDependency: mainTabVCDependency.homeViewControllerDependency,
                 lottieViewControllerDependency: lottieVCDependency,
                 bookmarkVCDependency: bookmarkVCDependency,

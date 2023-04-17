@@ -157,11 +157,10 @@ final class YouCell: UICollectionViewCell {
                     case .success(let image):
                         self?.profileImageView.image = image
                     case .failure(let error):
-                        print("Error \(error)")
+                        print("Error rendering image \(error)")
                     }
                 })
                 
-//                self?.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
                 self?.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
                 self?.usernameStack.bottomLabelText = address?.username ?? "N/A"
                 self?.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"

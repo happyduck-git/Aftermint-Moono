@@ -61,6 +61,7 @@ class VerticalDoubleStackView: UIStackView {
         super.init(frame: frame)
         setUI()
         self.axis = .vertical
+        self.bottomLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
     
     required init(coder: NSCoder) {

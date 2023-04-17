@@ -15,7 +15,7 @@ final class GameViewController: UIViewController {
     private var initialTouchScore: Int = 0
     
     // MARK: - Dependency
-    private var leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellViewModel
+    private var leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
     private var leaderBoardSecondSectionViewModel: LeaderBoardSecondSectionCellListViewModel
     private var scene: MoonoGameScene?
     
@@ -130,9 +130,11 @@ final class GameViewController: UIViewController {
     }()
     
     private lazy var bottomSheetView: BottomSheetView = {
-        let bottomSheet = BottomSheetView(frame: .zero,
-                                          vm: leaderBoardSecondSectionViewModel,
-                                          firstSectionVM: leaderBoardFirstSectionViewModel)
+        let bottomSheet = BottomSheetView(
+            frame: .zero,
+            firstSectionVM: leaderBoardFirstSectionViewModel,
+            secondSectionVM: leaderBoardSecondSectionViewModel
+        )
         bottomSheet.bottomSheetColor = AftermintColor.backgroundNavy
         bottomSheet.barViewColor = .darkGray
         bottomSheet.translatesAutoresizingMaskIntoConstraints = false
@@ -147,7 +149,7 @@ final class GameViewController: UIViewController {
     // MARK: - Init
     init(
         leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel,
-        leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellViewModel
+        leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
     ) {
         self.leaderBoardSecondSectionViewModel = leaderBoardListViewModel
         self.leaderBoardFirstSectionViewModel = leaderBoardFirstSectionViewModel

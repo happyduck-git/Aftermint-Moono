@@ -23,6 +23,7 @@ final class ProjectsCell: UICollectionViewCell {
     //MARK: - UI Elements
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -172,14 +173,14 @@ final class ProjectsCell: UICollectionViewCell {
             self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountLabel.trailingAnchor, multiplier: 3),
             
             self.totalNftsTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.nftImageView.bottomAnchor, multiplier: 2),
-
+            self.totalNftsTitleLabel.leadingAnchor.constraint(equalTo: self.collectionTitleLabel.leadingAnchor),
+            
             self.totalNftsLabel.topAnchor.constraint(equalTo: self.totalNftsTitleLabel.topAnchor),
             self.totalNftsLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.totalNftsTitleLabel.trailingAnchor, multiplier: 2),
             self.totalHoldersTitleLabel.topAnchor.constraint(equalTo: self.totalNftsTitleLabel.topAnchor),
             self.totalHoldersTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.totalNftsLabel.trailingAnchor, multiplier: 2),
             self.totalHoldersLabel.topAnchor.constraint(equalTo: self.totalNftsTitleLabel.topAnchor),
             self.totalHoldersLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.totalHoldersTitleLabel.trailingAnchor, multiplier: 2),
-            self.contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: self.totalHoldersLabel.trailingAnchor, multiplier: 2),
             
             self.segmentedControl.topAnchor.constraint(equalToSystemSpacingBelow: self.totalHoldersTitleLabel.bottomAnchor, multiplier: 3),
             self.segmentedControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
@@ -194,6 +195,8 @@ final class ProjectsCell: UICollectionViewCell {
             self.actionCountTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor)
         ])
+        
+        self.nftImageView.layer.cornerRadius = 80 / 2
     }
     
     private func setDelegate() {

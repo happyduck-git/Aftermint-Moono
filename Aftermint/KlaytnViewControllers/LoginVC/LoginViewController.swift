@@ -146,8 +146,8 @@ class LoginViewController: UIViewController, View {
         /// NOTE: Temporarily push directly to KlaytnTabViewController;
         /// Will connect to FavorletWallet application later in the future
         let homeVC = KlaytnTabViewController(
-            vm: mainTabBarVCDependency.leaderBoardListViewModel(),
-            leaderBoardFirstViewModel: mainTabBarVCDependency.firstLeaderBoardViewModel(),
+            leaderBoardFirstViewModel: mainTabBarVCDependency.leaderBoardFirstListViewModel(),
+            leaderBoardSecondViewModel: mainTabBarVCDependency.leaderBoardSecondListViewModel(),
             homeViewControllerDependency: mainTabBarVCDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieVCDependency,
             bookmarkVCDependency: bookmarkVCDependency,

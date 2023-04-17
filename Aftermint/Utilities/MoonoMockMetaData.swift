@@ -12,7 +12,7 @@ import Foundation
 struct MoonoMockMetaData {
     
     /// Changing this prorperty value will decide what mock Card object to use from the moonoList property
-    private let mockIndex: Int = 4
+    private let mockIndex: Int = 1
     
     private let moonoList: [Card] = [
         

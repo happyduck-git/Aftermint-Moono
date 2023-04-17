@@ -23,6 +23,7 @@ final class UsersCell: UICollectionViewCell {
     //MARK: - UI Elements
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -136,6 +137,8 @@ final class UsersCell: UICollectionViewCell {
             self.actionCountTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor)
         ])
+        
+        self.nftImageView.layer.cornerRadius = 80 / 2
     }
     
     private func setDelegate() {

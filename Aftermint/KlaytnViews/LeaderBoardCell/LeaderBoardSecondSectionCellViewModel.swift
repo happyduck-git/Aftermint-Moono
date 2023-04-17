@@ -27,7 +27,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     }
     
     // MARK: - Public
-    func numberOfRowsInSection(at section: Int) -> Int {
+    func numberOfRowsInSection() -> Int {
         return self.leaderBoardVMList.value?.count ?? 0
     }
     
@@ -42,34 +42,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
             return viewModel.topLabelText == mockUser.address
         })
         return currentUserViewModel?.first
-    }
- 
-    /// Build ViewModels for second section
-    func getAddressSectionViewModel(completion: @escaping (Result<[LeaderBoardSecondSectionCellViewModel], Error>) -> ()) {
-        self.fireStoreRepository.getAllAddress { addressList in
-            guard let addressList = addressList else {
-                completion(.failure(LeaderBoardError.AddressFetchError))
-                return
-            }
-            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
-            let initialRank = 1
-            
-            let viewModels = addressList.map { address in
-                let viewModel = LeaderBoardSecondSectionCellViewModel(
-                    rankImage: rankImage,
-                    rank: initialRank,
-                    userProfileImage: address.profileImageUrl,
-                    topLabelText: address.ownerAddress,
-                    bottomLabelText: "NFTs \(address.ownedNFTs)",
-                    actionCount: address.actionCount,
-                    popScore: address.popScore
-                )
-                return viewModel
-            }
-            completion(.success(viewModels))
-            return
-        }
-        completion(.failure(LeaderBoardError.AddressFetchError))
     }
     
     func getAddressSectionVM() {
