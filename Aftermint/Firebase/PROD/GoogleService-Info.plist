@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1006250346280-1hta6784qhi4hs1vptrs5hi0urrn7l1r.apps.googleusercontent.com</string>
+	<string>160705959973-mffvg76ccte378o3afnfpnktncpn3str.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1006250346280-1hta6784qhi4hs1vptrs5hi0urrn7l1r</string>
+	<string>com.googleusercontent.apps.160705959973-mffvg76ccte378o3afnfpnktncpn3str</string>
 	<key>API_KEY</key>
-	<string>AIzaSyADZdNtuPBNw8QwCZAagiDdGbUOSl0X7mY</string>
+	<string>AIzaSyBgH-FIvSCbbIe5wcDKcmqIYC853HZBZpQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1006250346280</string>
+	<string>160705959973</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>net.platfarm.Aftermint-moono</string>
 	<key>PROJECT_ID</key>
-	<string>aftermint-popcat-demo</string>
+	<string>aftermint-9ac24</string>
 	<key>STORAGE_BUCKET</key>
-	<string>aftermint-popcat-demo.appspot.com</string>
+	<string>aftermint-9ac24.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1006250346280:ios:3c32c13fcb5030ac2e721d</string>
+	<string>1:160705959973:ios:e9e13c96a453909a1ec7cc</string>
 </dict>
 </plist>

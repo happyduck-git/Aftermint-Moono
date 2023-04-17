@@ -7,12 +7,26 @@
 
 import UIKit.UIImage
 
+protocol LeaderBoardSecondSectionCellListViewModelDelegate: AnyObject {
+    func dataFetched2()
+}
+
 final class LeaderBoardSecondSectionCellListViewModel {
+    
+    weak var delegate: LeaderBoardSecondSectionCellListViewModelDelegate?
     
     private let fireStoreRepository = FirestoreRepository.shared
     var leaderBoardVMList: Box<[LeaderBoardSecondSectionCellViewModel]> = Box([])
     var touchCount: Box<Int> = Box(0)
 
+    var changedIndicies: Box<[UInt]> = Box([])
+    
+    // MARK: - Init
+    init() {
+        self.fireStoreRepository.delegate = self
+    }
+    
+    // MARK: - Public
     func numberOfRowsInSection(at section: Int) -> Int {
         return self.leaderBoardVMList.value?.count ?? 0
     }
@@ -58,6 +72,31 @@ final class LeaderBoardSecondSectionCellListViewModel {
         completion(.failure(LeaderBoardError.AddressFetchError))
     }
     
+    func getAddressSectionVM() {
+        self.fireStoreRepository.getAllAddress { addressList in
+            guard let addressList = addressList else {
+                return
+            }
+            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
+            let initialRank = 1
+            
+            let viewModels = addressList.map { address in
+                let viewModel = LeaderBoardSecondSectionCellViewModel(
+                    rankImage: rankImage,
+                    rank: initialRank,
+                    userProfileImage: address.profileImageUrl,
+                    topLabelText: address.ownerAddress,
+                    bottomLabelText: "NFTs \(address.ownedNFTs)",
+                    actionCount: address.actionCount,
+                    popScore: address.popScore
+                )
+                return viewModel
+            }
+            self.leaderBoardVMList.value = viewModels
+            self.delegate?.dataFetched2()
+        }
+    }
+    
     //TODO: Need to add error handler
     func getAllNftRankCellViewModels(completion: @escaping (Result<[LeaderBoardSecondSectionCellViewModel], Error>) -> ()) {
         
@@ -83,7 +122,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
     }
     
     func saveCountNumber(
-        collectionImageUrl: String,
         popScore: Int64,
         actionCount: Int64,
         ownerAddress: String,
@@ -96,12 +134,20 @@ final class LeaderBoardSecondSectionCellListViewModel {
         fireStoreRepository.save(
             actionCount: actionCount,
             popScore: popScore,
-            collectionImageUrl: collectionImageUrl,
             nftImageUrl: nftImageUrl,
             nftTokenId: nftTokenId,
             ownerAddress: ownerAddress,
             collectionType: collectionType
         )
+    }
+    
+}
+
+extension LeaderBoardSecondSectionCellListViewModel: FirestoreRepositoryDelegate {
+    
+    func dataChangedIndex(indices: [UInt]) {
+        self.changedIndicies.value = indices
+//        print("Changed indices: \(indices)")
     }
     
 }

@@ -47,7 +47,7 @@ final class LeaderBoardFirstSectionCellViewModel {
                 return
             }
             if collection.address == K.ContractAddress.moono {
-                let viewModel = LeaderBoardFirstSectionCellViewModel(nftImage: LeaderBoardAsset.moonoImage.rawValue, //실제 url로 변경된 이후에는 collection.imageUrl로 바꾸어주기
+                let viewModel = LeaderBoardFirstSectionCellViewModel(nftImage: collection.imageUrl,
                                                                      nftCollectionName: collection.name,
                                                                      totalActionCount: collection.totalActionCount,
                                                                      totalPopScore: collection.totalPopCount)

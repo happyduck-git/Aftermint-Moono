@@ -157,7 +157,15 @@ final class UsersCell: UICollectionViewCell {
     //MARK: - Public
     public func configure(vm: UsersCellViewModel) {
         guard let image = vm.currentNft.value??.imageUrl else { return }
-        self.nftImageView.image = UIImage(named: image)
+        self.imageStringToImage(with: image) { result in
+            switch result {
+            case .success(let image):
+                self.nftImageView.image = image
+            case .failure(let error):
+                print("Error converting image -- \(error)")
+            }
+        }
+
         self.popScoreLabel.text = "\(vm.currentNft.value??.totalPopCount ?? 0)"
         self.actionCountLabel.text = "\(vm.currentNft.value??.totalActionCount ?? 0)"
         
@@ -188,6 +196,13 @@ final class UsersCell: UICollectionViewCell {
             }
         }
         
+    }
+    
+    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
+        let url = URL(string: urlString)
+        NukeImageLoader.loadImageUsingNuke(url: url) { image in
+            completion(.success(image))
+        }
     }
     
 }

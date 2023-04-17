@@ -166,7 +166,7 @@ final class GameViewController: UIViewController {
         setGameScene()
 
         self.bottomSheetView.bottomSheetDelegate = self
-        
+        self.leaderBoardSecondSectionViewModel.delegate = self
         //Correct loction to call this?
 //        getCurrentUserViewModel()
     }
@@ -190,7 +190,6 @@ final class GameViewController: UIViewController {
             print("Accumulated touchCount: \(self.touchCount)")
 
             self.leaderBoardSecondSectionViewModel.saveCountNumber(
-                collectionImageUrl: "game_moono_mock",
                 popScore: self.touchCount * Int64(mockUserData.totalNfts),
                 actionCount: self.touchCount,
                 ownerAddress: mockUserData.address,
@@ -279,7 +278,15 @@ final class GameViewController: UIViewController {
         let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
         DispatchQueue.main.async {
             /// User information part
-            self.userImageView.image = UIImage(named: currentUserViewModel?.userProfileImage ?? "rebecca")
+            self.imageStringToImage(with: currentUserViewModel?.userProfileImage ?? "rebecca") { result in
+                switch result {
+                case .success(let image):
+                    self.userImageView.image = image
+                case .failure(let error):
+                    print("Error \(error)")
+                }
+            }
+//            self.userImageView.image = UIImage(named: currentUserViewModel?.userProfileImage ?? "rebecca")
             self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
             self.nickNameLabel.text = currentUserViewModel?.bottomLabelText
             /// Scoreboard part
@@ -293,6 +300,12 @@ final class GameViewController: UIViewController {
         }
     }
     
+    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
+        let url = URL(string: urlString)
+        NukeImageLoader.loadImageUsingNuke(url: url) { image in
+            completion(.success(image))
+        }
+    }
 }
 
 // MARK: - Set GameScene
@@ -335,4 +348,11 @@ extension GameViewController: BottomSheetViewDelegate {
         self.getCurrentUserViewModel()
     } 
 
+}
+
+extension GameViewController: LeaderBoardSecondSectionCellListViewModelDelegate {
+    func dataFetched2() {
+        self.touchCount = 0
+        self.getCurrentUserViewModel()
+    }
 }

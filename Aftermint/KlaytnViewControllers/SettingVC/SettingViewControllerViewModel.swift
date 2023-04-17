@@ -100,7 +100,7 @@ final class SettingViewControllerViewModel {
                     rank: 0,
                     rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                     nftImageUrl: card.imageUrl,
-                    nftName: card.tokenId,
+                    nftName: "Moono #\(card.tokenId)",
                     score: card.popScore,
                     ownerAddress: card.ownerAddress
                 )

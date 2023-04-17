@@ -16,37 +16,37 @@ struct MoonoMockMetaData {
     
     private let moonoList: [Card] = [
         
-        Card(tokenId: "Moono___81",
+        Card(tokenId: "81",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%2381.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___1126",
+        Card(tokenId: "1126",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231126.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___618",
+        Card(tokenId: "618",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23618.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___659",
+        Card(tokenId: "659",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%23659.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___1202",
+        Card(tokenId: "1202",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
              imageUrl: "https://firebasestorage.googleapis.com/v0/b/moono-aftermint-storage.appspot.com/o/Moono%231202.jpeg?alt=media"),
    
-        Card(tokenId: "Moono___924",
+        Card(tokenId: "924",
              ownerAddress: "0xdc96292cDf56d0607552359b555D4EDFa99D7B65",
              popScore: 0,
              actionCount: 0,
@@ -68,7 +68,7 @@ struct MoonoMockMetaData {
 struct MoonoMockUserData {
     
     /// Changing this prorperty value will decide what mock AftermintUser object to use from the userList property
-    private let mockIndex: Int = 0
+    private let mockIndex: Int = 2
  
     private let userList: [AfterMintUser] = [
         AfterMintUser(username: "Rebecca",
@@ -94,13 +94,13 @@ struct MoonoMockUserData {
                           imageUrl: "david",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 12),
+                          totalNfts: 15),
         AfterMintUser(username: "Dorio",
                           address: "0x8fB1B947E7b9e508C0a1445D1966709C069b6167",
                           imageUrl: "dorio",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 12),
+                          totalNfts: 13),
         AfterMintUser(username: "Kiwi",
                           address: "0xcFFA6E1E4092351d58cF8e00FbC3112A13334e45",
                           imageUrl: "kiwi",

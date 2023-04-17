@@ -44,7 +44,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         return stack
     }()
     
-    private let popScoreLabel: UILabel = {
+    let popScoreLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.font = BellyGomFont.header04
@@ -121,6 +121,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         self.rankLabel.text = nil
         self.userProfileImageView.image = nil
         self.popScoreLabel.text = nil
+        self.popScoreLabel.textColor = .white
         self.contentView.backgroundColor = nil
     }
     
@@ -131,7 +132,15 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 15)
         nftInfoStackView.bottomLabelText = vm.bottomLabelText
         popScoreLabel.text = String(describing: vm.popScore)
-        userProfileImageView.image = UIImage(named: vm.userProfileImage)
+
+        self.imageStringToImage(with: vm.userProfileImage) { result in
+            switch result {
+            case .success(let image):
+                self.userProfileImageView.image = image
+            case .failure(let error):
+                print("Error \(error)")
+            }
+        }
     }
     
     public func setAsCollectionInfoCell() {

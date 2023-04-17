@@ -124,8 +124,10 @@ final class BottomSheetView: PassThroughView {
         setDelegate()
         
         getFirstSectionViewModel()
-        getSecondSectionViewModel()
-        
+//        getSecondSectionViewModel()
+        //TODO: Need to change getSecondSectionViewModel() to vm.getAddressSectionVM()
+        vm.getAddressSectionVM()
+        bind()
         
     }
     
@@ -214,6 +216,18 @@ final class BottomSheetView: PassThroughView {
         bottomSheetViewTopConstraint?.constant = offset
         self.layoutIfNeeded()
     }
+    
+    private func bind() {
+        self.sectionSectionVM?.leaderBoardVMList.bind({ [weak self] _ in
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.6) {
+                    self?.leaderBoardTableView.reloadData()
+                    self?.leaderBoardTableView.alpha = 1.0
+                }
+            }
+        })
+    }
+    
 }
 
 // MARK: - TableView Delegate & DataSource
@@ -229,12 +243,12 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                 self.firstSectionVM.totalActionCount = vm.totalActionCount
                 self.firstSectionVM.totalPopScore = vm.totalPopScore
                 
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6) {
-                        self.leaderBoardTableView.reloadData()
-                        self.leaderBoardTableView.alpha = 1.0
-                    }
-                }
+//                DispatchQueue.main.async {
+//                    UIView.animate(withDuration: 0.6) {
+//                        self.leaderBoardTableView.reloadData()
+//                        self.leaderBoardTableView.alpha = 1.0
+//                    }
+//                }
             case .failure(let failure):
                 print("Error getting first section view model: \(failure)")
             }
@@ -242,25 +256,25 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
       
     }
     
-    private func getSecondSectionViewModel() {
-        self.sectionSectionVM?.getAddressSectionViewModel(completion: { result in
-            switch result {
-            case .success(let viewModels):
-                self.sectionSectionVM?.leaderBoardVMList.value = viewModels
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6) {
-                        self.leaderBoardTableView.reloadData()
-                        self.bottomSheetDelegate?.dataFetched()
-                        self.leaderBoardTableView.alpha = 1.0
-                    }
-                }
-
-            case .failure(let failure):
-                print("Error getting viewmodels : \(failure)")
-            }
-        })
-
-    }
+//    private func getSecondSectionViewModel() {
+//        self.sectionSectionVM?.getAddressSectionViewModel(completion: { result in
+//            switch result {
+//            case .success(let viewModels):
+//                self.sectionSectionVM?.leaderBoardVMList.value = viewModels
+//                DispatchQueue.main.async {
+//                    UIView.animate(withDuration: 0.6) {
+//                        self.leaderBoardTableView.reloadData()
+//                        self.bottomSheetDelegate?.dataFetched()
+//                        self.leaderBoardTableView.alpha = 1.0
+//                    }
+//                }
+//
+//            case .failure(let failure):
+//                print("Error getting viewmodels : \(failure)")
+//            }
+//        })
+//
+//    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -290,7 +304,19 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             else { return UITableViewCell()}
             cell.resetCell()
 
-            ///
+            guard let indices = self.sectionSectionVM?.changedIndicies.value else { return UITableViewCell() }
+            for index in indices {
+                if indexPath.row == Int(index) {
+                    UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
+                        cell.popScoreLabel.textColor = .systemOrange
+                    } completion: { _ in
+                        UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
+                            cell.popScoreLabel.textColor = .white
+                        }
+                    }
+                }
+            }
+            
             if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
             }

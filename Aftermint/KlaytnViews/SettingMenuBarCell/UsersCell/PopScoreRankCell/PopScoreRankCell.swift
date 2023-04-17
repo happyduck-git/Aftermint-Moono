@@ -173,7 +173,14 @@ final class PopScoreRankCell: UITableViewCell {
     public func configureRankScoreCell(with vm: PopScoreRankCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
+        self.imageStringToImage(with: vm.profileImageUrl) { result in
+            switch result {
+            case .success(let image):
+                self.userProfileImageView.image = image
+            case .failure(let error):
+                print("Error -- \(error)")
+            }
+        }
         self.nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
         self.popScoreLabel.text = "\(vm.popScore)"
@@ -182,7 +189,14 @@ final class PopScoreRankCell: UITableViewCell {
     public func configureActionCountCell(with vm: PopScoreRankCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.userProfileImageView.image = UIImage(named: vm.profileImageUrl)
+        self.imageStringToImage(with: vm.profileImageUrl) { result in
+            switch result {
+            case .success(let image):
+                self.userProfileImageView.image = image
+            case .failure(let error):
+                print("Error -- \(error)")
+            }
+        }
         self.nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
         self.popScoreLabel.text = "\(vm.actioncount)"

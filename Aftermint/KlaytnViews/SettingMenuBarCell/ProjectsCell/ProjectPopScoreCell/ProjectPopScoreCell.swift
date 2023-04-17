@@ -128,7 +128,14 @@ final class ProjectPopScoreCell: UITableViewCell {
     public func configureRankScoreCell(with vm: ProjectPopScoreCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.collectionImageView.image = UIImage(named: vm.nftImageUrl)
+        self.imageStringToImage(with: vm.nftImageUrl) { result in
+            switch result {
+            case .success(let image):
+                self.collectionImageView.image = image
+            case .failure(let error):
+                print("Error converting image -- \(error)")
+            }
+        }
         self.nftInfoStackView.topLabelText = vm.nftCollectionName
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts) / Holders \(vm.totalHolders)"
         self.popScoreLabel.text = "\(vm.popScore)"
@@ -137,7 +144,14 @@ final class ProjectPopScoreCell: UITableViewCell {
     public func configureActionCountCell(with vm: ProjectPopScoreCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.collectionImageView.image = UIImage(named: vm.nftImageUrl)
+        self.imageStringToImage(with: vm.nftImageUrl) { result in
+            switch result {
+            case .success(let image):
+                self.collectionImageView.image = image
+            case .failure(let error):
+                print("Error converting image -- \(error)")
+            }
+        }
         self.nftInfoStackView.topLabelText = vm.nftCollectionName
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts) / Holders \(vm.totalHolders)"
         self.popScoreLabel.text = "\(vm.actioncount)"

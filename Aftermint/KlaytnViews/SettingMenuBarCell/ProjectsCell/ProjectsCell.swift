@@ -215,8 +215,14 @@ final class ProjectsCell: UICollectionViewCell {
     public func configure(vm: ProjectsCellViewModel) {
         self.nftCollectionList = vm.nftCollectionList.value ?? []
         self.currentCollection = vm.getCurrentNftCollection(ofType: .moono)
-        
-        self.nftImageView.image = UIImage(named: self.currentCollection?.nftImageUrl ?? "N/A")
+        self.imageStringToImage(with: self.currentCollection?.nftImageUrl ?? "N/A") { result in
+            switch result {
+            case .success(let image):
+                self.nftImageView.image = image
+            case .failure(let error):
+                print("Error converting image -- \(error)")
+            }
+        }
         self.collectionTitleLabel.text = self.currentCollection?.nftCollectionName
         self.popScoreLabel.text = "\(self.currentCollection?.popScore ?? 0)"
         self.actionCountLabel.text = "\(self.currentCollection?.actioncount ?? 0)"
@@ -230,6 +236,13 @@ final class ProjectsCell: UICollectionViewCell {
         }
         vm.totalNumberOfMintedNFTs.bind { [weak self] numberOfNFTs in
             self?.totalNftsLabel.text = "\(numberOfNFTs ?? 0)"
+        }
+    }
+    
+    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
+        let url = URL(string: urlString)
+        NukeImageLoader.loadImageUsingNuke(url: url) { image in
+            completion(.success(image))
         }
     }
     
@@ -273,8 +286,6 @@ extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
-    
-    
     
     /// Determine cell image
     private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {

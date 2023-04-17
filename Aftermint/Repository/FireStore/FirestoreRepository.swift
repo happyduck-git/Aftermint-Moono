@@ -10,10 +10,16 @@ import FirebaseCore
 import FirebaseFirestore
 //import FirebaseFirestoreSwift
 
+protocol FirestoreRepositoryDelegate: AnyObject {
+    func dataChangedIndex(indices: [UInt])
+}
+
 class FirestoreRepository {
 
     static let shared: FirestoreRepository = FirestoreRepository()
     private init() {}
+    
+    weak var delegate: FirestoreRepositoryDelegate?
     
     let db = Firestore.firestore()
     
@@ -125,7 +131,6 @@ class FirestoreRepository {
     func save(
         actionCount: Int64,
         popScore: Int64,
-        collectionImageUrl: String,
         nftImageUrl: String,
         nftTokenId: String,
         ownerAddress: String,
@@ -139,7 +144,6 @@ class FirestoreRepository {
         
         docRefForNftCollection.setData([
             K.FStore.actionCountFieldKey: FieldValue.increment(actionCount),
-            K.FStore.imageUrlFieldKey: collectionImageUrl,
             K.FStore.popScoreFieldKey: FieldValue.increment(popScore)
         ], merge: true)
         
@@ -284,6 +288,19 @@ class FirestoreRepository {
                     completion(nil)
                     return
                 }
+                
+                /// ============================= Adding delegate function ===================
+                var diffIndices: [UInt] = []
+                snapshot.documentChanges.forEach { diff in
+                    if (diff.type == .modified) {
+                        diffIndices.append(diff.newIndex)
+                        print("Modified data new index: \(diff.newIndex)")
+                    }
+                }
+                
+                self.delegate?.dataChangedIndex(indices: diffIndices)
+                /// ================================================================
+                
                 let documents = snapshot.documents
                 if !documents.isEmpty {
                     let result: [Address] = documents.map { doc in

@@ -106,7 +106,7 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
     
         self.nftImageView.image = UIImage(named: vm.nftImage)
         self.nftInfoStackView.topLabelText = vm.nftCollectionName
-        self.nftInfoStackView.bottomLabelText = "Nfts: \(vm.totalActionCount)"
+        self.nftInfoStackView.bottomLabelText = "Action Count: \(vm.totalActionCount)"
         self.popScoreLabel.text = "\(vm.totalPopScore)"
         
     }

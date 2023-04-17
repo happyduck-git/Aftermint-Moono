@@ -150,8 +150,18 @@ final class YouCell: UICollectionViewCell {
         
         vm.currentUser.bind { [weak self] address in
             guard let address = address else { return }
+            
             DispatchQueue.main.async {
-                self?.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
+                self?.imageStringToImage(with: address?.profileImageUrl ?? "N/A", completion: { result in
+                    switch result {
+                    case .success(let image):
+                        self?.profileImageView.image = image
+                    case .failure(let error):
+                        print("Error \(error)")
+                    }
+                })
+                
+//                self?.profileImageView.image = UIImage(named: address?.profileImageUrl ?? "N/A")
                 self?.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
                 self?.usernameStack.bottomLabelText = address?.username ?? "N/A"
                 self?.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
@@ -193,6 +203,13 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
+        let url = URL(string: urlString)
+        NukeImageLoader.loadImageUsingNuke(url: url) { image in
+            completion(.success(image))
+        }
     }
 
     /// Determine cell image
