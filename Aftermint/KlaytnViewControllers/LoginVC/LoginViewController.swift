@@ -194,6 +194,23 @@ extension LoginViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.alertMessage }
+            .bind { [weak self] alertMessage in
+                guard let errorMessage = alertMessage else { return }
+                let alert = UIAlertController(
+                    title: "Wallet connection error",
+                    message: "There was a problem connecting with your wallet. Please re-try wallet connection. - \(errorMessage)",
+                    preferredStyle: .alert
+                )
+                alert.addAction(
+                    UIAlertAction(title: "Confirm", style: .default)
+                )
+                DispatchQueue.main.async {
+                    self?.present(alert, animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
     private func bindAction(with reactor: LoginViewReactor) {

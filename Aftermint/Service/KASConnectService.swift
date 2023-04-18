@@ -6,7 +6,21 @@
 //
 
 import Foundation
+
 class KASConnectService {
+    
+    enum KASConnectServiceError: Error {
+        case invalidURL
+        case badJsonDecoding
+        case addressFoundToBeNil
+        case invalidStatus
+    }
+
+    enum KASConnectionStatus: String {
+        case prepared
+        case completed
+        case failed
+    }
     
     // MARK: - Singleton init
     static let shared: KASConnectService = KASConnectService()
@@ -68,13 +82,13 @@ class KASConnectService {
     
     
     //TODO: Change return type: String? to Result<String?, Error>
-    func getWalletAddress(requestKey: String) async throws -> String? {
+    func getWalletAddress(requestKey: String) async throws -> String {
 
         let urlString = "https://api.kaikas.io/api/v1/k/result/\(requestKey)"
 
         guard let url = URL(string: urlString) else {
             print("URL not available")
-            return nil
+            throw KASConnectServiceError.invalidURL
         }
 
         var request = URLRequest(url: url)
@@ -87,14 +101,21 @@ class KASConnectService {
         guard let httpResponse = response as? HTTPURLResponse,
               sucessRange.contains(httpResponse.statusCode) else {
             print("Error http response")
-            return nil
+            throw URLError(.badServerResponse)
             
         }
         
         let output = try JSONDecoder().decode(KlaytnAuthResult.self, from: data)
         
-        return output.result?.klaytnAddress
-        
+        /// Check fetching wallet address results.
+        if output.status == KASConnectionStatus.completed.rawValue {
+            guard let address = output.result?.klaytnAddress else {
+                throw KASConnectServiceError.addressFoundToBeNil
+            }
+            return address
+        } else {
+            throw KASConnectServiceError.invalidStatus
+        }
     }
     
 }

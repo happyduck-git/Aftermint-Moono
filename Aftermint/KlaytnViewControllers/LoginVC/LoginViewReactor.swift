@@ -26,7 +26,7 @@ final class LoginViewReactor: Reactor {
     enum Mutation {
         case openFavorlet
         case openKaikas
-        case presentAlert(String)
+        case presentAlert(String?)
     }
     
     struct State {
@@ -57,7 +57,9 @@ final class LoginViewReactor: Reactor {
                         observer.onNext(.openKaikas)
                         observer.onCompleted()
                     case .failure(let error):
-                        observer.onError(error)
+                        observer.onNext(.presentAlert(error.localizedDescription))
+                        observer.onNext(.presentAlert(nil))
+                        observer.onCompleted()
                     }
                 }
                 return Disposables.create()
@@ -117,14 +119,18 @@ extension LoginViewReactor {
                     /// When notified that the app will enter foreground,
                     /// acquire wallet address and save the address to KasWalletRepository.
                     Task.init {
-                        guard let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken) else { return }
-                        self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
-                        print("walletAddress: \(walletAddress)")
-                        completion(.success(walletAddress))
+                        do {
+                            let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken)
+                            self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
+                            print("walletAddress: \(walletAddress)")
+                            completion(.success(walletAddress))
+                        } catch (let error){
+                            print("Error \(error)")
+                            completion(.failure(error))
+                        }
                     }
                 })
-                
-                
+   
             } catch (let error){
                 print("Error \(error)")
                 completion(.failure(error))
