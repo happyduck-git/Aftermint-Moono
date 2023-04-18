@@ -26,7 +26,7 @@ final class LoginViewReactor: Reactor {
     enum Mutation {
         case openFavorlet
         case openKaikas
-        case presentAlert(String)
+        case presentAlert(String?)
     }
     
     struct State {
@@ -57,7 +57,9 @@ final class LoginViewReactor: Reactor {
                         observer.onNext(.openKaikas)
                         observer.onCompleted()
                     case .failure(let error):
-                        observer.onError(error)
+                        observer.onNext(.presentAlert(error.localizedDescription))
+                        observer.onNext(.presentAlert(nil))
+                        observer.onCompleted()
                     }
                 }
                 return Disposables.create()
@@ -91,30 +93,44 @@ extension LoginViewReactor {
         Task.init {
             do {
                 guard let requestToken = try await self.kasConnectService.getTokenID() else { return }
-                guard let url = URL(string: "kaikas://wallet/api?request_key=\(requestToken)") else { return }
+                guard let kaikasUrl = URL(string: "kaikas://wallet/api?request_key=\(requestToken)") else { return }
+                guard let appStoreUrl = URL(string: "itms-apps://itunes.apple.com/app/id1626107061") else { return }
                 self.isWaitingTransactionResponse = true
                 
-                /// Open KAS app to login.
-                DispatchQueue.main.async {
-                    UIApplication.shared.open(url)
+                /// Check if `Kaikas` is installed or not;
+                /// If so, open `Kaikas`,
+                /// else, open `AppStore`.
+                if await UIApplication.shared.canOpenURL(kaikasUrl) {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.open(kaikasUrl)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.open(appStoreUrl)
+                    }
                 }
                 
                 /// Notify when the app will enter foreground.
-                self.observer = await NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification,
-                                                                             object: nil,
-                                                                             queue: .main,
-                                                                             using: { notification in
+                self.observer = await NotificationCenter.default.addObserver(
+                    forName: UIApplication.willEnterForegroundNotification,
+                    object: nil,
+                    queue: .main,
+                    using: { notification in
                     /// When notified that the app will enter foreground,
                     /// acquire wallet address and save the address to KasWalletRepository.
                     Task.init {
-                        guard let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken) else { return }
-                        self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
-                        print("walletAddress: \(walletAddress)")
-                        completion(.success(walletAddress))
+                        do {
+                            let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken)
+                            self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
+                            print("walletAddress: \(walletAddress)")
+                            completion(.success(walletAddress))
+                        } catch (let error){
+                            print("Error \(error)")
+                            completion(.failure(error))
+                        }
                     }
                 })
-                
-                
+   
             } catch (let error){
                 print("Error \(error)")
                 completion(.failure(error))
