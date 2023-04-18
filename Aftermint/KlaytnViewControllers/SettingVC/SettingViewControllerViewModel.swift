@@ -111,6 +111,7 @@ final class SettingViewControllerViewModel {
                 
                 return vm
             }
+            print("Current user list: \(currentUserCardList.count)")
             self.youCellViewModel.nftRankViewModels.value = currentUserCardList
             self.nftsCellViewModel.nftsList.value = vmList
         }

@@ -249,6 +249,14 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         cell.resetCell()
         
         let vm = self.usersList[indexPath.row]
+        
+        /// Check if vm is the owner's vm;
+        /// if so, change the cell content background color
+        if vm.ownerAddress == MoonoMockUserData().getOneUserData().address {
+            self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
+            cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+        }
+
         /// Set Rank Image for 1st to 3rd rank and give number of rank to below seats
         if indexPath.row <= 2 {
             vm.setRankImage(with: cellRankImageAt(indexPath.row))
@@ -256,22 +264,21 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
             cell.switchRankImageToLabel()
             vm.setRankNumberWithIndexPath(indexPath.row + 1)
         }
-        /// Check if vm is the owner's vm;
-        /// if so, change the cell content background color
-        if vm.ownerAddress == MoonoMockUserData().getOneUserData().address {
-            self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
-            cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
-        }
-        
+
         if tableView == self.popScoreTableView {
             if indexPath.section == 0 {
-//                print("Rank image of the popScoreTableView: \(String(describing: currentUserVM.rankImage))")
+                print("Rank image of the popScoreTableView: \(String(describing: currentUserVM.rank))")
                 self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+                
+                if currentUserVM.rank >= 3 {
+                    cell.switchRankImageToLabel()
+                    vm.setRankNumberWithIndexPath(indexPath.row + 1)
+                }
+                
                 cell.configureRankScoreCell(with: currentUserVM)
                 return cell
             } else {
-                
                 cell.configureRankScoreCell(with: vm)
                 return cell
             }
@@ -281,6 +288,12 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
 //                print("Rank image of the actionCountTableView: \(String(describing: currentUserVM.rankImage))")
                 self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+                
+                if currentUserVM.rank >= 3 {
+                    cell.switchRankImageToLabel()
+                    vm.setRankNumberWithIndexPath(indexPath.row + 1)
+                }
+                
                 cell.configureActionCountCell(with: currentUserVM)
                 return cell
             } else {

@@ -66,6 +66,7 @@ final class YouCell: UICollectionViewCell {
     
     private let nftsTableView: UITableView = {
         let table = UITableView()
+        table.alpha = 0.0
         table.register(NftRankCell.self, forCellReuseIdentifier: NftRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -171,7 +172,11 @@ final class YouCell: UICollectionViewCell {
         vm.nftRankViewModels.bind { [weak self] viewModels in
             DispatchQueue.main.async {
                 self?.nftsList = viewModels ?? []
-                self?.nftsTableView.reloadData()
+         
+                UIView.animate(withDuration: 0.6) {
+                    self?.nftsTableView.reloadData()
+                    self?.nftsTableView.alpha = 1.0
+                }
             }
         }
     }

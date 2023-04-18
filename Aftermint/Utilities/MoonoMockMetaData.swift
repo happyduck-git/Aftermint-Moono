@@ -12,7 +12,7 @@ import Foundation
 struct MoonoMockMetaData {
     
     /// Changing this prorperty value will decide what mock Card object to use from the moonoList property
-    private let mockIndex: Int = 1
+    private let mockIndex: Int = 0
     
     private let moonoList: [Card] = [
         
@@ -68,7 +68,7 @@ struct MoonoMockMetaData {
 struct MoonoMockUserData {
     
     /// Changing this prorperty value will decide what mock AftermintUser object to use from the userList property
-    private let mockIndex: Int = 2
+    private let mockIndex: Int = 0
  
     private let userList: [AfterMintUser] = [
         AfterMintUser(username: "Rebecca",
