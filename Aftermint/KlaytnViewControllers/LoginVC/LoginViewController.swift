@@ -10,7 +10,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-class LoginViewController: UIViewController, View {
+class LoginViewController: BaseViewController, View {
     
     // MARK: - Dependency
     struct Dependency {
