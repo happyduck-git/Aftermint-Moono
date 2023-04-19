@@ -57,7 +57,7 @@ class LoginViewController: UIViewController, View {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     private let loginDescription: UILabel = {
         let label = UILabel()
         label.text = LoginAsset.loginDescription.rawValue
@@ -165,7 +165,7 @@ class LoginViewController: UIViewController, View {
         )
         navigationController?.pushViewController(startVC, animated: true)
     }
-
+    
 }
 
 //MARK: - Bind Action and State
@@ -185,13 +185,30 @@ extension LoginViewController {
                 }
             }
             .disposed(by: disposeBag)
-    
+        
         reactor.state.map { $0.isWalletConnected }
             .bind{ [weak self] isWalletConnected in
                 if isWalletConnected {
                     DispatchQueue.main.async {
                         self?.connectKaikasWallet()
                     }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.alertMessage }
+            .bind { [weak self] alertMessage in
+                guard let errorMessage = alertMessage else { return }
+                let alert = UIAlertController(
+                    title: "Wallet connection error",
+                    message: "There was a problem connecting with your wallet. Please re-try wallet connection. - \(errorMessage)",
+                    preferredStyle: .alert
+                )
+                alert.addAction(
+                    UIAlertAction(title: "Confirm", style: .default)
+                )
+                DispatchQueue.main.async {
+                    self?.present(alert, animated: true)
                 }
             }
             .disposed(by: disposeBag)
