@@ -79,6 +79,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             window.makeKeyAndVisible()
             
+            /// Network connection check
+            NetworkMonitor.shared.startMonitoring()
+            
             LLog.v()
         }
     }
