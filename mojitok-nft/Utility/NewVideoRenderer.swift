@@ -106,7 +106,7 @@ final class NewVideoRenderer {
                             currentImage = images[imageIndex]
                         }
                         
-                        DispatchQueue.global().async {
+                        DispatchQueue.global(qos: .background).async {
                             let pixelBufferPointer = self.allocateDrawnPixelBufferForImage(
                                 currentImage,
                                 bufferAdaptor: pixelBufferAdaptor,
