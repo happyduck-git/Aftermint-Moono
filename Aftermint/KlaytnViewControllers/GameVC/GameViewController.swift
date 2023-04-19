@@ -188,7 +188,7 @@ final class GameViewController: UIViewController {
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
         
         ///Set Timer scheduler to repeat certain action
-        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
             print("Accumulated touchCount: \(self.touchCount)")
 
             self.leaderBoardSecondSectionViewModel.saveCountNumber(
@@ -200,6 +200,8 @@ final class GameViewController: UIViewController {
                 totalNfts: mockUserData.totalNfts,
                 ofCollectionType: .moono
             )
+            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
+            self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
         }
         
         //OGCode

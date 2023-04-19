@@ -222,7 +222,7 @@ class FirestoreRepository {
         
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
-            .addSnapshotListener { snapshot, error in
+            .getDocuments { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
                     completion(nil)
@@ -282,7 +282,7 @@ class FirestoreRepository {
         let docRefForNft = db.collection(K.FStore.nftCardCollectionName)
         docRefForNft
             .order(by: K.FStore.popScoreFieldKey, descending: true)
-            .addSnapshotListener { snapshot, error in
+            .getDocuments { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
                     completion(nil)
@@ -316,7 +316,7 @@ class FirestoreRepository {
         let docRefForAddress = db.collection(K.FStore.nftAddressCollectionName)
         docRefForAddress
             .order(by: K.FStore.popScoreFieldKey, descending: true)
-            .addSnapshotListener { snapshot, error in
+            .getDocuments { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
                     completion(nil)
@@ -363,7 +363,7 @@ class FirestoreRepository {
                           completion: @escaping ((NftCollection?) -> ())) {
         let docRefForNftCollection = db.collection(K.FStore.nftCardCollectionName)
         docRefForNftCollection
-            .addSnapshotListener { snapshot, error in
+            .getDocuments { snapshot, error in
                 guard let snapshot = snapshot, error == nil else {
                     print("Error fetching cards list: \(String(describing: error))")
                     completion(nil)

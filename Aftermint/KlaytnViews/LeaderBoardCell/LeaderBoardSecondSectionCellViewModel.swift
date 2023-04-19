@@ -64,6 +64,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
                 )
                 return viewModel
             }
+            print("Viewmodels count --- \(viewModels.count)")
             self.leaderBoardVMList.value = viewModels
             self.delegate?.dataFetched2()
         }
