@@ -40,6 +40,7 @@ final class UsersCell: UICollectionViewCell {
     private let popScoreLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header03
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -56,6 +57,7 @@ final class UsersCell: UICollectionViewCell {
     private let actionCountLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header03
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -63,6 +65,9 @@ final class UsersCell: UICollectionViewCell {
     private lazy var segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Pop score", "Action count"])
         control.selectedSegmentIndex = 0
+        control.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        control.selectedSegmentTintColor = .black.withAlphaComponent(0.5)
         control.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
@@ -70,6 +75,7 @@ final class UsersCell: UICollectionViewCell {
     
     private let popScoreTableView: UITableView = {
         let table = UITableView()
+        table.backgroundColor = .black
         table.register(PopScoreRankCell.self, forCellReuseIdentifier: PopScoreRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -78,6 +84,7 @@ final class UsersCell: UICollectionViewCell {
     private let actionCountTableView: UITableView = {
         let table = UITableView()
         table.isHidden = true
+        table.backgroundColor = .black
         table.register(PopScoreRankCell.self, forCellReuseIdentifier: PopScoreRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -216,21 +223,26 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.backgroundColor = .black.withAlphaComponent(0.7)
+        label.textColor = .lightGray
+        label.font = BellyGomFont.header04
+        
         if tableView == popScoreTableView {
             if section == 0 {
-                return SettingAsset.usersPopScoreFirstSectionHeader.rawValue
+                label.text = SettingAsset.usersPopScoreFirstSectionHeader.rawValue
             } else {
-                return SettingAsset.usersPopScoreSecondSectionHeader.rawValue
+                label.text = SettingAsset.usersPopScoreSecondSectionHeader.rawValue
             }
         } else if tableView == actionCountTableView {
             if section == 0 {
-                return SettingAsset.usersActionCountFirstSectionHeader.rawValue
+                label.text = SettingAsset.usersActionCountFirstSectionHeader.rawValue
             } else {
-                return SettingAsset.usersActionCountSecondSectionHeader.rawValue
+                label.text = SettingAsset.usersActionCountSecondSectionHeader.rawValue
             }
         }
-        return SettingAsset.emptyTitle.rawValue
+        return label
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

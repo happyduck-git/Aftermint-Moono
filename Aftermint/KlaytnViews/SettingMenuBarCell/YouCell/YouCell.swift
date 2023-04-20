@@ -67,6 +67,7 @@ final class YouCell: UICollectionViewCell {
     private let nftsTableView: UITableView = {
         let table = UITableView()
         table.alpha = 0.0
+        table.backgroundColor = .black
         table.register(NftRankCell.self, forCellReuseIdentifier: NftRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -185,8 +186,13 @@ final class YouCell: UICollectionViewCell {
 
 extension YouCell: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return SettingAsset.tableHeaderTitle.rawValue
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = SettingAsset.tableHeaderTitle.rawValue
+        label.font = BellyGomFont.header04
+        label.backgroundColor = .black.withAlphaComponent(0.7)
+        label.textColor = .lightGray
+        return label
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -215,6 +221,24 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
             completion(.success(image))
         }
     }
+    
+//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+//        guard let headerView = view as? UITableViewHeaderFooterView else { return }
+//        var config = headerView.defaultContentConfiguration()
+//        config.attributedText = NSAttributedString(
+//            string: SettingAsset.tableHeaderTitle.rawValue,
+//            attributes: [
+//                .foregroundColor: UIColor.white
+//            ])
+//        headerView.contentConfiguration = config
+//
+        /*
+         content.attributedText = NSAttributedString(string: "Text", attributes: [
+         .font: UIFont.systemFont(ofSize: 20, weight: .bold),
+         .foregroundColor: UIColor.systemBlue
+         ])
+         */
+//    }
 
     /// Determine cell image
     private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {

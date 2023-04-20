@@ -48,6 +48,7 @@ final class ProjectsCell: UICollectionViewCell {
     private let popScoreLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header03
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -64,6 +65,7 @@ final class ProjectsCell: UICollectionViewCell {
     private let actionCountLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header03
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -80,6 +82,7 @@ final class ProjectsCell: UICollectionViewCell {
     private let totalNftsLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header04
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -96,6 +99,7 @@ final class ProjectsCell: UICollectionViewCell {
     private let totalHoldersLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header04
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -103,6 +107,9 @@ final class ProjectsCell: UICollectionViewCell {
     private lazy var segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Pop score", "Action count"])
         control.selectedSegmentIndex = 0
+        control.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        control.selectedSegmentTintColor = .black.withAlphaComponent(0.5)
         control.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
@@ -110,6 +117,7 @@ final class ProjectsCell: UICollectionViewCell {
     
     private let popScoreTableView: UITableView = {
         let table = UITableView()
+        table.backgroundColor = .black
         table.register(ProjectPopScoreCell.self, forCellReuseIdentifier: ProjectPopScoreCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -118,6 +126,7 @@ final class ProjectsCell: UICollectionViewCell {
     private let actionCountTableView: UITableView = {
         let table = UITableView()
         table.isHidden = true
+        table.backgroundColor = .black
         table.register(ProjectPopScoreCell.self, forCellReuseIdentifier: ProjectPopScoreCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -253,13 +262,19 @@ final class ProjectsCell: UICollectionViewCell {
 
 extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.backgroundColor = .black.withAlphaComponent(0.7)
+        label.textColor = .lightGray
+        label.font = BellyGomFont.header04
+        
         if tableView == self.popScoreTableView {
-            return "Project Pop Score Rank"
+            label.text = "Project Pop Score Rank"
         } else if tableView == self.actionCountTableView {
-            return "Project Action Count Rank"
+            label.text = "Project Action Count Rank"
         }
-        return "Project Pop Score Rank"
+        
+        return label
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

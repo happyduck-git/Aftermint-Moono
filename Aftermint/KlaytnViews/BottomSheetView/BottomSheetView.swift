@@ -216,9 +216,20 @@ final class BottomSheetView: PassThroughView {
         self.layoutIfNeeded()
     }
     
+    var demoVMList: [LeaderBoardFirstSectionCellViewModel] = [] {
+        didSet {
+            oldValue.forEach { vm in
+                
+            }
+        }
+    }
+    
     private func bind() {
 
-        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] _ in
+        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] list in
+            guard let list = list else { return }
+            self?.demoVMList = list
+            
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.6) {
                     self?.leaderBoardTableView.reloadData()
@@ -288,6 +299,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             guard let indices = self.secondSectionVM.changedIndicies.value else { return UITableViewCell() }
             for index in indices {
                 if indexPath.row == Int(index) {
+                    print("Index: \(index)")
                     UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
                         cell.popScoreLabel.textColor = .systemOrange
                     } completion: { _ in

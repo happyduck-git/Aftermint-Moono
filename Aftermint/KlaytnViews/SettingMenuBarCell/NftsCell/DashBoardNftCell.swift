@@ -16,6 +16,7 @@ final class DashBoardNftCell: UICollectionViewCell {
     //MARK: - UI Elements
     private let nftScoreTableView: UITableView = {
         let table = UITableView()
+        table.backgroundColor = .black
         table.register(NftRankCell.self, forCellReuseIdentifier: NftRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -73,12 +74,19 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.backgroundColor = .black.withAlphaComponent(0.7)
+        label.textColor = .lightGray
+        label.font = BellyGomFont.header04
+        
         if section == 0 {
-            return SettingAsset.nftsFirstSectionHeader.rawValue
+            label.text = SettingAsset.nftsFirstSectionHeader.rawValue
         } else {
-            return SettingAsset.nftsSecondSectionHeader.rawValue
+            label.text = SettingAsset.nftsSecondSectionHeader.rawValue
         }
+        
+        return label
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,7 +109,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             cell.nftImageBorderColor = AftermintColor.moonoBlue.cgColor
             cell.nftNameLabelColor = AftermintColor.moonoBlue
             cell.rankLabelColor = AftermintColor.moonoBlue
-            cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.1)
+            cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.2)
             cell.configure(vm: vm)
             return cell
             
@@ -115,7 +123,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
                 cell.nftImageBorderColor = AftermintColor.moonoBlue.cgColor
                 cell.nftNameLabelColor = AftermintColor.moonoBlue
                 cell.rankLabelColor = AftermintColor.moonoBlue
-                cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.1)
+                cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.2)
             }
             
             cell.configure(vm: vm)

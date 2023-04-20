@@ -190,7 +190,7 @@ final class GameViewController: UIViewController {
         ///Set Timer scheduler to repeat certain action
         timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
             print("Accumulated touchCount: \(self.touchCount)")
-
+            
             self.leaderBoardSecondSectionViewModel.saveCountNumber(
                 popScore: self.touchCount * Int64(mockUserData.totalNfts),
                 actionCount: self.touchCount,

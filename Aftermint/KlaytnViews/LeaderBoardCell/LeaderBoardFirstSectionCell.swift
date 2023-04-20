@@ -58,12 +58,13 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.contentView.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         nftImageView.layer.cornerRadius = nftImageView.frame.size.width / 2
     }
     
     // MARK: - Private
     private func setUI() {
+        self.backgroundColor = .systemBlue.withAlphaComponent(0.5)
+        
         contentView.addSubview(nftImageView)
         contentView.addSubview(nftNameLabel)
         contentView.addSubview(nftInfoStackView)
@@ -95,7 +96,7 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
     }
     
     internal func resetCell() {
-        self.nftImageView.image = nil
+//        self.nftImageView.image = nil
         self.nftNameLabel.text = nil
         self.popScoreLabel.text = nil
         self.contentView.backgroundColor = nil

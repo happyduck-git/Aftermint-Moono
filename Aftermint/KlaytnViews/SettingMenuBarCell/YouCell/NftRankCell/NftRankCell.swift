@@ -21,10 +21,9 @@ final class NftRankCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let height = self.nftImageView.frame.size.height
-        self.nftImageView.layer.cornerRadius = height / 2
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        self.nftImageView.layer.cornerRadius = self.nftImageView.frame.size.height / 2
     }
     
     //MARK: - UI Elements
@@ -40,6 +39,7 @@ final class NftRankCell: UITableViewCell {
         let label = UILabel()
         label.isHidden = true
         label.font = BellyGomFont.header03
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -65,6 +65,7 @@ final class NftRankCell: UITableViewCell {
     private let nftNameLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header08
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -81,6 +82,7 @@ final class NftRankCell: UITableViewCell {
         let label = UILabel()
         label.text = SettingAsset.pointLabel.rawValue
         label.font = BellyGomFont.header07
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -106,7 +108,7 @@ final class NftRankCell: UITableViewCell {
     
     //MARK: - Private
     private func setUI() {
-        self.contentView.backgroundColor = AftermintColor.backgroundNavy
+        self.backgroundColor = AftermintColor.backgroundNavy
         
         self.contentView.addSubview(rankImageView)
         self.contentView.addSubview(rankLabel)

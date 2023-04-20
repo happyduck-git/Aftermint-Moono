@@ -64,14 +64,15 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.backgroundColor = AftermintColor.backgroundNavy
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
     }
     
     // MARK: - Private
     private func setUI() {
+        self.backgroundColor = AftermintColor.backgroundNavy
+        
         contentView.addSubview(rankImageView)
         contentView.addSubview(rankLabel)
         contentView.addSubview(userProfileImageView)
@@ -119,7 +120,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     
     internal func resetCell() {
         self.rankLabel.text = nil
-        self.userProfileImageView.image = nil
+//        self.userProfileImageView.image = nil
         self.popScoreLabel.text = nil
         self.popScoreLabel.textColor = .white
         self.contentView.backgroundColor = nil
