@@ -84,7 +84,7 @@ class BenefitViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("BenefitVC will disappear")
-        self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
+//        self.tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
         
     }
     
@@ -121,6 +121,7 @@ class BenefitViewController: UIViewController {
     private func navigationBarSetup() {
         
         self.navigationController?.navigationBar.backgroundColor = .white
+        self.tabBarController?.navigationItem.setHidesBackButton(true, animated: false)
         self.tabBarController?.navigationItem.title = ""
         
         /* Left bar item */

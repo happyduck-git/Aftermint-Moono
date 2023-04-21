@@ -175,6 +175,7 @@ final class GameViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationBarSetup()
     }
     
@@ -182,7 +183,10 @@ final class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        if self.navigationController?.isNavigationBarHidden ?? true {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
         
         let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
@@ -217,6 +221,7 @@ final class GameViewController: UIViewController {
         ///Disable the timer when the view disappeared
         timer.invalidate()
     }
+    
     private func navigationBarSetup() {
         
         self.tabBarController?.navigationItem.setHidesBackButton(true, animated: false)
