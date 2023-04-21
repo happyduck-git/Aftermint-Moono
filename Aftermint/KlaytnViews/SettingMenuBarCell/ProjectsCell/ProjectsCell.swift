@@ -163,11 +163,13 @@ final class ProjectsCell: UICollectionViewCell {
     }
     
     private func setLayout() {
+        let nftImageViewHeight: CGFloat = 80
+        
         NSLayoutConstraint.activate([
             self.nftImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 3),
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 2),
-            self.nftImageView.widthAnchor.constraint(equalToConstant: 80),
-            self.nftImageView.heightAnchor.constraint(equalTo: self.nftImageView.widthAnchor),
+            self.nftImageView.heightAnchor.constraint(equalToConstant: nftImageViewHeight),
+            self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
             
             self.collectionTitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 2),
             self.collectionTitleLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 3),
@@ -205,7 +207,7 @@ final class ProjectsCell: UICollectionViewCell {
             self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor)
         ])
         
-        self.nftImageView.layer.cornerRadius = 80 / 2
+        self.nftImageView.layer.cornerRadius = nftImageViewHeight / 2
     }
     
     private func setDelegate() {

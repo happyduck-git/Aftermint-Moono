@@ -33,6 +33,7 @@ class FirestoreRepository {
         ownerAddress: String,
         completion: @escaping (Result<Bool, Error>) -> ()
     ) {
+        var isMatch: Bool = false
         
         self.db.collection(K.FStore.nftAddressCollectionName)
             .whereField(K.FStore.actionCountFieldKey, isNotEqualTo: 0)
@@ -44,11 +45,11 @@ class FirestoreRepository {
                 let docs = snapshot.documents
                 for doc in docs {
                     if doc.documentID == ownerAddress {
-                        completion(.success(true))
-                        return
+                        isMatch = true
+                        break
                     }
                 }
-                completion(.success(false))
+                completion(.success(isMatch))
             }
         
     }

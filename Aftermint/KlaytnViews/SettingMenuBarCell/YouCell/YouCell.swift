@@ -85,12 +85,18 @@ final class YouCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let width = self.profileImageView.frame.size.width
-        self.profileImageView.layer.cornerRadius = width / 2
-    }
-    
+//    override func layoutIfNeeded() {
+//        super.layoutIfNeeded()
+//        let width = self.profileImageView.frame.size.width
+//        self.profileImageView.layer.cornerRadius = width / 2
+//    }
+//
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        let width = self.profileImageView.frame.size.width
+//        self.profileImageView.layer.cornerRadius = width / 2
+//    }
+//
     //MARK: - Private
     
     private func setUI() {
@@ -103,10 +109,12 @@ final class YouCell: UICollectionViewCell {
     }
     
     private func setLayout() {
+        let profileImageHeight: CGFloat = 90
+        
         NSLayoutConstraint.activate([
             self.profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
             self.profileImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
-            self.profileImageView.heightAnchor.constraint(equalToConstant: 90),
+            self.profileImageView.heightAnchor.constraint(equalToConstant: profileImageHeight),
             self.profileImageView.widthAnchor.constraint(equalTo: self.profileImageView.heightAnchor),
             self.walletAddressStack.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 2),
             self.walletAddressStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.profileImageView.trailingAnchor, multiplier: 2),
@@ -123,6 +131,8 @@ final class YouCell: UICollectionViewCell {
             self.nftsTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             self.nftsTableView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
+        
+        self.profileImageView.layer.cornerRadius = profileImageHeight / 2
     }
     
     private func setDelegate() {
