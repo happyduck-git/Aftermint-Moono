@@ -89,7 +89,8 @@ struct AppDependency {
         
         let mainTabBarControllerDependency: KlaytnTabViewController.Dependency =
             .init(
-                leaderBoardListViewModel: { LeaderBoardTableViewCellListViewModel() },
+                leaderBoardFirstListViewModel: { LeaderBoardFirstSectionCellListViewModel() },
+                leaderBoardSecondListViewModel: { LeaderBoardSecondSectionCellListViewModel() },
                 homeViewControllerDependency: homeViewControllerDependency,
                 bookmarkVCDependency: bookmarkVCDependency,
                 calendarVCDependency: calendarVCDependency

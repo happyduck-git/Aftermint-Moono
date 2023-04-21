@@ -11,65 +11,107 @@ import SpriteKit
 final class GameViewController: UIViewController {
     
     // MARK: - Constants
-    private var nftGradeLabelText: String = "/ Moono week"
+    private var nickNameLabelText: String = "월요 병아리"
     private var initialTouchScore: Int = 0
     
     // MARK: - Dependency
-    private var leaderBoardListViewModel: LeaderBoardTableViewCellListViewModel
+    private var leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
+    private var leaderBoardSecondSectionViewModel: LeaderBoardSecondSectionCellListViewModel
     private var scene: MoonoGameScene?
+    
+    /// TEMP ========================
+    var tempPopScore: Int64 = 0
+    var tempActionCount: Int64 = 0
+    /// ============================
     
     private var touchCount: Int64 = 0
     private var touchCountToShow: Int64 = 0 {
         didSet {
-            self.touchCountLabel.text = "\(self.touchCountToShow)"
+            self.popScoreLabel.text = "\(self.touchCountToShow)"
         }
     }
     
     // MARK: - UI Elements
-    private let nftImageView: UIImageView = {
+    private let userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .tertiarySystemFill
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
         imageView.layer.borderWidth = 1.0
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    private let nftDataAndScoreStackView: UIStackView = {
+
+    private let userInfoStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 5
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
-    private let nftDataStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
+    private let walletAddressLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = BellyGomFont.header08
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var nickNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = self.nickNameLabelText
+        label.textColor = .white
+        label.font = BellyGomFont.header04
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let popRankStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
+        stack.topLabelText = "Pop Rank"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
+        stack.bottomLabelText = "12"
+        stack.bottomLabelFont = BellyGomFont.header09
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
-    private let nftNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = BellyGomFont.header06
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let popScoreStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
+        stack.topLabelText = "Pop Score"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
+        stack.bottomLabelText = "358,732"
+        stack.bottomLabelFont = BellyGomFont.header09
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
-    private lazy var nftGradeLabel: UILabel = {
-        let label = UILabel()
-        label.text = self.nftGradeLabelText
-        label.textColor = .white
-        label.font = BellyGomFont.header06
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let nftsStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
+        stack.topLabelText = "NFTs"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
+        stack.bottomLabelText = "17"
+        stack.bottomLabelFont = BellyGomFont.header05
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
-    private lazy var touchCountLabel: UILabel = {
+    private let actionCountStack: VerticalDoubleStackView = {
+        let stack = VerticalDoubleStackView()
+        stack.topLabelText = "Action Count"
+        stack.topLabelFont = BellyGomFont.header05
+        stack.topLabelTextColor = AftermintColor.bellyGreen
+        stack.bottomLabelFont = BellyGomFont.header05
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
+    //Change this to Pop Score Label
+    private lazy var popScoreLabel: UILabel = {
         let label = UILabel()
         label.text = "\(self.initialTouchScore)"
         label.textColor = .white
@@ -88,7 +130,11 @@ final class GameViewController: UIViewController {
     }()
     
     private lazy var bottomSheetView: BottomSheetView = {
-        let bottomSheet = BottomSheetView(frame: .zero, vm: leaderBoardListViewModel)
+        let bottomSheet = BottomSheetView(
+            frame: .zero,
+            firstSectionVM: leaderBoardFirstSectionViewModel,
+            secondSectionVM: leaderBoardSecondSectionViewModel
+        )
         bottomSheet.bottomSheetColor = AftermintColor.backgroundNavy
         bottomSheet.barViewColor = .darkGray
         bottomSheet.translatesAutoresizingMaskIntoConstraints = false
@@ -101,8 +147,12 @@ final class GameViewController: UIViewController {
     }
     
     // MARK: - Init
-    init(leaderBoardListViewModel: LeaderBoardTableViewCellListViewModel) {
-        self.leaderBoardListViewModel = leaderBoardListViewModel
+    init(
+        leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel,
+        leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
+    ) {
+        self.leaderBoardSecondSectionViewModel = leaderBoardListViewModel
+        self.leaderBoardFirstSectionViewModel = leaderBoardFirstSectionViewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -117,13 +167,15 @@ final class GameViewController: UIViewController {
         setLayout()
         setGameScene()
 
-        configureProfileInfo()
         self.bottomSheetView.bottomSheetDelegate = self
-
+        self.leaderBoardSecondSectionViewModel.delegate = self
+        //Correct loction to call this?
+//        getCurrentUserViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationBarSetup()
     }
     
@@ -131,16 +183,37 @@ final class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        ///Set Timer scheduler to repeat certain action
-        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
-            print("Accumulated touchCount: \(self.touchCount)")
-            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
+        
+        if self.navigationController?.isNavigationBarHidden ?? true {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
+        
+        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
+        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
+        
+        ///Set Timer scheduler to repeat certain action
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
+            print("Accumulated touchCount: \(self.touchCount)")
+            
+            self.leaderBoardSecondSectionViewModel.saveCountNumber(
+                popScore: self.touchCount * Int64(mockUserData.totalNfts),
+                actionCount: self.touchCount,
+                ownerAddress: mockUserData.address,
+                nftImageUrl: mockCardData.imageUrl,
+                nftTokenId: mockCardData.tokenId,
+                totalNfts: mockUserData.totalNfts,
+                ofCollectionType: .moono
+            )
+            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
+            self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
+        }
+        
+        //OGCode
+//            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
     }
     
     override func viewWillLayoutSubviews() {
-        nftImageView.layer.cornerRadius = nftImageView.frame.size.width / 2
+        userImageView.layer.cornerRadius = userImageView.frame.size.width / 2
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -148,6 +221,7 @@ final class GameViewController: UIViewController {
         ///Disable the timer when the view disappeared
         timer.invalidate()
     }
+    
     private func navigationBarSetup() {
         
         self.tabBarController?.navigationItem.setHidesBackButton(true, animated: false)
@@ -164,28 +238,42 @@ final class GameViewController: UIViewController {
     private func setUI() {
         view.backgroundColor = AftermintColor.backgroundLightBlue
         view.addSubview(gameSKView)
-        view.addSubview(nftImageView)
-        view.addSubview(nftDataAndScoreStackView)
+        view.addSubview(userImageView)
+        view.addSubview(userInfoStackView)
         view.addSubview(bottomSheetView)
+        view.addSubview(popRankStack)
+        view.addSubview(popScoreStack)
+        view.addSubview(nftsStack)
+        view.addSubview(actionCountStack)
         
-        nftDataAndScoreStackView.addArrangedSubview(nftDataStackView)
-        nftDataAndScoreStackView.addArrangedSubview(touchCountLabel)
-        nftDataStackView.addArrangedSubview(nftNameLabel)
-        nftDataStackView.addArrangedSubview(nftGradeLabel)
+        userInfoStackView.addArrangedSubview(walletAddressLabel)
+        userInfoStackView.addArrangedSubview(nickNameLabel)
     }
     
     private func setLayout() {
         let viewHeight = view.frame.size.height
         gameSKView.frame = view.bounds
         NSLayoutConstraint.activate([
-            self.nftImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
-            self.nftImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
-            self.nftImageView.heightAnchor.constraint(equalToConstant: viewHeight / 14),
-            self.nftImageView.widthAnchor.constraint(equalTo: self.nftImageView.heightAnchor),
+            self.userImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
+            self.userImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
+            self.userImageView.heightAnchor.constraint(equalToConstant: viewHeight / 14),
+            self.userImageView.widthAnchor.constraint(equalTo: self.userImageView.heightAnchor),
             
+            self.userInfoStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userImageView.trailingAnchor, multiplier: 1),
+            self.userInfoStackView.centerYAnchor.constraint(equalTo: self.userImageView.centerYAnchor),
             
-            self.nftDataAndScoreStackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftImageView.trailingAnchor, multiplier: 1),
-            self.nftDataAndScoreStackView.centerYAnchor.constraint(equalTo: self.nftImageView.centerYAnchor),
+            self.popRankStack.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 0),
+            self.popRankStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userInfoStackView.trailingAnchor, multiplier: 1),
+            self.popScoreStack.topAnchor.constraint(equalTo: self.popRankStack.topAnchor),
+            self.popScoreStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.popRankStack.trailingAnchor, multiplier: 1),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: self.popScoreStack.trailingAnchor, multiplier: 1),
+            
+            self.nftsStack.topAnchor.constraint(equalToSystemSpacingBelow: self.popRankStack.bottomAnchor, multiplier: 1),
+            self.nftsStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.userInfoStackView.trailingAnchor, multiplier: 1),
+            self.actionCountStack.topAnchor.constraint(equalTo: self.nftsStack.topAnchor),
+            self.actionCountStack.leadingAnchor.constraint(equalToSystemSpacingAfter: self.nftsStack.trailingAnchor, multiplier: 1),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: self.actionCountStack.trailingAnchor, multiplier: 1),
+            
             
             self.bottomSheetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             self.bottomSheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -194,6 +282,39 @@ final class GameViewController: UIViewController {
         ])
     }
     
+    /// Get viewModel for current user information
+    private func getCurrentUserViewModel() {
+        let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
+        DispatchQueue.main.async {
+            /// User information part
+            self.imageStringToImage(with: currentUserViewModel?.userProfileImage ?? "rebecca") { result in
+                switch result {
+                case .success(let image):
+                    self.userImageView.image = image
+                case .failure(let error):
+                    print("Error \(error)")
+                }
+            }
+//            self.userImageView.image = UIImage(named: currentUserViewModel?.userProfileImage ?? "rebecca")
+            self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
+            self.nickNameLabel.text = currentUserViewModel?.bottomLabelText
+            /// Scoreboard part
+//            self.popScoreStack.bottomLabelText = String(describing: currentUserViewModel?.popScore ?? 0)
+//            self.actionCountStack.bottomLabelText = String(describing: currentUserViewModel?.actionCount ?? 0)
+            
+            self.tempPopScore = currentUserViewModel?.popScore ?? 0
+            self.tempActionCount = currentUserViewModel?.actionCount ?? 0
+            self.popScoreStack.bottomLabelText = String(describing: self.tempPopScore)
+            self.actionCountStack.bottomLabelText = String(describing: self.tempActionCount)
+        }
+    }
+    
+    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
+        let url = URL(string: urlString)
+        NukeImageLoader.loadImageUsingNuke(url: url) { image in
+            completion(.success(image))
+        }
+    }
 }
 
 // MARK: - Set GameScene
@@ -209,17 +330,7 @@ extension GameViewController {
         scene.scaleMode = .aspectFit
         gameSKView.presentScene(scene)
     }
-    
-    private func configureProfileInfo() {
-        let card = leaderBoardListViewModel.randomMoonoData
-        let url = URL(string: card.imageUri)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            self.nftImageView.image = image
-        }
-        
-        let nftName = card.tokenId.replacingOccurrences(of: "___", with: " #")
-        self.nftNameLabel.text = "\(nftName) "
-    }
+
 }
 
 extension GameViewController: MoonoGameSceneDelegate {
@@ -228,6 +339,11 @@ extension GameViewController: MoonoGameSceneDelegate {
         print("Touch received: \(number)")
         self.touchCountToShow += number
         self.touchCount += number
+        
+        self.tempPopScore += (number * Int64(MoonoMockUserData().getOneUserData().totalNfts))
+        self.tempActionCount += number
+        self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
+        self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
     }
 
 }
@@ -238,6 +354,14 @@ extension GameViewController: BottomSheetViewDelegate {
     ///Get notified when the data saved to firestore
     func dataFetched() {
         self.touchCount = 0
+        self.getCurrentUserViewModel()
     } 
 
+}
+
+extension GameViewController: LeaderBoardSecondSectionCellListViewModelDelegate {
+    func dataFetched2() {
+        self.touchCount = 0
+        self.getCurrentUserViewModel()
+    }
 }

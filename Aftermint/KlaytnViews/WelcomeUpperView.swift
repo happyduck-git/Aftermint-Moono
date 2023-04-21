@@ -23,7 +23,7 @@ class WelcomeUpperView: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-    private let usernameLabel: UILabel = {
+    let usernameLabel: UILabel = {
         let label = UILabel()
         label.font = BellyGomFont.header03
         label.textColor = AftermintColor.moonoBlue

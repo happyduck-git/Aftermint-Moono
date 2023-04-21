@@ -11,6 +11,7 @@ class NFTCardViewModel {
     
     var nftCardCellViewModel: Box<[NftCardCellViewModel]> = Box([])
     var nftSelected: [Bool] = []
+    let fireStoreRepository = FirestoreRepository.shared
     
     func numberOfItemsInSection() -> Int {
         guard let numberOfItems = self.nftCardCellViewModel.value?.count else {
@@ -18,6 +19,14 @@ class NFTCardViewModel {
         }
         self.nftSelected = Array(repeating: false, count: numberOfItems)
         print("numberofNfts: \(numberOfItems)")
+        
+        /// Save total number of nfts an owner has
+        self.fireStoreRepository.saveTotalNumbersOfNFTs(
+//            ofOwner: K.Wallet.temporaryAddress, /// Use temporary wallet address for demo purpose
+            ofOwner: MoonoMockUserData().getOneUserData().address,
+            ownedNFTs: Int64(numberOfItems)
+        )
+        
         return numberOfItems
     }
     

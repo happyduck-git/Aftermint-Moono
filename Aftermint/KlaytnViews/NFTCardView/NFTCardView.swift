@@ -264,7 +264,9 @@ extension NFTCardView {
     
     private func fetchMoonoNft() {
         
-        let tempAddress: String = K.Wallet.temporaryAddress
+        /// TempAddress used when there was no game features
+//        let tempAddress: String = K.Wallet.temporaryAddress
+        let tempAddress: String = MoonoMockUserData().getOneUserData().address
 
         self.viewModel.getNftCardCellViewModels(of: tempAddress) { result in
             switch result {

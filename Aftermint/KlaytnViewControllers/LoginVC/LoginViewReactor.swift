@@ -13,6 +13,7 @@ final class LoginViewReactor: Reactor {
     
     let kasWalletRepository: KasWalletRepository = KasWalletRepository.shared
     let kasConnectService: KASConnectService = KASConnectService.shared
+    let firestoreRepository: FirestoreRepository = FirestoreRepository.shared
     var requestToken: String?
     
     private var isWaitingTransactionResponse: Bool = false
@@ -47,6 +48,7 @@ final class LoginViewReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .connectWithFavorlet:
+            self.saveWalletAddressAndUsernameToFirestore()
             return Observable.just(Mutation.openFavorlet)
             
         case .connectWithKaikas:
@@ -116,19 +118,22 @@ extension LoginViewReactor {
                     object: nil,
                     queue: .main,
                     using: { notification in
-                    /// When notified that the app will enter foreground,
-                    /// acquire wallet address and save the address to KasWalletRepository.
-                    Task.init {
-                        do {
-                            let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken)
-                            self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
-                            print("walletAddress: \(walletAddress)")
-                            completion(.success(walletAddress))
-                        } catch (let error){
-                            print("Error \(error)")
-                            completion(.failure(error))
+
+                        /// When notified that the app will enter foreground,
+                        /// acquire wallet address and save the address to KasWalletRepository.
+                        /// ** Also save the address and username to Firestore **
+                        /// ** Username is a demo pupose **
+                        Task.init {
+                            do {
+                                let walletAddress = try await self.kasConnectService.getWalletAddress(requestKey: requestToken)
+                                self.kasWalletRepository.setCurrentWallet(walletAddress: walletAddress)
+                                print("walletAddress: \(walletAddress)")
+                                completion(.success(walletAddress))
+                            } catch (let error){
+                                print("Error \(error)")
+                                completion(.failure(error))
+                            }
                         }
-                    }
                 })
    
             } catch (let error){
@@ -137,5 +142,22 @@ extension LoginViewReactor {
             }
         }
     }
+    
+    /// ** Save the address and username to Firestore **
+    /// ** Username is a demo pupose **
+    private func saveWalletAddressAndUsernameToFirestore() {
+        let mockUser = MoonoMockUserData().getOneUserData()
+        
+        /// TEMP: Only for demo purpose
+        self.firestoreRepository.saveAddressBaseFields(
+            ownerAddress: mockUser.address,
+            username: mockUser.username
+        )
+        self.kasWalletRepository.setUsername(
+            username: mockUser.username
+        )
+
+    }
+    
 }
 

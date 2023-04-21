@@ -57,7 +57,7 @@ class LoginViewController: BaseViewController, View {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     private let loginDescription: UILabel = {
         let label = UILabel()
         label.text = LoginAsset.loginDescription.rawValue
@@ -146,7 +146,8 @@ class LoginViewController: BaseViewController, View {
         /// NOTE: Temporarily push directly to KlaytnTabViewController;
         /// Will connect to FavorletWallet application later in the future
         let homeVC = KlaytnTabViewController(
-            vm: mainTabBarVCDependency.leaderBoardListViewModel(),
+            leaderBoardFirstViewModel: mainTabBarVCDependency.leaderBoardFirstListViewModel(),
+            leaderBoardSecondViewModel: mainTabBarVCDependency.leaderBoardSecondListViewModel(),
             homeViewControllerDependency: mainTabBarVCDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieVCDependency,
             bookmarkVCDependency: bookmarkVCDependency,
@@ -164,7 +165,7 @@ class LoginViewController: BaseViewController, View {
         )
         navigationController?.pushViewController(startVC, animated: true)
     }
-
+    
 }
 
 //MARK: - Bind Action and State
@@ -184,7 +185,7 @@ extension LoginViewController {
                 }
             }
             .disposed(by: disposeBag)
-    
+        
         reactor.state.map { $0.isWalletConnected }
             .bind{ [weak self] isWalletConnected in
                 if isWalletConnected {

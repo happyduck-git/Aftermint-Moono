@@ -11,11 +11,16 @@ class KasWalletRepository {
     
     static let shared: KasWalletRepository = .init()
     private let currentWalletKey = "KasWalletRepository.CurrentKey"
+    private let userNameKey = "KasWalletRepository.UsernameKey"
     
     private init() {}
     
     func setCurrentWallet(walletAddress: String) {
         UserDefaults.standard.set(walletAddress, forKey: currentWalletKey)
+    }
+    
+    func setUsername(username: String) {
+        UserDefaults.standard.set(username, forKey: userNameKey)
     }
     
     func getCurrentWallet() -> String {
@@ -25,5 +30,9 @@ class KasWalletRepository {
     
     func getWalletKey() -> String {
         return self.currentWalletKey
+    }
+    
+    func getUsername() -> String {
+        return UserDefaults.standard.string(forKey: userNameKey) ?? "월요병아리"
     }
 }

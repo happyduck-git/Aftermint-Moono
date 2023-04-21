@@ -6,6 +6,7 @@
 //
 
 import SpriteKit
+import AVFAudio
 
 protocol MoonoGameSceneDelegate: AnyObject {
     func didReceiveTouchCount(number: Int64)
@@ -14,6 +15,8 @@ protocol MoonoGameSceneDelegate: AnyObject {
 final class MoonoGameScene: SKScene {
     
     weak var gameSceneDelegate: MoonoGameSceneDelegate?
+    
+    private var player: AVAudioPlayer?
     
     // MARK: - Game Elements
     private let numberToIncrease: Int64 = 1
@@ -63,7 +66,11 @@ final class MoonoGameScene: SKScene {
     //MARK: - Touch Handling
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        /// Let delegate know there is an increase in touch number
         gameSceneDelegate?.didReceiveTouchCount(number: numberToIncrease)
+        
+        /// Play audio for every touch
+        playGameSound()
         
         particles?.removeFromParent()
         particles = nil
@@ -86,6 +93,17 @@ final class MoonoGameScene: SKScene {
             
         }
         
+    }
+    
+    private func playGameSound() {
+        let fileName = "bubbles"
+        guard let audioFileUrl = Bundle.main.url(forResource: fileName, withExtension: "wav") else { return }
+        do {
+            player = try AVAudioPlayer(contentsOf: audioFileUrl)
+            player?.play()
+        } catch(let err) {
+            print("Error Init AVAudioPlayer ---- \(err.localizedDescription)")
+        }
     }
     
 }

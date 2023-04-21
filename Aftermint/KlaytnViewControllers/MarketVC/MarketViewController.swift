@@ -13,7 +13,7 @@ class MarketViewController: UIViewController {
     /// use of dummy images will be replaced with real image data from Opensea
     let moonoMockImageData: MoonoMockImageData = MoonoMockImageData()
     
-    /// NOTE: Change the dropDown view using DropDown library
+    /// TODO: Change the dropDown view using DropDown library
     let dropDownView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: MarketAsset.dropDown.rawValue)
@@ -48,18 +48,23 @@ class MarketViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("MarketVC - \(#function)")
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         navigationBarSetup()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        print("MarketVC - \(#function)")
+        
+        /// When NavigationController's navigation bar is hidden
+        /// due to view hierarchy, show hidden navigation bar in viewDidAppear.
+        if self.navigationController?.isNavigationBarHidden ?? true {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
+        
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
+
     //MARK: - Set UI & Layout
     private func setUI() {
         view.addSubview(dropDownView)
@@ -70,7 +75,6 @@ class MarketViewController: UIViewController {
     
     private func setLayout() {
         let tabBarHeight = view.frame.size.height / 8.2
-        
         
         NSLayoutConstraint.activate([
             

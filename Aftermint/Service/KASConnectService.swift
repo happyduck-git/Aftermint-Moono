@@ -44,7 +44,7 @@ class KASConnectService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-      
+        
         
         let body: [String: Any] = [
             "type": "auth",
@@ -85,16 +85,16 @@ class KASConnectService {
     func getWalletAddress(requestKey: String) async throws -> String {
 
         let urlString = "https://api.kaikas.io/api/v1/k/result/\(requestKey)"
-
+        
         guard let url = URL(string: urlString) else {
             print("URL not available")
             throw KASConnectServiceError.invalidURL
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-
+        
         //Data Task
         let (data, response) = try await session.data(for: request)
         let sucessRange = 200..<300
