@@ -21,12 +21,20 @@ class NFTCardViewModel {
         print("numberofNfts: \(numberOfItems)")
         
         /// Save total number of nfts an owner has
-        self.fireStoreRepository.saveTotalNumbersOfNFTs(
-//            ofOwner: K.Wallet.temporaryAddress, /// Use temporary wallet address for demo purpose
-            ofOwner: MoonoMockUserData().getOneUserData().address,
-            ownedNFTs: Int64(numberOfItems)
-        )
+        let mockUser = MoonoMockUserData().getOneUserData()
         
+        /// TEMP: Only for demo purpose
+        self.fireStoreRepository.saveAddressBaseFields(
+            ownerAddress: mockUser.address,
+            username: mockUser.username
+        ) { [weak self] _ in
+            self?.fireStoreRepository.saveTotalNumbersOfNFTs(
+    //            ofOwner: K.Wallet.temporaryAddress, /// Use temporary wallet address for demo purpose
+                ofOwner: mockUser.address,
+                ownedNFTs: Int64(numberOfItems)
+            )
+        }
+
         return numberOfItems
     }
     

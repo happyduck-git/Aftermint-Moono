@@ -25,6 +25,7 @@ class FirestoreRepository {
     
     // MARK: - Save data
     
+    
     /// Check if document with ownerAddress exist
     /// - Parameters:
     ///   - ownerAddress: Logged in user's wallet address.
@@ -33,27 +34,25 @@ class FirestoreRepository {
         ownerAddress: String,
         completion: @escaping (Result<Bool, Error>) -> ()
     ) {
-        var isMatch: Bool = false
         
-        self.db.collection(K.FStore.nftAddressCollectionName)
-            .whereField(K.FStore.actionCountFieldKey, isNotEqualTo: 0)
-            .getDocuments { snapshot, error in
-                guard let snapshot = snapshot, error == nil else {
-                    completion(.failure(FirestoreError.getDocumentsError))
-                    return
-                }
-                let docs = snapshot.documents
-                for doc in docs {
-                    if doc.documentID == ownerAddress {
-                        isMatch = true
-                        break
-                    }
-                }
-                completion(.success(isMatch))
+        let docRef = self.db.collection(K.FStore.nftAddressCollectionName).document(ownerAddress)
+        docRef.getDocument { snapshot, error in
+            
+            guard error == nil else {
+                completion(.failure(FirestoreError.getDocumentsError))
+                return
             }
+            
+            if let document = snapshot, document.exists {
+                completion(.success(true))
+            } else {
+                completion(.success(false))
+            }
+        }
         
     }
     
+    /// Currently not in use.
     func saveUsername(
         ownerAddress: String,
         username: String
@@ -75,13 +74,15 @@ class FirestoreRepository {
     ///   - username: Logged in user's username.
     func saveAddressBaseFields(
         ownerAddress: String,
-        username: String
+        username: String,
+        completion: @escaping ((Bool) -> Void)
     ) {
         self.checkIfSavedUser(ownerAddress: ownerAddress) { result in
             
             switch result {
             case .success(let isSaved):
                 if isSaved {
+                    completion(true)
                     return
                 } else {
                     let docRefForAddress = self.db
@@ -93,10 +94,13 @@ class FirestoreRepository {
                         K.FStore.popScoreFieldKey: 0,
                         K.FStore.actionCountFieldKey: 0
                     ], merge: true)
+                    
+                    completion(true)
                     return
                 }
             case .failure(let error):
                 print("Error checking saved user: \(error.localizedDescription)")
+                completion(false)
                 return
             }
         }
