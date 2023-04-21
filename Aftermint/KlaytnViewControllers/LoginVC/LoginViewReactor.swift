@@ -146,13 +146,9 @@ extension LoginViewReactor {
     /// ** Save the address and username to Firestore **
     /// ** Username is a demo pupose **
     private func saveWalletAddressAndUsernameToFirestore() {
-        let mockUser = MoonoMockUserData().getOneUserData()
         
-        /// TEMP: Only for demo purpose
-        self.firestoreRepository.saveAddressBaseFields(
-            ownerAddress: mockUser.address,
-            username: mockUser.username
-        )
+        let mockUser = MoonoMockUserData().getOneUserData()
+
         self.kasWalletRepository.setUsername(
             username: mockUser.username
         )
