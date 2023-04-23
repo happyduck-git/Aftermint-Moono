@@ -20,7 +20,7 @@ final class BottomSheetView: PassThroughView {
     var secondSectionVM: LeaderBoardSecondSectionCellListViewModel
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
-    var tempTouchCountList: [String: Int64] = [:]
+    var currentUserScoreUpdateHandler: ((Int64) -> Void)?
     
     // MARK: - UI Elements
     
@@ -312,6 +312,9 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             
             if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+                self.currentUserScoreUpdateHandler = { count in
+                    cell.popScoreLabel.text = "\(count)"
+                }
             }
  
             //TODO: Make below logic as a separate function

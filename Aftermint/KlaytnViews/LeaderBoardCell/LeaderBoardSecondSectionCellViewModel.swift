@@ -6,6 +6,7 @@
 //
 
 import UIKit.UIImage
+import DifferenceKit
 
 protocol LeaderBoardSecondSectionCellListViewModelDelegate: AnyObject {
     func dataFetched2()
@@ -45,6 +46,8 @@ final class LeaderBoardSecondSectionCellListViewModel {
     }
     
     func getAddressSectionVM() {
+        let oldVms: [LeaderBoardSecondSectionCellViewModel]? = self.leaderBoardVMList.value
+        
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else {
                 return
@@ -54,6 +57,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
             
             let viewModels = addressList.map { address in
                 let viewModel = LeaderBoardSecondSectionCellViewModel(
+                    ownerAddress: address.ownerAddress,
                     rankImage: rankImage,
                     rank: initialRank,
                     userProfileImage: address.profileImageUrl,
@@ -79,6 +83,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
         let viewModels = userList.map { user in
             let viewModel: LeaderBoardSecondSectionCellViewModel =
             LeaderBoardSecondSectionCellViewModel(
+                ownerAddress: user.address,
                 rankImage: rankImage,
                 rank: initialRank,
                 userProfileImage: user.imageUrl,
@@ -126,6 +131,7 @@ extension LeaderBoardSecondSectionCellListViewModel: FirestoreRepositoryDelegate
 
 //MARK: - LeaderBoardTableViewCellViewModel
 final class LeaderBoardSecondSectionCellViewModel {
+    let ownerAddress: String
     var rankImage: UIImage
     var rank: Int
     let userProfileImage: String
@@ -135,7 +141,8 @@ final class LeaderBoardSecondSectionCellViewModel {
     let popScore: Int64
     
     //MARK: - Initializer
-    init(rankImage: UIImage,
+    init(ownerAddress: String,
+         rankImage: UIImage,
          rank: Int,
          userProfileImage: String,
          topLabelText: String,
@@ -143,6 +150,7 @@ final class LeaderBoardSecondSectionCellViewModel {
          actionCount: Int64,
          popScore: Int64
     ) {
+        self.ownerAddress = ownerAddress
         self.rankImage = rankImage
         self.rank = rank
         self.userProfileImage = userProfileImage

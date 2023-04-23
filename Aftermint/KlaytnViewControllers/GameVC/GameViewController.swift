@@ -141,11 +141,6 @@ final class GameViewController: UIViewController {
         return bottomSheet
     }()
     
-    private var tempTouchCountList: [String: Int64] {
-        print("\(self.bottomSheetView.tempTouchCountList)")
-        return self.bottomSheetView.tempTouchCountList
-    }
-    
     // MARK: - Init
     init(
         leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel,
@@ -169,6 +164,7 @@ final class GameViewController: UIViewController {
 
         self.bottomSheetView.bottomSheetDelegate = self
         self.leaderBoardSecondSectionViewModel.delegate = self
+        
         //Correct loction to call this?
 //        getCurrentUserViewModel()
     }
@@ -188,25 +184,7 @@ final class GameViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
         
-        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
-        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
-        
-        ///Set Timer scheduler to repeat certain action
-        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
-            print("Accumulated touchCount: \(self.touchCount)")
-            
-            self.leaderBoardSecondSectionViewModel.saveCountNumber(
-                popScore: self.touchCount * Int64(mockUserData.totalNfts),
-                actionCount: self.touchCount,
-                ownerAddress: mockUserData.address,
-                nftImageUrl: mockCardData.imageUrl,
-                nftTokenId: mockCardData.tokenId,
-                totalNfts: mockUserData.totalNfts,
-                ofCollectionType: .moono
-            )
-            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
-            self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
-        }
+        self.saveAndRetrieveGameData(after: 5.0)
         
         //OGCode
 //            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
@@ -282,6 +260,30 @@ final class GameViewController: UIViewController {
         ])
     }
     
+    //MARK: - Private
+    
+    private func saveAndRetrieveGameData(after second: CGFloat) {
+        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
+        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
+        
+        ///Set Timer scheduler to repeat certain action
+        timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { _ in
+            print("Accumulated touchCount: \(self.touchCount)")
+            
+            self.leaderBoardSecondSectionViewModel.saveCountNumber(
+                popScore: self.touchCount * Int64(mockUserData.totalNfts),
+                actionCount: self.touchCount,
+                ownerAddress: mockUserData.address,
+                nftImageUrl: mockCardData.imageUrl,
+                nftTokenId: mockCardData.tokenId,
+                totalNfts: mockUserData.totalNfts,
+                ofCollectionType: .moono
+            )
+            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
+            self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
+        }
+    }
+    
     /// Get viewModel for current user information
     private func getCurrentUserViewModel() {
         let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
@@ -295,7 +297,7 @@ final class GameViewController: UIViewController {
                     print("Error \(error)")
                 }
             }
-//            self.userImageView.image = UIImage(named: currentUserViewModel?.userProfileImage ?? "rebecca")
+
             self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
             self.nickNameLabel.text = currentUserViewModel?.bottomLabelText
             /// Scoreboard part
@@ -344,6 +346,8 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.tempActionCount += number
         self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
         self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
+        
+        self.bottomSheetView.currentUserScoreUpdateHandler?(self.tempActionCount)
     }
 
 }
@@ -355,7 +359,7 @@ extension GameViewController: BottomSheetViewDelegate {
     func dataFetched() {
         self.touchCount = 0
         self.getCurrentUserViewModel()
-    } 
+    }
 
 }
 

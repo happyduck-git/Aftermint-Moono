@@ -44,6 +44,7 @@
 		2481E1D9297BDDE400187BB9 /* NftTraitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481E1D8297BDDE400187BB9 /* NftTraitView.swift */; };
 		2481E1DC297C48E700187BB9 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481E1DB297C48E700187BB9 /* UIImage.swift */; };
 		2481E1DE297D125D00187BB9 /* NftCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481E1DD297D125D00187BB9 /* NftCardCell.swift */; };
+		249FC5B229F5536000B684E7 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 249FC5B129F5536000B684E7 /* DifferenceKit */; };
 		24DDC99829817576007A3F63 /* PropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DDC99729817576007A3F63 /* PropertyView.swift */; };
 		24DDC99A298175A2007A3F63 /* UtilityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DDC999298175A2007A3F63 /* UtilityModel.swift */; };
 		24DDC99C298175ED007A3F63 /* NftCardUtilityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DDC99B298175ED007A3F63 /* NftCardUtilityCell.swift */; };
@@ -906,6 +907,7 @@
 				3619B21229790C130051C387 /* RxAlamofire in Frameworks */,
 				93A4B81A2991CFC100146FD8 /* FSCalendar in Frameworks */,
 				3619B21F297911EC0051C387 /* Differentiator in Frameworks */,
+				249FC5B229F5536000B684E7 /* DifferenceKit in Frameworks */,
 				3619B22B297912330051C387 /* RxCocoa in Frameworks */,
 				3619B2312979125D0051C387 /* SnapKit in Frameworks */,
 				3619B2212979120F0051C387 /* FirebaseAnalytics in Frameworks */,
@@ -2584,6 +2586,7 @@
 				93A4B8192991CFC100146FD8 /* FSCalendar */,
 				9300BB5B29C820C900C67A29 /* FirebaseFirestore */,
 				9300BB5D29C820D100C67A29 /* FirebaseFirestoreSwift */,
+				249FC5B129F5536000B684E7 /* DifferenceKit */,
 			);
 			productName = Aftermint;
 			productReference = 3619AF0F297908F90051C387 /* Aftermint.app */;
@@ -2629,6 +2632,7 @@
 				3619B21A29790D160051C387 /* XCRemoteSwiftPackageReference "OhhAuth" */,
 				24097B7A29913E9000F92366 /* XCRemoteSwiftPackageReference "Pulley" */,
 				93A4B8182991CFC100146FD8 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				249FC5B029F5536000B684E7 /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			productRefGroup = 3619AF10297908F90051C387 /* Products */;
 			projectDirPath = "";
@@ -3321,6 +3325,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		249FC5B029F5536000B684E7 /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ra1028/DifferenceKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		3619B1FF29790AFB0051C387 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactorKit/ReactorKit.git";
@@ -3440,6 +3452,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 24097B7A29913E9000F92366 /* XCRemoteSwiftPackageReference "Pulley" */;
 			productName = Pulley;
+		};
+		249FC5B129F5536000B684E7 /* DifferenceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 249FC5B029F5536000B684E7 /* XCRemoteSwiftPackageReference "DifferenceKit" */;
+			productName = DifferenceKit;
 		};
 		3619B20029790AFB0051C387 /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;
