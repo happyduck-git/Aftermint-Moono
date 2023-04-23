@@ -56,8 +56,8 @@ final class LeaderBoardFirstSectionCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
         nftImageView.layer.cornerRadius = nftImageView.frame.size.width / 2
     }
     
