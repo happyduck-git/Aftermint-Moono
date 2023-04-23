@@ -6,16 +6,21 @@
 //
 
 import UIKit
+import DifferenceKit
 import Nuke
 
 protocol BottomSheetViewDelegate: AnyObject {
     func dataFetched()
 }
 
+enum SectionID: Differentiable {
+    case first, second
+}
+
 final class BottomSheetView: PassThroughView {
     
     let prefetcher = ImagePrefetcher()
-    
+
     var firstSectionVM: LeaderBoardFirstSectionCellListViewModel
     var secondSectionVM: LeaderBoardSecondSectionCellListViewModel
     
@@ -225,7 +230,17 @@ final class BottomSheetView: PassThroughView {
     }
     
     private func bind() {
-
+       
+        guard let secondVM = self.secondSectionVM.leaderBoardVMList.value else { return }
+       
+        let typeErasedSecondVM = secondVM.map { vm in
+            AnyDifferentiable(vm)
+        }
+        
+        let secondSection = ArraySection<SectionID, AnyDifferentiable>(model: .second, elements: typeErasedSecondVM)
+        
+        let source: [ArraySection<SectionID, AnyDifferentiable>] = [secondSection]
+        
         self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] list in
             guard let list = list else { return }
             self?.demoVMList = list
@@ -245,6 +260,25 @@ final class BottomSheetView: PassThroughView {
                     self?.leaderBoardTableView.alpha = 1.0
                     self?.bottomSheetDelegate?.dataFetched()
                 }
+            }
+        }
+        
+        self.secondSectionVM.changeset.bind { [weak self] changeset in
+            guard let vm = changeset else { return }
+            DispatchQueue.main.async {
+                self?.leaderBoardTableView.reload(
+                    using: vm,
+                    deleteSectionsAnimation: .none,
+                    insertSectionsAnimation: .none,
+                    reloadSectionsAnimation: .none,
+                    deleteRowsAnimation: .fade,
+                    insertRowsAnimation: .left,
+                    reloadRowsAnimation: .middle,
+                    setData: { collection in
+                        self?.secondSectionVM.leaderBoardVMList.value = collection
+                        self?.secondSectionVM.oldVMList = collection
+                        
+                    })
             }
         }
     }

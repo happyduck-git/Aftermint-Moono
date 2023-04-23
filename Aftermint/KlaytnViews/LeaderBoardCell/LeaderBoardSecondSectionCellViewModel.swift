@@ -21,6 +21,8 @@ final class LeaderBoardSecondSectionCellListViewModel {
     var touchCount: Box<Int> = Box(0)
 
     var changedIndicies: Box<[UInt]> = Box([])
+    var oldVMList: [LeaderBoardSecondSectionCellViewModel] = []
+    var changeset: Box<StagedChangeset<[LeaderBoardSecondSectionCellViewModel]>> = Box(StagedChangeset([]))
     
     // MARK: - Init
     init() {
@@ -46,7 +48,9 @@ final class LeaderBoardSecondSectionCellListViewModel {
     }
     
     func getAddressSectionVM() {
-        let oldVms: [LeaderBoardSecondSectionCellViewModel]? = self.leaderBoardVMList.value
+        
+        guard let oldVms = self.leaderBoardVMList.value else { return }
+        self.oldVMList = oldVms
         
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else {
@@ -68,6 +72,8 @@ final class LeaderBoardSecondSectionCellListViewModel {
                 )
                 return viewModel
             }
+            self.changeset.value = StagedChangeset(source: self.oldVMList, target: viewModels)
+           
             self.leaderBoardVMList.value = viewModels
             self.delegate?.dataFetched2()
         }
@@ -172,3 +178,14 @@ final class LeaderBoardSecondSectionCellViewModel {
     
 }
 
+extension LeaderBoardSecondSectionCellViewModel: Differentiable {
+    
+    var differenceIdentifier: String {
+        return self.ownerAddress
+    }
+    
+    func isContentEqual(to source: LeaderBoardSecondSectionCellViewModel) -> Bool {
+        return self.actionCount == source.actionCount
+    }
+    
+}

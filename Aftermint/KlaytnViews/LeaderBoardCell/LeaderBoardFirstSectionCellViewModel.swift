@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DifferenceKit
 
 enum LeaderBoardError: Error {
     case FirstSectionFetchError
@@ -17,7 +18,16 @@ enum LeaderBoardError: Error {
 
 final class LeaderBoardFirstSectionCellListViewModel {
     private let fireStoreRepository = FirestoreRepository.shared
-    var leaderBoardFirstSectionVMList: Box<[LeaderBoardFirstSectionCellViewModel]> = Box([])
+    var leaderBoardFirstSectionVMList: Box<[LeaderBoardFirstSectionCellViewModel]> = Box([]) {
+        didSet {
+            guard let vmList = self.leaderBoardFirstSectionVMList.value else { return }
+            self.typeErasedVMList = vmList.map {
+                AnyDifferentiable($0)
+            }
+        }
+    }
+    var typeErasedVMList: [AnyDifferentiable] = []
+    var firstSection: ArraySection<SectionID, AnyDifferentiable> = ArraySection(model: .first, elements: [])
     
     //MARK: - Internal
     func numberOfRowsInSection() -> Int {
@@ -43,8 +53,10 @@ final class LeaderBoardFirstSectionCellListViewModel {
                 
                 if !(self.leaderBoardFirstSectionVMList.value?.isEmpty ?? true) {
                     self.leaderBoardFirstSectionVMList.value?.removeFirst()
+                    self.firstSection.elements.removeFirst()
                 }
                 self.leaderBoardFirstSectionVMList.value?.append(viewModel)
+                self.firstSection.elements.append(AnyDifferentiable(viewModel))
                 
             } else {
                 return
@@ -68,3 +80,12 @@ final class LeaderBoardFirstSectionCellViewModel {
     }
 }
 
+extension LeaderBoardFirstSectionCellViewModel: Differentiable {
+    var differenceIdentifier: String {
+        return self.nftCollectionName
+    }
+    
+    func isContentEqual(to source: LeaderBoardFirstSectionCellViewModel) -> Bool {
+        return self.totalActionCount == source.totalActionCount
+    }
+}
