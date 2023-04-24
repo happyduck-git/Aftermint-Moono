@@ -132,9 +132,9 @@ final class BottomSheetView: PassThroughView {
         setLayout()
         setDelegate()
 
-        firstSectionVM.getFirstSectionVM(ofCollection: .moono)
-        secondSectionVM.getAddressSectionVM()
-
+//        firstSectionVM.getFirstSectionVM(ofCollection: .moono)
+//        secondSectionVM.getAddressSectionVM()
+        self.bottomSheetVM.getItems()
         bind()
         
     }
@@ -227,32 +227,35 @@ final class BottomSheetView: PassThroughView {
     
     private func bind() {
         
-        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] _ in
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.6) {
-                    self?.leaderBoardTableView.reloadData()
-                    self?.leaderBoardTableView.alpha = 1.0
-                }
-            }
-        }
-
-        self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.6) {
-                    self?.leaderBoardTableView.reloadData()
-                    self?.leaderBoardTableView.alpha = 1.0
-                    self?.bottomSheetDelegate?.dataFetched()
-                }
-            }
-        }
+        ///self.bottomSheetVM.changeset으로도 가능하면 firstVM, secondVM 사용부분은 삭제하기
+//        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] _ in
+//            DispatchQueue.main.async {
+//                UIView.animate(withDuration: 0.6) {
+//                    self?.leaderBoardTableView.reloadData()
+//                    self?.leaderBoardTableView.alpha = 1.0
+//                }
+//            }
+//        }
+//
+//        self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
+//            DispatchQueue.main.async {
+//                UIView.animate(withDuration: 0.6) {
+//                    self?.leaderBoardTableView.reloadData()
+//                    self?.leaderBoardTableView.alpha = 1.0
+//                    self?.bottomSheetDelegate?.dataFetched()
+//                }
+//            }
+//        }
 
         self.bottomSheetVM.changeset.bind { [weak self] vm in
             guard let vms = vm else { return }
             for vm in vms {
                 print("VM: \(vm.elementUpdated)")
+                print("Inserted vm: \(vm.elementInserted)")
             }
             
             DispatchQueue.main.async {
+                self?.leaderBoardTableView.alpha = 1.0
                 self?.leaderBoardTableView.reload(
                     using: vms,
                     deleteSectionsAnimation: .none,
@@ -279,6 +282,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        /*
         if section == 0 {
             let numberOfSection = self.firstSectionVM.numberOfRowsInSection()
             return numberOfSection
@@ -286,14 +290,24 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             let numberOfSection = self.secondSectionVM.numberOfRowsInSection()
             return numberOfSection
         }
+         */
+        
+        if section == 0 {
+            guard let numberOfRows = self.bottomSheetVM.source.first?.elements.count else { return 0 }
+            return numberOfRows
+        } else {
+            guard let numberOfRows = self.bottomSheetVM.source.last?.elements.count else { return 0 }
+            return numberOfRows
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardFirstSectionCell.identifier) as? LeaderBoardFirstSectionCell else { return UITableViewCell() }
+            cell.selectionStyle = .none
             cell.resetCell()
-            
+         
             guard let vm = firstSectionVM.modelAt(indexPath) else {
                 return UITableViewCell()
             }
@@ -316,8 +330,9 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell,
                   let vm = self.secondSectionVM.modelAt(indexPath)
             else { return UITableViewCell()}
+            cell.selectionStyle = .none
             cell.resetCell()
-            
+          
             /*
             UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
                 cell.popScoreLabel.textColor = .systemOrange
@@ -334,7 +349,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                     cell.popScoreLabel.text = "\(count)"
                 }
             }
- 
+
             //TODO: Make below logic as a separate function
             if indexPath.row <= 2 {
                 vm.setRankImage(with: cellRankImageAt(indexPath.row))
@@ -342,7 +357,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                 cell.switchRankImageToLabel()
                 vm.setRankNumberWithIndexPath(indexPath.row + 1)
             }
-            
+
             cell.configure(with: vm)
             return cell
         }
@@ -376,6 +391,8 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
         leaderBoardTableView.dataSource = self
         leaderBoardTableView.prefetchDataSource = self
     }
+    
+    
     
 }
 

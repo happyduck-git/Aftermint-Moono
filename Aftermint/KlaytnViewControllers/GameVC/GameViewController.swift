@@ -304,11 +304,11 @@ final class GameViewController: UIViewController {
             }
 
             self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
-            self.nickNameLabel.text = currentUserViewModel?.bottomLabelText
+            self.nickNameLabel.text = "NFTs \(currentUserViewModel?.bottomLabelText ?? "0")"
             /// Scoreboard part
 //            self.popScoreStack.bottomLabelText = String(describing: currentUserViewModel?.popScore ?? 0)
 //            self.actionCountStack.bottomLabelText = String(describing: currentUserViewModel?.actionCount ?? 0)
-            
+            self.nftsStack.bottomLabelText = currentUserViewModel?.bottomLabelText ?? "0"
             self.tempPopScore = currentUserViewModel?.popScore ?? 0
             self.tempActionCount = currentUserViewModel?.actionCount ?? 0
             self.popScoreStack.bottomLabelText = String(describing: self.tempPopScore)

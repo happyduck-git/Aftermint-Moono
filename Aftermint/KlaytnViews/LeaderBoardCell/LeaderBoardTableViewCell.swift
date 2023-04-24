@@ -120,6 +120,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     
     internal func resetCell() {
         self.rankLabel.text = nil
+        self.rankImageView.image = nil
 //        self.userProfileImageView.image = nil
         self.popScoreLabel.text = nil
         self.popScoreLabel.textColor = .white

@@ -25,8 +25,8 @@ final class BottomSheetViewModel {
     var source: [ArraySection<SectionID, AnyDifferentiable>] = []
     
     func getItems() {
-        guard let firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
-              let secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
+        guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
+              var secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
             return
         }
         
@@ -47,6 +47,7 @@ final class BottomSheetViewModel {
         group.enter()
         self.firstListVM.getFirstSectionVM(ofCollection: .moono) {
             group.leave()
+            firstSectionOldVal.append($0)
             firstSectionNewVal.append($0)
         }
         
@@ -54,6 +55,7 @@ final class BottomSheetViewModel {
         group.enter()
         self.secondListVM.getAddressSectionVM {
             group.leave()
+            secondSectionOldVal = $0
             secondSectionNewVal = $0
         }
         
