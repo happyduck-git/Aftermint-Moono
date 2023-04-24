@@ -23,6 +23,7 @@ final class BottomSheetView: PassThroughView {
 
     var firstSectionVM: LeaderBoardFirstSectionCellListViewModel
     var secondSectionVM: LeaderBoardSecondSectionCellListViewModel
+    let bottomSheetVM: BottomSheetViewModel
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
     var currentUserScoreUpdateHandler: ((Int64) -> Void)?
@@ -111,10 +112,12 @@ final class BottomSheetView: PassThroughView {
     init(
         frame: CGRect,
         firstSectionVM: LeaderBoardFirstSectionCellListViewModel,
-        secondSectionVM: LeaderBoardSecondSectionCellListViewModel
+        secondSectionVM: LeaderBoardSecondSectionCellListViewModel,
+        bottomSheetVM: BottomSheetViewModel
     ) {
         self.firstSectionVM = firstSectionVM
         self.secondSectionVM = secondSectionVM
+        self.bottomSheetVM = bottomSheetVM
         super.init(frame: frame)
 
         self.backgroundColor = .clear
@@ -131,6 +134,7 @@ final class BottomSheetView: PassThroughView {
 
         firstSectionVM.getFirstSectionVM(ofCollection: .moono)
         secondSectionVM.getAddressSectionVM()
+
         bind()
         
     }
@@ -221,30 +225,9 @@ final class BottomSheetView: PassThroughView {
         self.layoutIfNeeded()
     }
     
-    var demoVMList: [LeaderBoardFirstSectionCellViewModel] = [] {
-        didSet {
-            oldValue.forEach { vm in
-                
-            }
-        }
-    }
-    
     private func bind() {
-       
-        guard let secondVM = self.secondSectionVM.leaderBoardVMList.value else { return }
-       
-        let typeErasedSecondVM = secondVM.map { vm in
-            AnyDifferentiable(vm)
-        }
         
-        let secondSection = ArraySection<SectionID, AnyDifferentiable>(model: .second, elements: typeErasedSecondVM)
-        
-        let source: [ArraySection<SectionID, AnyDifferentiable>] = [secondSection]
-        
-        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] list in
-            guard let list = list else { return }
-            self?.demoVMList = list
-            
+        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] _ in
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.6) {
                     self?.leaderBoardTableView.reloadData()
@@ -252,7 +235,7 @@ final class BottomSheetView: PassThroughView {
                 }
             }
         }
-        
+
         self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.6) {
@@ -262,25 +245,28 @@ final class BottomSheetView: PassThroughView {
                 }
             }
         }
-        
-        self.secondSectionVM.changeset.bind { [weak self] changeset in
-            guard let vm = changeset else { return }
+
+        self.bottomSheetVM.changeset.bind { [weak self] vm in
+            guard let vms = vm else { return }
+            for vm in vms {
+                print("VM: \(vm.elementUpdated)")
+            }
+            
             DispatchQueue.main.async {
                 self?.leaderBoardTableView.reload(
-                    using: vm,
+                    using: vms,
                     deleteSectionsAnimation: .none,
                     insertSectionsAnimation: .none,
                     reloadSectionsAnimation: .none,
                     deleteRowsAnimation: .fade,
-                    insertRowsAnimation: .left,
+                    insertRowsAnimation: .bottom,
                     reloadRowsAnimation: .middle,
-                    setData: { collection in
-                        self?.secondSectionVM.leaderBoardVMList.value = collection
-                        self?.secondSectionVM.oldVMList = collection
-                        
+                    setData: { coll in
+                        self?.bottomSheetVM.source = coll
                     })
             }
         }
+         
     }
     
 }
@@ -312,6 +298,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             
+            /*
             UIView.transition(with: cell.popScoreLabel, duration: 0.8, options: .transitionCrossDissolve) {
                 cell.popScoreLabel.textColor = .systemOrange
             } completion: { _ in
@@ -319,6 +306,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                     cell.popScoreLabel.textColor = .white
                 }
             }
+             */
             
             cell.configure(with: vm)
             
@@ -329,20 +317,16 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                   let vm = self.secondSectionVM.modelAt(indexPath)
             else { return UITableViewCell()}
             cell.resetCell()
-
-            guard let indices = self.secondSectionVM.changedIndicies.value else { return UITableViewCell() }
-            for index in indices {
-                if indexPath.row == Int(index) {
-                    print("Index: \(index)")
-                    UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
-                        cell.popScoreLabel.textColor = .systemOrange
-                    } completion: { _ in
-                        UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
-                            cell.popScoreLabel.textColor = .white
-                        }
-                    }
+            
+            /*
+            UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
+                cell.popScoreLabel.textColor = .systemOrange
+            } completion: { _ in
+                UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
+                    cell.popScoreLabel.textColor = .white
                 }
             }
+             */
             
             if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)

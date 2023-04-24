@@ -68,7 +68,7 @@ struct MoonoMockMetaData {
 struct MoonoMockUserData {
     
     /// Changing this prorperty value will decide what mock AftermintUser object to use from the userList property
-    private let mockIndex: Int = 2
+    private let mockIndex: Int = 6
  
     private let userList: [AfterMintUser] = [
         AfterMintUser(username: "Rebecca",
@@ -107,6 +107,13 @@ struct MoonoMockUserData {
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 7),
+        AfterMintUser(username: "miniminimi",
+                          address: "0xD6d98ee36a4fC08A4916f6b90D75A273554Df4b7",
+                          imageUrl: "miniminimi",
+                          popCount: 0,
+                          actionCount: 0,
+                          totalNfts: 7),
+
     ]
     
     func getOneUserData() -> AfterMintUser {

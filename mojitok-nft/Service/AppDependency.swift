@@ -87,10 +87,17 @@ struct AppDependency {
                 bottomSheetVC: benefitTabBottomVC
             )
         
+        let firstVM = LeaderBoardFirstSectionCellListViewModel()
+        let secondVM = LeaderBoardSecondSectionCellListViewModel()
+        
         let mainTabBarControllerDependency: KlaytnTabViewController.Dependency =
             .init(
-                leaderBoardFirstListViewModel: { LeaderBoardFirstSectionCellListViewModel() },
-                leaderBoardSecondListViewModel: { LeaderBoardSecondSectionCellListViewModel() },
+                leaderBoardFirstListViewModel: { firstVM },
+                leaderBoardSecondListViewModel: { secondVM },
+                bottomSheetVM: BottomSheetViewModel(
+                    firstListVM: firstVM,
+                    secondListVM: secondVM
+                ),
                 homeViewControllerDependency: homeViewControllerDependency,
                 bookmarkVCDependency: bookmarkVCDependency,
                 calendarVCDependency: calendarVCDependency

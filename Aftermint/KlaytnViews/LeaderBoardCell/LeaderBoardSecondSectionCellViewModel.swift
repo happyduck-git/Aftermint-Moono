@@ -18,11 +18,10 @@ final class LeaderBoardSecondSectionCellListViewModel {
     
     private let fireStoreRepository = FirestoreRepository.shared
     var leaderBoardVMList: Box<[LeaderBoardSecondSectionCellViewModel]> = Box([])
-    var touchCount: Box<Int> = Box(0)
 
-    var changedIndicies: Box<[UInt]> = Box([])
-    var oldVMList: [LeaderBoardSecondSectionCellViewModel] = []
-    var changeset: Box<StagedChangeset<[LeaderBoardSecondSectionCellViewModel]>> = Box(StagedChangeset([]))
+    var secondSection: ArraySection<SectionID, AnyDifferentiable> = ArraySection(model: .second, elements: [])
+    
+    var touchCount: Box<Int> = Box(0)
     
     // MARK: - Init
     init() {
@@ -48,9 +47,37 @@ final class LeaderBoardSecondSectionCellListViewModel {
     }
     
     func getAddressSectionVM() {
-        
-        guard let oldVms = self.leaderBoardVMList.value else { return }
-        self.oldVMList = oldVms
+
+        self.fireStoreRepository.getAllAddress { addressList in
+            guard let addressList = addressList else {
+                return
+            }
+            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
+            let initialRank = 1
+            
+            let viewModels = addressList.map { address in
+                let viewModel = LeaderBoardSecondSectionCellViewModel(
+                    ownerAddress: address.ownerAddress,
+                    rankImage: rankImage,
+                    rank: initialRank,
+                    userProfileImage: address.profileImageUrl,
+                    topLabelText: address.ownerAddress,
+                    bottomLabelText: "NFTs \(address.ownedNFTs)",
+                    actionCount: address.actionCount,
+                    popScore: address.popScore
+                )
+                return viewModel
+            }
+           
+            self.leaderBoardVMList.value = viewModels
+//            self.diff = viewModels.difference(from: self.oldVMList)
+            
+            self.delegate?.dataFetched2()
+        }
+    }
+    
+    /// DifferenceKit Test
+    func getAddressSectionVM(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
         
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else {
@@ -72,9 +99,9 @@ final class LeaderBoardSecondSectionCellListViewModel {
                 )
                 return viewModel
             }
-            self.changeset.value = StagedChangeset(source: self.oldVMList, target: viewModels)
            
             self.leaderBoardVMList.value = viewModels
+            completion(viewModels)
             self.delegate?.dataFetched2()
         }
     }
@@ -129,7 +156,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
 extension LeaderBoardSecondSectionCellListViewModel: FirestoreRepositoryDelegate {
     
     func dataChangedIndex(indices: [UInt]) {
-        self.changedIndicies.value = indices
+        
 //        print("Changed indices: \(indices)")
     }
     
@@ -188,4 +215,14 @@ extension LeaderBoardSecondSectionCellViewModel: Differentiable {
         return self.actionCount == source.actionCount
     }
     
+}
+
+extension LeaderBoardSecondSectionCellViewModel: Equatable {
+    static func == (lhs: LeaderBoardSecondSectionCellViewModel, rhs: LeaderBoardSecondSectionCellViewModel) -> Bool {
+        if (lhs.ownerAddress == rhs.ownerAddress) && (lhs.actionCount == rhs.actionCount) {
+            return true
+        } else {
+            return false
+        }
+    }
 }

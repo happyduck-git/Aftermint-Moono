@@ -17,6 +17,7 @@ final class GameViewController: UIViewController {
     // MARK: - Dependency
     private var leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
     private var leaderBoardSecondSectionViewModel: LeaderBoardSecondSectionCellListViewModel
+    private var bottomSheetVM: BottomSheetViewModel
     private var scene: MoonoGameScene?
     
     /// TEMP ========================
@@ -133,7 +134,8 @@ final class GameViewController: UIViewController {
         let bottomSheet = BottomSheetView(
             frame: .zero,
             firstSectionVM: leaderBoardFirstSectionViewModel,
-            secondSectionVM: leaderBoardSecondSectionViewModel
+            secondSectionVM: leaderBoardSecondSectionViewModel,
+            bottomSheetVM: bottomSheetVM
         )
         bottomSheet.bottomSheetColor = AftermintColor.backgroundNavy
         bottomSheet.barViewColor = .darkGray
@@ -144,10 +146,12 @@ final class GameViewController: UIViewController {
     // MARK: - Init
     init(
         leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel,
-        leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
+        leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel,
+        bottomSheetVM: BottomSheetViewModel
     ) {
         self.leaderBoardSecondSectionViewModel = leaderBoardListViewModel
         self.leaderBoardFirstSectionViewModel = leaderBoardFirstSectionViewModel
+        self.bottomSheetVM = bottomSheetVM
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -281,6 +285,7 @@ final class GameViewController: UIViewController {
             )
             self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
             self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
+            self.bottomSheetVM.getItems()
         }
     }
     
@@ -347,7 +352,7 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
         self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
         
-        self.bottomSheetView.currentUserScoreUpdateHandler?(self.tempActionCount)
+        self.bottomSheetView.currentUserScoreUpdateHandler?(self.tempPopScore)
     }
 
 }

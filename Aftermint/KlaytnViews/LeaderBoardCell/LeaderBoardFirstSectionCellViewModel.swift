@@ -18,14 +18,7 @@ enum LeaderBoardError: Error {
 
 final class LeaderBoardFirstSectionCellListViewModel {
     private let fireStoreRepository = FirestoreRepository.shared
-    var leaderBoardFirstSectionVMList: Box<[LeaderBoardFirstSectionCellViewModel]> = Box([]) {
-        didSet {
-            guard let vmList = self.leaderBoardFirstSectionVMList.value else { return }
-            self.typeErasedVMList = vmList.map {
-                AnyDifferentiable($0)
-            }
-        }
-    }
+    var leaderBoardFirstSectionVMList: Box<[LeaderBoardFirstSectionCellViewModel]> = Box([])
     var typeErasedVMList: [AnyDifferentiable] = []
     var firstSection: ArraySection<SectionID, AnyDifferentiable> = ArraySection(model: .first, elements: [])
     
@@ -53,16 +46,38 @@ final class LeaderBoardFirstSectionCellListViewModel {
                 
                 if !(self.leaderBoardFirstSectionVMList.value?.isEmpty ?? true) {
                     self.leaderBoardFirstSectionVMList.value?.removeFirst()
-                    self.firstSection.elements.removeFirst()
                 }
                 self.leaderBoardFirstSectionVMList.value?.append(viewModel)
-                self.firstSection.elements.append(AnyDifferentiable(viewModel))
-                
             } else {
                 return
             }
         }
     }
+    
+    func getFirstSectionVM(ofCollection collectionType: CollectionType, completion: @escaping ((LeaderBoardFirstSectionCellViewModel) -> Void)) {
+        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
+            guard let collection = collection else {
+                return
+            }
+            if collection.address == K.ContractAddress.moono {
+                let viewModel = LeaderBoardFirstSectionCellViewModel(
+                    nftImage: collection.imageUrl,
+                    nftCollectionName: collection.name,
+                    totalActionCount: collection.totalActionCount,
+                    totalPopScore: collection.totalPopCount
+                )
+                
+                if !(self.leaderBoardFirstSectionVMList.value?.isEmpty ?? true) {
+                    self.leaderBoardFirstSectionVMList.value?.removeFirst()
+                }
+                self.leaderBoardFirstSectionVMList.value?.append(viewModel)
+                completion(viewModel)
+            } else {
+                return
+            }
+        }
+    }
+    
 }
 
 final class LeaderBoardFirstSectionCellViewModel {

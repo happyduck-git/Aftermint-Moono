@@ -13,6 +13,7 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
     struct Dependency {
         let leaderBoardFirstListViewModel: () -> LeaderBoardFirstSectionCellListViewModel
         let leaderBoardSecondListViewModel: () -> LeaderBoardSecondSectionCellListViewModel
+        let bottomSheetVM: BottomSheetViewModel
         let homeViewControllerDependency: KlaytnHomeViewController.Dependency
 //        let lottieVCDependency: LottieViewController.Dependency
         let bookmarkVCDependency: BookmarkViewController.Dependency
@@ -21,6 +22,7 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
     
     private let leaderBoardFirstListViewModel: LeaderBoardFirstSectionCellListViewModel
     private let leaderBoardSecondListViewModel: LeaderBoardSecondSectionCellListViewModel
+    private let bottomSheetVM: BottomSheetViewModel
     private let homeViewControllerDependency: KlaytnHomeViewController.Dependency
     private let lottieVCDependency: LottieViewController.Dependency
     private let bookmarkVCDependency: BookmarkViewController.Dependency
@@ -30,6 +32,7 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
     init(
          leaderBoardFirstViewModel: LeaderBoardFirstSectionCellListViewModel,
          leaderBoardSecondViewModel: LeaderBoardSecondSectionCellListViewModel,
+         bottomSheetVM: BottomSheetViewModel,
          homeViewControllerDependency: KlaytnHomeViewController.Dependency,
          lottieViewControllerDependency: LottieViewController.Dependency,
          bookmarkVCDependency: BookmarkViewController.Dependency,
@@ -37,6 +40,7 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
     ) {
         self.leaderBoardFirstListViewModel = leaderBoardFirstViewModel
         self.leaderBoardSecondListViewModel = leaderBoardSecondViewModel
+        self.bottomSheetVM = bottomSheetVM
         self.homeViewControllerDependency = homeViewControllerDependency
         self.lottieVCDependency = lottieViewControllerDependency
         self.bookmarkVCDependency = bookmarkVCDependency
@@ -85,7 +89,9 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
         marketVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.marketOn.rawValue)?.withRenderingMode(.alwaysOriginal)
 
         let gameVC = GameViewController(leaderBoardListViewModel: self.leaderBoardSecondListViewModel,
-                                        leaderBoardFirstSectionViewModel: self.leaderBoardFirstListViewModel)
+                                        leaderBoardFirstSectionViewModel: self.leaderBoardFirstListViewModel,
+                                        bottomSheetVM: self.bottomSheetVM
+        )
         gameVC.tabBarItem.image = UIImage(named: TabBarAsset.gameOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         gameVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.gameOn.rawValue)?.withRenderingMode(.alwaysOriginal)
         

@@ -148,6 +148,7 @@ class LoginViewController: BaseViewController, View {
         let homeVC = KlaytnTabViewController(
             leaderBoardFirstViewModel: mainTabBarVCDependency.leaderBoardFirstListViewModel(),
             leaderBoardSecondViewModel: mainTabBarVCDependency.leaderBoardSecondListViewModel(),
+            bottomSheetVM: mainTabBarVCDependency.bottomSheetVM,
             homeViewControllerDependency: mainTabBarVCDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieVCDependency,
             bookmarkVCDependency: bookmarkVCDependency,

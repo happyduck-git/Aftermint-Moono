@@ -157,6 +157,7 @@ class StartViewController: UIViewController {
         let vc = KlaytnTabViewController(
             leaderBoardFirstViewModel: mainTabBarViewControllerDependency.leaderBoardFirstListViewModel(),
             leaderBoardSecondViewModel: mainTabBarViewControllerDependency.leaderBoardSecondListViewModel(),
+            bottomSheetVM: mainTabBarViewControllerDependency.bottomSheetVM,
             homeViewControllerDependency: mainTabBarViewControllerDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieViewControllerDependency,
             bookmarkVCDependency: bookmarkVCDependency,
