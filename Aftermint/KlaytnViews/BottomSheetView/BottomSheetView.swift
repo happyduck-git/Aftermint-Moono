@@ -237,22 +237,25 @@ final class BottomSheetView: PassThroughView {
 //            }
 //        }
 //
-//        self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
-//            DispatchQueue.main.async {
-//                UIView.animate(withDuration: 0.6) {
-//                    self?.leaderBoardTableView.reloadData()
-//                    self?.leaderBoardTableView.alpha = 1.0
-//                    self?.bottomSheetDelegate?.dataFetched()
-//                }
-//            }
-//        }
+        self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.6) {
+                    self?.leaderBoardTableView.reloadData()
+                    self?.leaderBoardTableView.alpha = 1.0
+                    self?.bottomSheetDelegate?.dataFetched()
+                }
+            }
+        }
 
         self.bottomSheetVM.changeset.bind { [weak self] vm in
             guard let vms = vm else { return }
+            
+            #if DEBUG
             for vm in vms {
-                print("VM: \(vm.elementUpdated)")
-                print("Inserted vm: \(vm.elementInserted)")
+                print("updated vm: \(vm.elementUpdated)")
+                print("inserted vm: \(vm.elementInserted)")
             }
+            #endif
             
             DispatchQueue.main.async {
                 self?.leaderBoardTableView.alpha = 1.0
@@ -345,6 +348,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             
             if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
+                print("Index: \(indexPath.row)")
                 self.currentUserScoreUpdateHandler = { count in
                     cell.popScoreLabel.text = "\(count)"
                 }

@@ -62,7 +62,8 @@ final class LeaderBoardSecondSectionCellListViewModel {
                     rank: initialRank,
                     userProfileImage: address.profileImageUrl,
                     topLabelText: address.ownerAddress,
-                    bottomLabelText: "NFTs \(address.ownedNFTs)",
+//                    bottomLabelText: "NFTs \(address.ownedNFTs)",
+                    bottomLabelText: "\(address.ownedNFTs)",
                     actionCount: address.actionCount,
                     popScore: address.popScore
                 )

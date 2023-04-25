@@ -11,7 +11,7 @@ import SpriteKit
 final class GameViewController: UIViewController {
     
     // MARK: - Constants
-    private var nickNameLabelText: String = "월요 병아리"
+    private var nickNameLabelText: String = ""
     private var initialTouchScore: Int = 0
     
     // MARK: - Dependency
@@ -31,6 +31,7 @@ final class GameViewController: UIViewController {
             self.popScoreLabel.text = "\(self.touchCountToShow)"
         }
     }
+    private var numberOfOwnedNfts: Int64 = 0
     
     // MARK: - UI Elements
     private let userImageView: UIImageView = {
@@ -168,9 +169,6 @@ final class GameViewController: UIViewController {
 
         self.bottomSheetView.bottomSheetDelegate = self
         self.leaderBoardSecondSectionViewModel.delegate = self
-        
-        //Correct loction to call this?
-//        getCurrentUserViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -190,8 +188,6 @@ final class GameViewController: UIViewController {
         
         self.saveAndRetrieveGameData(after: 5.0)
         
-        //OGCode
-//            self.leaderBoardListViewModel.increaseTouchCount(self.touchCount)
     }
     
     override func viewWillLayoutSubviews() {
@@ -273,9 +269,8 @@ final class GameViewController: UIViewController {
         ///Set Timer scheduler to repeat certain action
         timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { _ in
             print("Accumulated touchCount: \(self.touchCount)")
-            
             self.leaderBoardSecondSectionViewModel.saveCountNumber(
-                popScore: self.touchCount * Int64(mockUserData.totalNfts),
+                popScore: self.touchCount * self.numberOfOwnedNfts,
                 actionCount: self.touchCount,
                 ownerAddress: mockUserData.address,
                 nftImageUrl: mockCardData.imageUrl,
@@ -283,7 +278,8 @@ final class GameViewController: UIViewController {
                 totalNfts: mockUserData.totalNfts,
                 ofCollectionType: .moono
             )
-            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
+            /// Delete if not needed
+//            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
             self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
             self.bottomSheetVM.getItems()
         }
@@ -292,6 +288,7 @@ final class GameViewController: UIViewController {
     /// Get viewModel for current user information
     private func getCurrentUserViewModel() {
         let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
+        self.numberOfOwnedNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") ?? 0
         DispatchQueue.main.async {
             /// User information part
             self.imageStringToImage(with: currentUserViewModel?.userProfileImage ?? "rebecca") { result in
@@ -306,8 +303,6 @@ final class GameViewController: UIViewController {
             self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
             self.nickNameLabel.text = "NFTs \(currentUserViewModel?.bottomLabelText ?? "0")"
             /// Scoreboard part
-//            self.popScoreStack.bottomLabelText = String(describing: currentUserViewModel?.popScore ?? 0)
-//            self.actionCountStack.bottomLabelText = String(describing: currentUserViewModel?.actionCount ?? 0)
             self.nftsStack.bottomLabelText = currentUserViewModel?.bottomLabelText ?? "0"
             self.tempPopScore = currentUserViewModel?.popScore ?? 0
             self.tempActionCount = currentUserViewModel?.actionCount ?? 0
@@ -343,11 +338,13 @@ extension GameViewController {
 extension GameViewController: MoonoGameSceneDelegate {
     
     func didReceiveTouchCount(number: Int64) {
-        print("Touch received: \(number)")
+        let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
+        guard let numberOfNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") else { return }
+
         self.touchCountToShow += number
         self.touchCount += number
         
-        self.tempPopScore += (number * Int64(MoonoMockUserData().getOneUserData().totalNfts))
+        self.tempPopScore += (number * Int64(numberOfNfts))
         self.tempActionCount += number
         self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
         self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
@@ -362,8 +359,8 @@ extension GameViewController: BottomSheetViewDelegate {
     
     ///Get notified when the data saved to firestore
     func dataFetched() {
-        self.touchCount = 0
-        self.getCurrentUserViewModel()
+//        self.touchCount = 0
+//        self.getCurrentUserViewModel()
     }
 
 }

@@ -83,9 +83,11 @@ class MarketViewController: UIViewController {
             dropDownView.widthAnchor.constraint(equalToConstant: 100.0),
             dropDownView.heightAnchor.constraint(equalToConstant: 32.0),
             
-            nftCollectionView.topAnchor.constraint(equalTo: dropDownView.bottomAnchor, constant: 24.0),
+//            nftCollectionView.topAnchor.constraint(equalTo: dropDownView.bottomAnchor, constant: 24.0),
+            nftCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: dropDownView.bottomAnchor, multiplier: 2),
             nftCollectionView.leadingAnchor.constraint(equalTo: dropDownView.leadingAnchor),
-            nftCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
+//            nftCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: nftCollectionView.trailingAnchor, multiplier: 2),
             nftCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarHeight))
         ])
     }
@@ -121,7 +123,7 @@ extension MarketViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let viewHeight = view.frame.size.height
         let viewWidth = view.frame.size.width
         
-        return CGSize(width: viewWidth / 2.34, height: viewHeight / 3.76)
+        return CGSize(width: viewWidth / 2.4, height: viewHeight / 4)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

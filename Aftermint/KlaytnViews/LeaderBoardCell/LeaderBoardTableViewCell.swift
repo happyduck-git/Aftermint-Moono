@@ -132,7 +132,7 @@ final class LeaderBoardTableViewCell: UITableViewCell {
         rankImageView.image = vm.rankImage
         rankLabel.text = String(describing: vm.rank)
         nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 15)
-        nftInfoStackView.bottomLabelText = vm.bottomLabelText
+        nftInfoStackView.bottomLabelText = "NFTs \(vm.bottomLabelText)"
         popScoreLabel.text = String(describing: vm.popScore)
 
         self.imageStringToImage(with: vm.userProfileImage) { result in

@@ -82,7 +82,7 @@ struct MoonoMockUserData {
                           imageUrl: "maine",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 45),
+                          totalNfts: 0),
         AfterMintUser(username: "Lucy",
                           address: "0x6a5fe8B4718bC147ba13BD8Dfb31eC6097bfabcB",
                           imageUrl: "lucy",
@@ -95,13 +95,13 @@ struct MoonoMockUserData {
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 15),
-        AfterMintUser(username: "Dorio",
+        AfterMintUser(username: "차가운 화요일",
                           address: "0x8fB1B947E7b9e508C0a1445D1966709C069b6167",
                           imageUrl: "dorio",
                           popCount: 0,
                           actionCount: 0,
                           totalNfts: 13),
-        AfterMintUser(username: "Kiwi",
+        AfterMintUser(username: "sori",
                           address: "0xcFFA6E1E4092351d58cF8e00FbC3112A13334e45",
                           imageUrl: "kiwi",
                           popCount: 0,
@@ -112,7 +112,7 @@ struct MoonoMockUserData {
                           imageUrl: "miniminimi",
                           popCount: 0,
                           actionCount: 0,
-                          totalNfts: 7),
+                          totalNfts: 4),
 
     ]
     
