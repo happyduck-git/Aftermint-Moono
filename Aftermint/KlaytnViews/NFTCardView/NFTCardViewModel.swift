@@ -7,7 +7,13 @@
 
 import Foundation
 
+protocol NFTCardViewModelDelegate: AnyObject {
+    func didLoadNfts()
+}
+
 class NFTCardViewModel {
+    
+    weak var delegate: NFTCardViewModelDelegate?
     
     var nftCardCellViewModel: Box<[NftCardCellViewModel]> = Box([])
     var nftSelected: [Bool] = []
@@ -63,6 +69,9 @@ class NFTCardViewModel {
                 return viewModel
             }
             completion(.success(viewModels))
+            DispatchQueue.main.async {
+                self.delegate?.didLoadNfts()
+            }
             return
         })
         
