@@ -2,15 +2,15 @@
 //  Card.swift
 //  Aftermint
 //
-//  Created by Platfarm on 2023/03/20.
+//  Created by Platfarm on 2023/04/12.
 //
 
 import Foundation
 
-struct Card: Storable, Codable {
-    let imageUri: String
-    let collectionId: String
+struct Card: Storable {
     let tokenId: String
-    let count: Int64
+    let ownerAddress: String
+    let popScore: Int64
+    let actionCount: Int64
+    let imageUrl: String
 }
-

@@ -70,17 +70,16 @@ final class MarketCell: UICollectionViewCell {
             nftImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             nftImageView.heightAnchor.constraint(equalToConstant: self.frame.size.width),
             
-            nameStackView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 12.0),
+            nameStackView.topAnchor.constraint(equalToSystemSpacingBelow: nftImageView.bottomAnchor, multiplier: 1),
             nameStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             nameStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
-            priceLabel.topAnchor.constraint(equalTo: nameStackView.bottomAnchor, constant: 4.0),
+            priceLabel.topAnchor.constraint(equalToSystemSpacingBelow: nameStackView.bottomAnchor, multiplier: 1),
             priceLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             priceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            priceLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         
-        priceLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        nameStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
     
     public func configure(image: UIImage?) {

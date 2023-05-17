@@ -95,11 +95,12 @@ class NftCardCell: UICollectionViewCell {
             cardFrontView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             cardFrontView.heightAnchor.constraint(equalToConstant: self.frame.size.width),
             
-            traitView.topAnchor.constraint(equalTo: cardBackView.bottomAnchor, constant: 10),
-            traitView.topAnchor.constraint(equalTo: cardFrontView.bottomAnchor, constant: 10),
+            traitView.topAnchor.constraint(equalToSystemSpacingBelow: cardBackView.bottomAnchor, multiplier: 1),
+            traitView.topAnchor.constraint(equalToSystemSpacingBelow: cardFrontView.bottomAnchor, multiplier: 1),
+
             traitView.leadingAnchor.constraint(equalToSystemSpacingAfter: cardBackView.leadingAnchor, multiplier: 2),
             cardBackView.trailingAnchor.constraint(equalToSystemSpacingAfter: traitView.trailingAnchor, multiplier: 2),
-            traitView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20)
+            self.bottomAnchor.constraint(equalToSystemSpacingBelow: traitView.bottomAnchor, multiplier: 1)
             
         ])
         

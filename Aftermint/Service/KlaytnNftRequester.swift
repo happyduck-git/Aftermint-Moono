@@ -8,6 +8,8 @@
 import Foundation
 
 class KlaytnNftRequester {
+    private static let TOKEN_URL__GET_NFT_CONTRACT_INFO = "https://th-api.klaytnapi.com/v2/contract/nft/%@"
+    private static let TOKEN_URL__GET_NUMBER_OF_HOLDERS = "https://th-api.klaytnapi.com/v2/contract/nft/%@/holder"
     private static let TOKEN_URL__GET_NFTS_BY_OWNER_ADDRESS__PARAMS_2 = "https://th-api.klaytnapi.com/v2/contract/nft/%@/owner/%@"
     private static let TOKEN_HEADER__KEY__CHAIN_ID = "x-chain-id"
     private static let TOKEN_HEADER__VALUE__CHAIN_ID = "8217"
@@ -72,6 +74,52 @@ class KlaytnNftRequester {
         }
         return jsonData
     }
+    
+    private static func baseUrlRequest(urlString: String) -> URLRequest {
+        let url = URL(string: urlString)! //TODO: Implicit unwrapping need to be handled properly
+        var urlRequest = URLRequest(url: url)
+        urlRequest.addValue(
+            KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID,
+            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__CHAIN_ID
+        )
+        urlRequest.addValue(
+            KlaytnNftRequester.TOKEN_HEADER__VALUE__AUTHORIZATION,
+            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__AUTHORIZATION
+        )
+        return urlRequest
+    }
+    
+    // MARK: - Get Total Number of Issued NFTs
+
+    public static func getNumberOfIssuedNFTs(ofCollection nftAddress: String) async throws -> NFTContractInfoResponse? {
+        let urlString = String(format: TOKEN_URL__GET_NFT_CONTRACT_INFO, nftAddress)
+        let urlRequest = self.baseUrlRequest(urlString: urlString)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        if self.processResponse(data: data, response: response, error: nil) {
+            guard let result = self.convertTo(type: NFTContractInfoResponse.self, data: data) else {
+                throw URLError(.cannotParseResponse)
+            }
+            return result
+        } else {
+            throw URLError(.cannotParseResponse)
+        }
+    }
+    
+    // MARK: - Get Number of Holders
+    public static func getNumberOfHolders(ofCollection nftAddress: String) async throws -> NFTHolderResponse? {
+        let urlString = String(format: TOKEN_URL__GET_NUMBER_OF_HOLDERS, nftAddress)
+        let urlRequest = self.baseUrlRequest(urlString: urlString)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        if self.processResponse(data: data, response: response, error: nil) {
+            guard let result = self.convertTo(type: NFTHolderResponse.self, data: data) else {
+                throw URLError(.cannotParseResponse)
+            }
+            return result
+        } else {
+            throw URLError(.cannotParseResponse)
+        }
+    }
+    
     
     //MARK: - Get Nfts
     public static func requestToGetNfts(

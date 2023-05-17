@@ -13,7 +13,7 @@ class MarketViewController: UIViewController {
     /// use of dummy images will be replaced with real image data from Opensea
     let moonoMockImageData: MoonoMockImageData = MoonoMockImageData()
     
-    /// NOTE: Change the dropDown view using DropDown library
+    /// TODO: Change the dropDown view using DropDown library
     let dropDownView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: MarketAsset.dropDown.rawValue)
@@ -48,18 +48,23 @@ class MarketViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("MarketVC - \(#function)")
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         navigationBarSetup()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        print("MarketVC - \(#function)")
+        
+        /// When NavigationController's navigation bar is hidden
+        /// due to view hierarchy, show hidden navigation bar in viewDidAppear.
+        if self.navigationController?.isNavigationBarHidden ?? true {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
+        
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
+
     //MARK: - Set UI & Layout
     private func setUI() {
         view.addSubview(dropDownView)
@@ -71,7 +76,6 @@ class MarketViewController: UIViewController {
     private func setLayout() {
         let tabBarHeight = view.frame.size.height / 8.2
         
-        
         NSLayoutConstraint.activate([
             
             dropDownView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),
@@ -79,9 +83,11 @@ class MarketViewController: UIViewController {
             dropDownView.widthAnchor.constraint(equalToConstant: 100.0),
             dropDownView.heightAnchor.constraint(equalToConstant: 32.0),
             
-            nftCollectionView.topAnchor.constraint(equalTo: dropDownView.bottomAnchor, constant: 24.0),
+//            nftCollectionView.topAnchor.constraint(equalTo: dropDownView.bottomAnchor, constant: 24.0),
+            nftCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: dropDownView.bottomAnchor, multiplier: 2),
             nftCollectionView.leadingAnchor.constraint(equalTo: dropDownView.leadingAnchor),
-            nftCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
+//            nftCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: nftCollectionView.trailingAnchor, multiplier: 2),
             nftCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarHeight))
         ])
     }
@@ -117,7 +123,7 @@ extension MarketViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let viewHeight = view.frame.size.height
         let viewWidth = view.frame.size.width
         
-        return CGSize(width: viewWidth / 2.34, height: viewHeight / 3.76)
+        return CGSize(width: viewWidth / 2.4, height: viewHeight / 4)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

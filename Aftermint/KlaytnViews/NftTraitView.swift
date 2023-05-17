@@ -22,7 +22,7 @@ class NftTraitView: UIView {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 8.0
+        stackView.spacing = 5.0
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -38,6 +38,7 @@ class NftTraitView: UIView {
         let label = UILabel()
         label.text = "Bellygom #1920"
         label.font = BellyGomFont.header04
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = AftermintColor.bellyTitleGrey
         return label
     }()
@@ -63,6 +64,7 @@ class NftTraitView: UIView {
     private let withMeLabel: UILabel = {
         let label = UILabel()
         label.text = "With me"
+        label.adjustsFontSizeToFitWidth = true
         label.font = BellyGomFont.header06
         label.textColor = AftermintColor.traitGrey
         return label
@@ -126,19 +128,18 @@ class NftTraitView: UIView {
             nameAndLevelStack.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             
             cardButton.topAnchor.constraint(equalTo: nameAndLevelStack.topAnchor),
-            cardButton.leadingAnchor.constraint(equalTo: nameAndLevelStack.trailingAnchor, constant: 44),
+            cardButton.leadingAnchor.constraint(equalToSystemSpacingAfter: nameAndLevelStack.trailingAnchor, multiplier: 2),
             cardButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             cardButton.bottomAnchor.constraint(equalTo: nameAndLevelStack.bottomAnchor),
 
-            withMeStackView.topAnchor.constraint(equalTo: nameAndLevelStack.bottomAnchor, constant: 15),
+            withMeStackView.topAnchor.constraint(equalTo: nameAndLevelStack.bottomAnchor),
             withMeStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             withMeStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
-            verticalLine1.topAnchor.constraint(equalTo: nameAndLevelStack.bottomAnchor, constant: 23),
+            verticalLine1.topAnchor.constraint(equalToSystemSpacingBelow: nameAndLevelStack.bottomAnchor, multiplier: 1),
             verticalLine1.widthAnchor.constraint(equalToConstant: 1),
-            verticalLine1.leadingAnchor.constraint(equalTo: withMeStackView.trailingAnchor, constant: 11.5),
-            verticalLine1.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
-
+            verticalLine1.leadingAnchor.constraint(equalToSystemSpacingAfter: withMeStackView.trailingAnchor, multiplier: 1),
+            self.bottomAnchor.constraint(equalToSystemSpacingBelow: verticalLine1.bottomAnchor, multiplier: 1)
         ])
         
         withMeLabel.setContentHuggingPriority(.defaultLow, for: .vertical)

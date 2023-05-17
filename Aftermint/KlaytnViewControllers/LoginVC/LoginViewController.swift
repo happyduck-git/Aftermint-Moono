@@ -10,7 +10,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-class LoginViewController: UIViewController, View {
+class LoginViewController: BaseViewController, View {
     
     // MARK: - Dependency
     struct Dependency {
@@ -57,7 +57,7 @@ class LoginViewController: UIViewController, View {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     private let loginDescription: UILabel = {
         let label = UILabel()
         label.text = LoginAsset.loginDescription.rawValue
@@ -119,12 +119,10 @@ class LoginViewController: UIViewController, View {
         
         walletStackView.addArrangedSubview(favorletButton)
         walletStackView.addArrangedSubview(kaikasButton)
-        
+
     }
     
     private func setLayout() {
-        let viewHeight = UIScreen.main.bounds.size.height
-        
         NSLayoutConstraint.activate([
             
             moonoLoginBackgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -132,12 +130,12 @@ class LoginViewController: UIViewController, View {
             moonoLoginBackgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             moonoLoginBackgroundImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            loginDescription.topAnchor.constraint(equalTo: moonoLoginBackgroundImageView.bottomAnchor, constant: 59),
+            loginDescription.topAnchor.constraint(equalToSystemSpacingBelow: moonoLoginBackgroundImageView.bottomAnchor, multiplier: 3),
             loginDescription.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            walletStackView.topAnchor.constraint(equalTo: loginDescription.bottomAnchor, constant: viewHeight / 67.66),
+            walletStackView.topAnchor.constraint(equalToSystemSpacingBelow: loginDescription.bottomAnchor, multiplier: 2),
             walletStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            walletStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(viewHeight / 8.28))
+            view.bottomAnchor.constraint(equalToSystemSpacingBelow: walletStackView.bottomAnchor, multiplier: 3)
             
         ])
     }
@@ -146,7 +144,9 @@ class LoginViewController: UIViewController, View {
         /// NOTE: Temporarily push directly to KlaytnTabViewController;
         /// Will connect to FavorletWallet application later in the future
         let homeVC = KlaytnTabViewController(
-            vm: mainTabBarVCDependency.leaderBoardListViewModel(),
+            leaderBoardFirstViewModel: mainTabBarVCDependency.leaderBoardFirstListViewModel(),
+            leaderBoardSecondViewModel: mainTabBarVCDependency.leaderBoardSecondListViewModel(),
+            bottomSheetVM: mainTabBarVCDependency.bottomSheetVM,
             homeViewControllerDependency: mainTabBarVCDependency.homeViewControllerDependency,
             lottieViewControllerDependency: lottieVCDependency,
             bookmarkVCDependency: bookmarkVCDependency,
@@ -164,7 +164,7 @@ class LoginViewController: UIViewController, View {
         )
         navigationController?.pushViewController(startVC, animated: true)
     }
-
+    
 }
 
 //MARK: - Bind Action and State
@@ -184,13 +184,30 @@ extension LoginViewController {
                 }
             }
             .disposed(by: disposeBag)
-    
+        
         reactor.state.map { $0.isWalletConnected }
             .bind{ [weak self] isWalletConnected in
                 if isWalletConnected {
                     DispatchQueue.main.async {
                         self?.connectKaikasWallet()
                     }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.alertMessage }
+            .bind { [weak self] alertMessage in
+                guard let errorMessage = alertMessage else { return }
+                let alert = UIAlertController(
+                    title: "Wallet connection error",
+                    message: "There was a problem connecting with your wallet. Please re-try wallet connection. - \(errorMessage)",
+                    preferredStyle: .alert
+                )
+                alert.addAction(
+                    UIAlertAction(title: "Confirm", style: .default)
+                )
+                DispatchQueue.main.async {
+                    self?.present(alert, animated: true)
                 }
             }
             .disposed(by: disposeBag)

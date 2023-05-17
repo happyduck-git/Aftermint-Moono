@@ -38,6 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             let window = UIWindow(windowScene: windowScene)
             window.backgroundColor = AftermintColor.backgroundNavy
+            window.overrideUserInterfaceStyle = .dark
             UINavigationBar.appearance().backIndicatorImage = UIImage(named: "back")
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(named: "back")
 
@@ -62,7 +63,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
             
             let mainTabVC = KlaytnTabViewController(
-                vm: mainTabVCDependency.leaderBoardListViewModel(),
+                leaderBoardFirstViewModel: mainTabVCDependency.leaderBoardFirstListViewModel(),
+                leaderBoardSecondViewModel: mainTabVCDependency.leaderBoardSecondListViewModel(),
+                bottomSheetVM: mainTabVCDependency.bottomSheetVM,
                 homeViewControllerDependency: mainTabVCDependency.homeViewControllerDependency,
                 lottieViewControllerDependency: lottieVCDependency,
                 bookmarkVCDependency: bookmarkVCDependency,
@@ -78,6 +81,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = rootNaviVC
             self.window = window
             window.makeKeyAndVisible()
+            
+            /// Network connection check
+            NetworkMonitor.shared.startMonitoring()
             
             LLog.v()
         }

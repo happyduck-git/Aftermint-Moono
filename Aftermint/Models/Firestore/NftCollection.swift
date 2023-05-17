@@ -2,13 +2,17 @@
 //  NftCollection.swift
 //  Aftermint
 //
-//  Created by Platfarm on 2023/03/20.
+//  Created by Platfarm on 2023/04/12.
 //
 
 import Foundation
 
 struct NftCollection: Storable {
-    let collectionId: String
-    let collectionLogoImage: String
-    let count: Int64
+    let name: String
+    let address: String
+    let imageUrl: String
+    let totalPopCount: Int64
+    let totalActionCount: Int64
+    let totalNfts: Int64
+    let totalHolders: Int64
 }
