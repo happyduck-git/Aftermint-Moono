@@ -26,6 +26,13 @@ class NFTCardView: UIView {
     
     weak var delegate: NFTCardViewDelegate?
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.hidesWhenStopped = true
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
+    
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         
@@ -76,6 +83,8 @@ class NFTCardView: UIView {
         layout()
         setDelegate()
         
+        spinner.startAnimating()
+        
         bind()
         fetchMoonoNft()
     }
@@ -86,6 +95,7 @@ class NFTCardView: UIView {
     
     // MARK: - Set UI and Layout
     private func setUI() {
+        self.addSubview(spinner)
         self.addSubview(stackView)
         stackView.addArrangedSubview(numbersOfNft)
         stackView.addArrangedSubview(numbersOfNftDescription)
@@ -94,6 +104,8 @@ class NFTCardView: UIView {
     }
     
     private func setDelegate() {
+        self.viewModel.delegate = self
+        
         self.nftCollectionView.delegate = self
         self.nftCollectionView.dataSource = self
         
@@ -104,6 +116,10 @@ class NFTCardView: UIView {
     private func layout() {
         
         NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            spinner.widthAnchor.constraint(equalToConstant: 50),
+            spinner.heightAnchor.constraint(equalTo: spinner.widthAnchor),
             
             stackView.topAnchor.constraint(equalTo: self.topAnchor),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1),
@@ -116,7 +132,7 @@ class NFTCardView: UIView {
         ])
         
         stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-    } 
+    }
     
 }
 
@@ -287,6 +303,14 @@ extension NFTCardView: NftCardCellDelegate {
     
     func didTapTemplateButton() {
         delegate?.didTapTemplateButton()
+    }
+    
+}
+
+extension NFTCardView: NFTCardViewModelDelegate {
+    
+    func didLoadNfts() {
+        spinner.stopAnimating()
     }
     
 }

@@ -8,6 +8,7 @@
 import UIKit
 import ReactorKit
 import FirebaseCore
+import AVFoundation
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -84,6 +85,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             /// Network connection check
             NetworkMonitor.shared.startMonitoring()
+            
+            do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
+            }
+            catch {
+                print("Error AVAudionSession setCategory --- \(error.localizedDescription)")
+            }
             
             LLog.v()
         }
