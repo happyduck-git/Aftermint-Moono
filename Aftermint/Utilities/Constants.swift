@@ -43,6 +43,27 @@ struct K {
         static let ownedNFTsFieldKey: String = "ownedNFTs"
         ///Currently not in use
         static let totalDocumentName: String = "Total Count"
+        
+        /// New DB scheme fields
+        static let rootV2Field: String = "root_v2"
+        static let nftScoreSystemField: String = "nft_score_system"
+        static let nftScoreSetField: String = "nft_score_set"
+        static let nftCollectionSetField: String = "nft_collection_set"
+        static let versionField: String = "version"
+        static let chainNameField: String = "chain_name"
+        static let contractAddressField: String = "contract_address"
+        static let profileImageField: String = "profile_image_url"
+        static let profileNameField: String = "profile_name"
+        static let cachedTotalActionCountSetField: String = "cached_total_action_count_set"
+        static let cachedTotalNftScoreSetField: String = "cached_total_nft_score_set"
+        static let cachedWalletAddress: String = "cached_wallet_address"
+        static let nftSetField: String = "nft_set"
+        static let walletAccountSetField: String = "wallet_account_set"
+        static let popgameField: String = "popgame"
+        static let totalCountField: String = "total_count"
+        static let tokenIdField: String = "token_id"
+        static let scoreField: String = "score"
+        static let countField: String = "count"
     }
     
 }

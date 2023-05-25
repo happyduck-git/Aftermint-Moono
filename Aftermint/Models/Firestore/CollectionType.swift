@@ -8,6 +8,6 @@
 import Foundation
 
 enum CollectionType: String {
-    case bellyGom = "BellyGom"
-    case moono = "Moono"
+    case bellyGom = "bellygom"
+    case moono = "moono"
 }

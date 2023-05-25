@@ -16,12 +16,21 @@ protocol FirestoreRepositoryDelegate: AnyObject {
 
 class FirestoreRepository {
     
-    static let shared: FirestoreRepository = FirestoreRepository()
-    private init() {}
+    static let shared: FirestoreRepository = FirestoreRepository(of: .moono)
     
     weak var delegate: FirestoreRepositoryDelegate?
     
     let db = Firestore.firestore()
+    let baseDBPath = Firestore.firestore()
+        .collection(K.FStore.rootV2Field)
+        .document(K.FStore.nftScoreSystemField)
+        .collection(K.FStore.nftCollectionSetField)
+    
+    // MARK: - Init
+    let type: CollectionType
+    private init(of type: CollectionType) {
+        self.type = type
+    }
     
     // MARK: - Save data
     
@@ -226,6 +235,87 @@ class FirestoreRepository {
             ])
         }
     }
+    
+    func saveToNewDB(
+        popScore: Int64,
+        nftTokenId: [String],
+        ownerAddress: String
+    ) {
+        
+        let collectionDocRef = baseDBPath.document(self.type.rawValue)
+        
+        // Save to nft_set collection
+        nftTokenId.forEach { tokenId in
+            let nftDocRef = collectionDocRef
+                .collection(K.FStore.nftSetField)
+                .document(tokenId)
+            // Save wallet address field
+            nftDocRef.setData(
+                [
+                    K.FStore.cachedWalletAddress: ownerAddress,
+                    K.FStore.tokenIdField: nftTokenId
+                ],
+                merge: true
+            )
+            // Save nft score
+            let valueToIncrease: Int64 = 1
+            nftDocRef.collection(K.FStore.nftScoreSetField)
+                .document(K.FStore.popgameField)
+                .setData(
+                    [
+                        K.FStore.scoreField: FieldValue.increment(valueToIncrease)
+                    ],
+                    merge: true
+                )
+        }
+        
+        // Save to cached_total_action_count_set
+        collectionDocRef
+            .collection(K.FStore.cachedTotalActionCountSetField)
+            .document(K.FStore.popgameField)
+            .setData(
+                [
+                    K.FStore.totalCountField: FieldValue.increment(valueToIncrease)
+                ],
+                     merge: true
+            )
+        // Save to cached_total_nft_score_set
+        collectionDocRef
+            .collection(K.FStore.cachedTotalNftScoreSetField)
+            .document(K.FStore.popgameField)
+            .setData(
+                [
+                    K.FStore.cachedTotalNftScoreSetField: FieldValue.increment(popScore)
+            ],
+                merge: true
+            )
+        
+        // Save to wallet_account_set
+        collectionDocRef
+            .collection(K.FStore.walletAccountSetField)
+            .document(ownerAddress)
+            .collection(K.FStore.actionCountFieldKey)
+            .document(K.FStore.popgameField)
+            .setData(
+                [
+                    K.FStore.countField: FieldValue.increment(valueToIncrease)
+                ]
+                ,
+                merge: true
+            )
+        
+        collectionDocRef
+            .collection(K.FStore.cachedTotalNftScoreSetField)
+            .document(K.FStore.popgameField)
+            .setData(
+                [
+                    K.FStore.countField: FieldValue.increment(popScore)
+                ]
+                ,
+                merge: true
+            )
+    }
+    
     
     // MARK: - Retrieve data
     

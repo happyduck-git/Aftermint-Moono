@@ -262,12 +262,30 @@ final class GameViewController: UIViewController {
     
     //MARK: - Private
     
+    private let firestoreRepository = FirestoreRepository.shared
+    
+    private func save(after second: CGFloat) {
+        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
+        timer = Timer.scheduledTimer(
+            withTimeInterval: second,
+            repeats: true,
+            block: { [weak self] _ in
+                guard let self = self else { return }
+                self.firestoreRepository.saveToNewDB(
+                    popScore: self.touchCount * self.numberOfOwnedNfts,
+                    nftTokenId: <#T##[String]#>,
+                    ownerAddress: mockUserData.address
+                )
+            })
+    }
+    
     private func saveAndRetrieveGameData(after second: CGFloat) {
         let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
         
         ///Set Timer scheduler to repeat certain action
-        timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
             print("Accumulated touchCount: \(self.touchCount)")
             self.leaderBoardSecondSectionViewModel.saveCountNumber(
                 popScore: self.touchCount * self.numberOfOwnedNfts,
