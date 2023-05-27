@@ -88,10 +88,7 @@ class KlaytnTabViewController: UITabBarController, UITabBarControllerDelegate {
         marketVC.tabBarItem.image = UIImage(named: TabBarAsset.marketOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         marketVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.marketOn.rawValue)?.withRenderingMode(.alwaysOriginal)
 
-        let gameVC = GameViewController(leaderBoardListViewModel: self.leaderBoardSecondListViewModel,
-                                        leaderBoardFirstSectionViewModel: self.leaderBoardFirstListViewModel,
-                                        bottomSheetVM: self.bottomSheetVM
-        )
+        let gameVC = GameViewController(bottomSheetVM: bottomSheetVM)
         gameVC.tabBarItem.image = UIImage(named: TabBarAsset.gameOff.rawValue)?.withRenderingMode(.alwaysOriginal)
         gameVC.tabBarItem.selectedImage = UIImage(named: TabBarAsset.gameOn.rawValue)?.withRenderingMode(.alwaysOriginal)
         

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		240121AA29A7B49200F60BDA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240121A929A7B49200F60BDA /* Coordinator.swift */; };
 		240121AD29A7B6DF00F60BDA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240121AC29A7B6DF00F60BDA /* AppCoordinator.swift */; };
+		2404DFB62A1F9FDB00FF69F6 /* KASCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404DFB52A1F9FDB00FF69F6 /* KASCacheManager.swift */; };
+		2404DFB82A20E2EF00FF69F6 /* GameViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2404DFB72A20E2EF00FF69F6 /* GameViewViewModel.swift */; };
 		24097B1A2989530000F92366 /* NftCardCellBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B192989530000F92366 /* NftCardCellBackView.swift */; };
 		24097B25298E952600F92366 /* MarketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B24298E952600F92366 /* MarketCell.swift */; };
 		24097B7929913C2E00F92366 /* MarketDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24097B7829913C2E00F92366 /* MarketDetailViewController.swift */; };
@@ -459,6 +461,8 @@
 /* Begin PBXFileReference section */
 		240121A929A7B49200F60BDA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		240121AC29A7B6DF00F60BDA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		2404DFB52A1F9FDB00FF69F6 /* KASCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KASCacheManager.swift; sourceTree = "<group>"; };
+		2404DFB72A20E2EF00FF69F6 /* GameViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewViewModel.swift; sourceTree = "<group>"; };
 		24097B192989530000F92366 /* NftCardCellBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCardCellBackView.swift; sourceTree = "<group>"; };
 		24097B24298E952600F92366 /* MarketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketCell.swift; sourceTree = "<group>"; };
 		24097B7829913C2E00F92366 /* MarketDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketDetailViewController.swift; sourceTree = "<group>"; };
@@ -1108,6 +1112,7 @@
 				36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */,
 				93199EF02989EDE1008D532B /* KASConnectService.swift */,
 				3620690929B9A564008764BE /* OpenSeaApiRequester.swift */,
+				2404DFB52A1F9FDB00FF69F6 /* KASCacheManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -2545,6 +2550,7 @@
 			isa = PBXGroup;
 			children = (
 				93C32FBD29B9A69700DB3CB3 /* GameViewController.swift */,
+				2404DFB72A20E2EF00FF69F6 /* GameViewViewModel.swift */,
 			);
 			path = GameVC;
 			sourceTree = "<group>";
@@ -2884,6 +2890,7 @@
 				3619B1CE29790AC60051C387 /* PrecompAsset.swift in Sources */,
 				93BDD41D29E681FC00E8AAEC /* Card.swift in Sources */,
 				3619B0DE29790AC50051C387 /* Resource.swift in Sources */,
+				2404DFB82A20E2EF00FF69F6 /* GameViewViewModel.swift in Sources */,
 				3690783E297A70050066530D /* HomeViewReactor2.swift in Sources */,
 				3619B10B29790AC50051C387 /* FontMeta.swift in Sources */,
 				3619B16F29790AC60051C387 /* TransformAnimations.swift in Sources */,
@@ -3010,6 +3017,7 @@
 				9300BB7629C840FD00C67A29 /* MoonoMockMetaData.swift in Sources */,
 				93BAFF1229D4051100596999 /* AftermintUser.swift in Sources */,
 				3619B1A929790AC60051C387 /* PathNode.swift in Sources */,
+				2404DFB62A1F9FDB00FF69F6 /* KASCacheManager.swift in Sources */,
 				3619B16029790AC60051C387 /* TransformLayer.swift in Sources */,
 				3619B0E929790AC50051C387 /* TokenKind.swift in Sources */,
 				3619B1A129790AC60051C387 /* KeypathSearchable.swift in Sources */,

@@ -11,10 +11,11 @@ final class DashBoardNftCellViewModel {
     
     let mockUser = MoonoMockUserData().getOneUserData()
     
+    var highestNft: Box<NftRankCellViewModel?> = Box(nil)
     var nftsList: Box<[NftRankCellViewModel]> = Box([])
     
     /// Among nftsList, filter and return current user's nfts
-    func getCurrentUsersNfts() -> [NftRankCellViewModel] {
+    private func getCurrentUsersNfts() -> [NftRankCellViewModel] {
         let currentUsersNfts = self.nftsList.value?.filter({ vm in
             vm.ownerAddress == mockUser.address
         })
@@ -24,8 +25,9 @@ final class DashBoardNftCellViewModel {
     }
     
     /// Among current user's nfts, get the nft which has the highest score
-    func getTheHighestScoreNftOfCurrentUser() -> NftRankCellViewModel? {
-        return self.getCurrentUsersNfts().first
+    func getTheHighestScoreNftOfCurrentUser() {
+        highestNft.value = self.getCurrentUsersNfts().first
+        print("Highest: \(highestNft.value)")
     }
     
 }

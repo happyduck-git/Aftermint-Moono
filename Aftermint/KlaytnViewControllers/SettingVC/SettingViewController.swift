@@ -154,29 +154,25 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .you:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: YouCell.identifier, for: indexPath) as? YouCell else { return UICollectionViewCell() }
             
-            cell.bind(with: vm.youCellViewModel)
-            cell.configure(vm: vm.youCellViewModel)
+            cell.configure(with: vm.youCellViewModel)
             return cell
             
         case .users:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifier, for: indexPath) as? UsersCell else { return UICollectionViewCell() }
-            
-            cell.bind(with: vm.usersCellViewModel)
-            cell.configure(vm: vm.usersCellViewModel)
+        
+            cell.configure(with: vm.usersCellViewModel)
             return cell
             
         case .nfts:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DashBoardNftCell.identifier, for: indexPath) as? DashBoardNftCell else { return UICollectionViewCell() }
-            
-            cell.bind(with: vm.nftsCellViewModel)
-            cell.configure(vm: vm.nftsCellViewModel)
+
+            cell.configure(with: vm.nftsCellViewModel)
             return cell
             
         case .projects:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProjectsCell.identifier, for: indexPath) as? ProjectsCell else { return UICollectionViewCell() }
             
-            cell.bind(with: vm.projectsCellViewModel)
-            cell.configure(vm: vm.projectsCellViewModel)
+            cell.configure(with: vm.projectsCellViewModel)
             return cell
         }
     }

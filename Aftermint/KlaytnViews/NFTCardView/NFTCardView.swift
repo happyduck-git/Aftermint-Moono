@@ -104,7 +104,6 @@ class NFTCardView: UIView {
     }
     
     private func setDelegate() {
-        self.viewModel.delegate = self
         
         self.nftCollectionView.delegate = self
         self.nftCollectionView.dataSource = self
@@ -271,8 +270,19 @@ extension NFTCardView {
     private func bind() {
         
         viewModel.nftCardCellViewModel.bind { [weak self] _ in
+            guard let `self` = self else { return }
             DispatchQueue.main.async {
-                self?.nftCollectionView.reloadData()
+                self.nftCollectionView.reloadData()
+            }
+        }
+        
+        viewModel.isLoaded.bind { [weak self] isLoaded in
+            guard let `self` = self,
+                  isLoaded != nil,
+                  isLoaded == true
+            else { return }
+            DispatchQueue.main.async {
+                self.spinner.stopAnimating()
             }
         }
         
@@ -283,15 +293,7 @@ extension NFTCardView {
         /// TempAddress used when there was no game features
 //        let tempAddress: String = K.Wallet.temporaryAddress
         let tempAddress: String = MoonoMockUserData().getOneUserData().address
-
-        self.viewModel.getNftCardCellViewModels(of: tempAddress) { result in
-            switch result {
-            case .success(let viewModels):
-                self.viewModel.nftCardCellViewModel.value = viewModels
-            case .failure(let failure):
-                print("Failed -- \(#function) --- \(failure)")
-            }
-        }
+        self.viewModel.getNftCardCellViewModels(of: tempAddress)
         
     }
     
@@ -307,10 +309,3 @@ extension NFTCardView: NftCardCellDelegate {
     
 }
 
-extension NFTCardView: NFTCardViewModelDelegate {
-    
-    func didLoadNfts() {
-        spinner.stopAnimating()
-    }
-    
-}

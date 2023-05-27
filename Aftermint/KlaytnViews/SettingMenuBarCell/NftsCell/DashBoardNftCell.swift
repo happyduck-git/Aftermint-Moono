@@ -54,16 +54,26 @@ final class DashBoardNftCell: UICollectionViewCell {
     }
     
     //MARK: - Public
-    public func configure(vm: DashBoardNftCellViewModel) {
-        self.nftsList = vm.nftsList.value ?? []
-        self.highestScoreVM = vm.getTheHighestScoreNftOfCurrentUser()
-    }
     
     /// Bind function - Test
-    public func bind(with vm: DashBoardNftCellViewModel) {
-        vm.nftsList.bind { _ in
+    public func configure(with vm: DashBoardNftCellViewModel) {
+        
+        vm.getTheHighestScoreNftOfCurrentUser()
+        
+        vm.nftsList.bind { [weak self] nfts in
+            guard let `self` = self else { return }
+            self.nftsList = nfts ?? []
             self.nftScoreTableView.reloadData()
         }
+        
+        vm.highestNft.bind { [weak self] rankCellVM in
+            guard let `self` = self,
+                  let vm = rankCellVM
+            else { return }
+                    
+            self.highestScoreVM = vm
+        }
+        
     }
     
 }

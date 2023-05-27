@@ -20,9 +20,6 @@ enum SectionID: Differentiable {
 final class BottomSheetView: PassThroughView {
     
     let prefetcher = ImagePrefetcher()
-
-    var firstSectionVM: LeaderBoardFirstSectionCellListViewModel
-    var secondSectionVM: LeaderBoardSecondSectionCellListViewModel
     let bottomSheetVM: BottomSheetViewModel
     
     weak var bottomSheetDelegate: BottomSheetViewDelegate?
@@ -111,12 +108,8 @@ final class BottomSheetView: PassThroughView {
     
     init(
         frame: CGRect,
-        firstSectionVM: LeaderBoardFirstSectionCellListViewModel,
-        secondSectionVM: LeaderBoardSecondSectionCellListViewModel,
         bottomSheetVM: BottomSheetViewModel
     ) {
-        self.firstSectionVM = firstSectionVM
-        self.secondSectionVM = secondSectionVM
         self.bottomSheetVM = bottomSheetVM
         super.init(frame: frame)
 
@@ -237,7 +230,7 @@ final class BottomSheetView: PassThroughView {
 //            }
 //        }
 //
-        self.secondSectionVM.leaderBoardVMList.bind{ [weak self] _ in
+        self.bottomSheetVM.secondListVM.leaderBoardVMList.bind{ [weak self] _ in
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.6) {
                     self?.leaderBoardTableView.reloadData()
@@ -311,7 +304,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
             cell.resetCell()
          
-            guard let vm = firstSectionVM.modelAt(indexPath) else {
+            guard let vm = bottomSheetVM.firstListVM.modelAt(indexPath) else {
                 return UITableViewCell()
             }
             
@@ -331,7 +324,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell,
-                  let vm = self.secondSectionVM.modelAt(indexPath)
+                  let vm = self.bottomSheetVM.secondListVM.modelAt(indexPath)
             else { return UITableViewCell()}
             cell.selectionStyle = .none
             cell.resetCell()
@@ -405,7 +398,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
     /// PretchImageAt
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.secondSectionVM.modelAt($0)?.userProfileImage
+            self.bottomSheetVM.secondListVM.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)
@@ -415,7 +408,7 @@ extension BottomSheetView: UITableViewDataSourcePrefetching {
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         let urlStrings: [String] = indexPaths.compactMap {
-            self.secondSectionVM.modelAt($0)?.userProfileImage
+            self.bottomSheetVM.secondListVM.modelAt($0)?.userProfileImage
         }
         let urls: [URL] = urlStrings.compactMap {
             URL(string: $0)

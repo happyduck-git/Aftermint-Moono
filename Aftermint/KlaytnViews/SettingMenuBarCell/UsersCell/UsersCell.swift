@@ -165,30 +165,23 @@ final class UsersCell: UICollectionViewCell {
     }
     
     //MARK: - Public
-    public func configure(vm: UsersCellViewModel) {
-        guard let image = vm.currentNft.value??.imageUrl else { return }
-        self.imageStringToImage(with: image) { result in
-            switch result {
-            case .success(let image):
-                self.nftImageView.image = image
-            case .failure(let error):
-                print("Error converting image -- \(error)")
-            }
-        }
-
-        self.popScoreLabel.text = "\(vm.currentNft.value??.totalPopCount ?? 0)"
-        self.actionCountLabel.text = "\(vm.currentNft.value??.totalActionCount ?? 0)"
-        
-        self.usersList = vm.usersList.value ?? []
-    }
-    
-    public func bind(with vm: UsersCellViewModel) {
+    public func configure(with vm: UsersCellViewModel) {
         
         vm.currentNft.bind { [weak self] collection in
-            guard let collection = collection else { return }
+            guard let `self` = self,
+                  let collection = collection else { return }
             DispatchQueue.main.async {
-                self?.popScoreLabel.text = "\(collection?.totalPopCount ?? 0)"
-                self?.actionCountLabel.text = "\(collection?.totalActionCount ?? 0)"
+                self.popScoreLabel.text = "\(collection?.totalPopCount ?? 0)"
+                self.actionCountLabel.text = "\(collection?.totalActionCount ?? 0)"
+                guard let image = collection?.imageUrl else { return }
+                self.imageStringToImage(with: image) { result in
+                    switch result {
+                    case .success(let image):
+                        self.nftImageView.image = image
+                    case .failure(let error):
+                        print("Error converting image -- \(error)")
+                    }
+                }
             }
         }
         

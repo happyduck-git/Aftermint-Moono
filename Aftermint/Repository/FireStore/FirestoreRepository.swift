@@ -236,12 +236,13 @@ class FirestoreRepository {
         }
     }
     
+    //TODO: FieldValue.increment 가 아니라 actionCount를 arg로 받아서 db저장하기
     func saveToNewDB(
         popScore: Int64,
         nftTokenId: [String],
         ownerAddress: String
     ) {
-        
+        let valueToIncrease: Int64 = 1
         let collectionDocRef = baseDBPath.document(self.type.rawValue)
         
         // Save to nft_set collection
@@ -258,7 +259,6 @@ class FirestoreRepository {
                 merge: true
             )
             // Save nft score
-            let valueToIncrease: Int64 = 1
             nftDocRef.collection(K.FStore.nftScoreSetField)
                 .document(K.FStore.popgameField)
                 .setData(

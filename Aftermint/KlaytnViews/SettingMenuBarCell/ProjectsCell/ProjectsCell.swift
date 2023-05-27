@@ -226,30 +226,44 @@ final class ProjectsCell: UICollectionViewCell {
     }
     
     //MARK: - Public
-    public func configure(vm: ProjectsCellViewModel) {
-        self.nftCollectionList = vm.nftCollectionList.value ?? []
-        self.currentCollection = vm.getCurrentNftCollection(ofType: .moono)
-        self.imageStringToImage(with: self.currentCollection?.nftImageUrl ?? "N/A") { result in
-            switch result {
-            case .success(let image):
-                self.nftImageView.image = image
-            case .failure(let error):
-                print("Error converting image -- \(error)")
+
+    public func configure(with vm: ProjectsCellViewModel) {
+        
+        vm.getCurrentNftCollection(ofType: .moono)
+        
+        vm.nftCollectionList.bind { [weak self] viewModels in
+            guard let `self` = self else { return }
+            self.nftCollectionList = viewModels ?? []
+        }
+        
+        vm.currentNftCollection.bind { [weak self] popScoreCellModel in
+            guard let `self` = self,
+                  let vm = popScoreCellModel
+            else { return }
+            
+            self.collectionTitleLabel.text = vm?.nftCollectionName
+            self.popScoreLabel.text = String(describing: vm?.popScore)
+            self.actionCountLabel.text = String(describing: vm?.actioncount)
+            
+            let imageUrl = vm?.nftImageUrl ?? "N/A"
+            self.imageStringToImage(with: imageUrl) {  result in
+                switch result {
+                case .success(let image):
+                    self.nftImageView.image = image
+                case .failure(let error):
+                    print("Error converting image -- \(error)")
+                }
             }
         }
-        self.collectionTitleLabel.text = self.currentCollection?.nftCollectionName
-        self.popScoreLabel.text = "\(self.currentCollection?.popScore ?? 0)"
-        self.actionCountLabel.text = "\(self.currentCollection?.actioncount ?? 0)"
-//        self.totalNftsLabel.text = "\(self.currentCollection?.totalNfts ?? 0)"
-//        self.totalHoldersLabel.text = "\(self.currentCollection?.totalHolders ?? 0)"
-    }
-    
-    public func bind(with vm: ProjectsCellViewModel) {
+        
+        
         vm.totalNumberOfHolders.bind { [weak self] numberOfHolder in
-            self?.totalHoldersLabel.text = "\(numberOfHolder ?? 0)"
+            guard let `self` = self else { return }
+            self.totalHoldersLabel.text = "\(numberOfHolder ?? 0)"
         }
         vm.totalNumberOfMintedNFTs.bind { [weak self] numberOfNFTs in
-            self?.totalNftsLabel.text = "\(numberOfNFTs ?? 0)"
+            guard let `self` = self else { return }
+            self.totalNftsLabel.text = "\(numberOfNFTs ?? 0)"
         }
     }
     

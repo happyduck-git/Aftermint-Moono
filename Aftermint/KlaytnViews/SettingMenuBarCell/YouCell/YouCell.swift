@@ -145,20 +145,8 @@ final class YouCell: UICollectionViewCell {
     }
     
     //MARK: - Public
-    public func configure(vm: YouCellViewModel) {
-         
-        guard let currentUser = vm.currentUser.value,
-              let currentUser = currentUser
-        else { return }
-        self.profileImageView.image = UIImage(named: currentUser.profileImageUrl) /// TODO: Need to change the logic to actually fetch image from server or cache
-        self.walletAddressStack.bottomLabelText = currentUser.ownerAddress.cutOfRange(length: 15)
-        self.usernameStack.bottomLabelText = currentUser.username
-        self.popScoreStack.bottomLabelText = "\(currentUser.popScore)"
-        self.actionCountStack.bottomLabelText = "\(currentUser.actionCount)"
-        
-    }
     
-    public func bind(with vm: YouCellViewModel) {
+    public func configure(with vm: YouCellViewModel) {
         
         vm.currentUser.bind { [weak self] address in
             guard let address = address else { return }

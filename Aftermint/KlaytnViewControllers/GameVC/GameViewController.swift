@@ -15,11 +15,12 @@ final class GameViewController: UIViewController {
     private var initialTouchScore: Int = 0
     
     // MARK: - Dependency
-    private var leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel
-    private var leaderBoardSecondSectionViewModel: LeaderBoardSecondSectionCellListViewModel
     private var bottomSheetVM: BottomSheetViewModel
+    private var gameVM: GameViewViewModel = GameViewViewModel()
     private var scene: MoonoGameScene?
     
+    //MARK: - Game score data variables
+    var timer: Timer = Timer()
     /// TEMP ========================
     var tempPopScore: Int64 = 0
     var tempActionCount: Int64 = 0
@@ -134,8 +135,6 @@ final class GameViewController: UIViewController {
     private lazy var bottomSheetView: BottomSheetView = {
         let bottomSheet = BottomSheetView(
             frame: .zero,
-            firstSectionVM: leaderBoardFirstSectionViewModel,
-            secondSectionVM: leaderBoardSecondSectionViewModel,
             bottomSheetVM: bottomSheetVM
         )
         bottomSheet.bottomSheetColor = AftermintColor.backgroundNavy
@@ -146,12 +145,8 @@ final class GameViewController: UIViewController {
     
     // MARK: - Init
     init(
-        leaderBoardListViewModel: LeaderBoardSecondSectionCellListViewModel,
-        leaderBoardFirstSectionViewModel: LeaderBoardFirstSectionCellListViewModel,
         bottomSheetVM: BottomSheetViewModel
     ) {
-        self.leaderBoardSecondSectionViewModel = leaderBoardListViewModel
-        self.leaderBoardFirstSectionViewModel = leaderBoardFirstSectionViewModel
         self.bottomSheetVM = bottomSheetVM
         super.init(nibName: nil, bundle: nil)
     }
@@ -166,9 +161,20 @@ final class GameViewController: UIViewController {
         setUI()
         setLayout()
         setGameScene()
-
-        self.bottomSheetView.bottomSheetDelegate = self
-        self.leaderBoardSecondSectionViewModel.delegate = self
+        setDelegate()
+        
+        // NEW SCEHME RELATED
+        gameVM.getOwnedNfts()
+        bind()
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            guard let `self` = self else { return }
+            gameVM.saveToNewDB(
+                popScore: self.touchCount * self.numberOfOwnedNfts,
+                nftTokenId: gameVM.ownedNftTokenIds.value ?? [],
+                ownerAddress: MoonoMockUserData().getOneUserData().address
+            )
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -177,8 +183,6 @@ final class GameViewController: UIViewController {
         self.navigationBarSetup()
     }
     
-    var timer: Timer = Timer()
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -186,7 +190,7 @@ final class GameViewController: UIViewController {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
         
-        self.saveAndRetrieveGameData(after: 5.0)
+//        self.saveAndRetrieveGameData(after: 5.0)
         
     }
     
@@ -213,6 +217,12 @@ final class GameViewController: UIViewController {
     }
     
     // MARK: - Set UI & Layout
+    
+    private func setDelegate() {
+        self.bottomSheetView.bottomSheetDelegate = self
+        self.bottomSheetVM.secondListVM.delegate = self
+    }
+    
     private func setUI() {
         view.backgroundColor = AftermintColor.backgroundLightBlue
         view.addSubview(gameSKView)
@@ -262,22 +272,15 @@ final class GameViewController: UIViewController {
     
     //MARK: - Private
     
-    private let firestoreRepository = FirestoreRepository.shared
-    
-    private func save(after second: CGFloat) {
-        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
-        timer = Timer.scheduledTimer(
-            withTimeInterval: second,
-            repeats: true,
-            block: { [weak self] _ in
-                guard let self = self else { return }
-                self.firestoreRepository.saveToNewDB(
-                    popScore: self.touchCount * self.numberOfOwnedNfts,
-                    nftTokenId: <#T##[String]#>,
-                    ownerAddress: mockUserData.address
-                )
-            })
+    private func bind() {
+        
+        gameVM.ownedNftTokenIds.bind { tokenIds in
+            guard let tokenIds = tokenIds else { return }
+            // TODO: tokenIds는 Fire store에 저장할 때 사용될 예정
+        }
+        
     }
+    
     
     private func saveAndRetrieveGameData(after second: CGFloat) {
         let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
@@ -287,7 +290,7 @@ final class GameViewController: UIViewController {
         timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             print("Accumulated touchCount: \(self.touchCount)")
-            self.leaderBoardSecondSectionViewModel.saveCountNumber(
+            self.bottomSheetVM.secondListVM.saveCountNumber(
                 popScore: self.touchCount * self.numberOfOwnedNfts,
                 actionCount: self.touchCount,
                 ownerAddress: mockUserData.address,
@@ -298,14 +301,14 @@ final class GameViewController: UIViewController {
             )
             /// Delete if not needed
 //            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
-            self.leaderBoardSecondSectionViewModel.getAddressSectionVM()
+            self.bottomSheetVM.secondListVM.getAddressSectionVM()
             self.bottomSheetVM.getItems()
         }
     }
     
     /// Get viewModel for current user information
     private func getCurrentUserViewModel() {
-        let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
+        let currentUserViewModel = self.bottomSheetVM.secondListVM.currentUserViewModel()
         self.numberOfOwnedNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") ?? 0
         DispatchQueue.main.async {
             /// User information part
@@ -356,7 +359,7 @@ extension GameViewController {
 extension GameViewController: MoonoGameSceneDelegate {
     
     func didReceiveTouchCount(number: Int64) {
-        let currentUserViewModel = self.leaderBoardSecondSectionViewModel.currentUserViewModel()
+        let currentUserViewModel = self.bottomSheetVM.secondListVM.currentUserViewModel()
         guard let numberOfNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") else { return }
 
         self.touchCountToShow += number

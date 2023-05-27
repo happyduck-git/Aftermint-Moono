@@ -10,8 +10,8 @@ import DifferenceKit
 
 final class BottomSheetViewModel {
     
-    private let firstListVM: LeaderBoardFirstSectionCellListViewModel
-    private let secondListVM: LeaderBoardSecondSectionCellListViewModel
+    public private(set) var firstListVM: LeaderBoardFirstSectionCellListViewModel
+    public private(set) var secondListVM: LeaderBoardSecondSectionCellListViewModel
     var changeset: Box<StagedChangeset<[ArraySection<SectionID, AnyDifferentiable>]>> = Box(StagedChangeset([]))
     
     init(

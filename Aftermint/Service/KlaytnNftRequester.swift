@@ -8,6 +8,10 @@
 import Foundation
 
 class KlaytnNftRequester {
+    
+    private static let cacheManager = KASCacheManager(type: .moono)
+    private static var requestToNftsURL: URL?
+    
     private static let TOKEN_URL__GET_NFT_CONTRACT_INFO = "https://th-api.klaytnapi.com/v2/contract/nft/%@"
     private static let TOKEN_URL__GET_NUMBER_OF_HOLDERS = "https://th-api.klaytnapi.com/v2/contract/nft/%@/holder"
     private static let TOKEN_URL__GET_NFTS_BY_OWNER_ADDRESS__PARAMS_2 = "https://th-api.klaytnapi.com/v2/contract/nft/%@/owner/%@"
@@ -139,6 +143,17 @@ class KlaytnNftRequester {
             return false
         }
         
+        requestToNftsURL = url
+        
+        if let cachedData = cacheManager.getDataCache(url: url),
+           let cachedUrlResponse = cacheManager.getResponseCache(url: url)
+        {
+            print("Using cached API Response")
+            let response = URLResponse()
+            completionHandler(cachedData, cachedUrlResponse, nil)
+            return true
+        }
+        
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue(
             KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID,
@@ -175,6 +190,7 @@ class KlaytnNftRequester {
                 return
             }
             
+            cacheManager.setCache(url: requestToNftsURL, data: data, response: response) //TODO: setting cache is occurring everytime this method is called. Need to find another way to avoid unnecessary set.
             nftsHandler(nfts, nil)
         }
     }

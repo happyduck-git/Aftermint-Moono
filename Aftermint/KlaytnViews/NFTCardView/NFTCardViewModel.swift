@@ -7,15 +7,10 @@
 
 import Foundation
 
-protocol NFTCardViewModelDelegate: AnyObject {
-    func didLoadNfts()
-}
-
 class NFTCardViewModel {
     
-    weak var delegate: NFTCardViewModelDelegate?
-    
     var nftCardCellViewModel: Box<[NftCardCellViewModel]> = Box([])
+    var isLoaded: Box<Bool> = Box(false)
     var nftSelected: [Bool] = []
     let fireStoreRepository = FirestoreRepository.shared
     
@@ -49,11 +44,11 @@ class NFTCardViewModel {
         return viewModel
     }
     
-    
-    func getNftCardCellViewModels(of wallet: String, completion: @escaping (Result<[NftCardCellViewModel], Error>) ->()) {
+    func getNftCardCellViewModels(of wallet: String) {
         
         _ = KlaytnNftRequester.requestToGetMoonoNfts(walletAddress: wallet,
-                                                     nftsHandler: {
+                                                     nftsHandler: { [weak self] in
+            guard let `self` = self else { return }
             let viewModels = $0.map { nft in
 
                 let viewModel: NftCardCellViewModel = NftCardCellViewModel(accDesc: nft.traits.accessories,
@@ -68,16 +63,11 @@ class NFTCardViewModel {
                                                                            imageUrl: nft.imageUrl)
                 return viewModel
             }
-            completion(.success(viewModels))
-            DispatchQueue.main.async {
-                self.delegate?.didLoadNfts()
-            }
-            return
+            self.nftCardCellViewModel.value = viewModels
+            self.isLoaded.value = true
         })
         
-        completion(.failure(NFTCardError.cardFetchError))
     }
-    
     
 }
 
