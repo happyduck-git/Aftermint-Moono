@@ -415,6 +415,7 @@
 		935E6A822982619200D94DA6 /* LottieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935E6A812982619200D94DA6 /* LottieViewController.swift */; };
 		936295F929EF707700E92AAB /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936295F829EF707700E92AAB /* NetworkMonitor.swift */; };
 		936295FE29EFC23F00E92AAB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936295FD29EFC23F00E92AAB /* BaseViewController.swift */; };
+		9373E3BA2A2582A100FDB018 /* String+Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9373E3B92A2582A100FDB018 /* String+Decimal.swift */; };
 		939DE050297A232100EFA71E /* KlaytnTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE04F297A232100EFA71E /* KlaytnTabBarController.swift */; };
 		939DE052297A23DB00EFA71E /* KlaytnHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE051297A23DB00EFA71E /* KlaytnHomeViewController.swift */; };
 		939DE054297A242500EFA71E /* BenefitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE053297A242500EFA71E /* BenefitViewController.swift */; };
@@ -848,6 +849,7 @@
 		935E6A812982619200D94DA6 /* LottieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieViewController.swift; sourceTree = "<group>"; };
 		936295F829EF707700E92AAB /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		936295FD29EFC23F00E92AAB /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		9373E3B92A2582A100FDB018 /* String+Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Decimal.swift"; sourceTree = "<group>"; };
 		939DE04F297A232100EFA71E /* KlaytnTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnTabBarController.swift; sourceTree = "<group>"; };
 		939DE051297A23DB00EFA71E /* KlaytnHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnHomeViewController.swift; sourceTree = "<group>"; };
 		939DE053297A242500EFA71E /* BenefitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitViewController.swift; sourceTree = "<group>"; };
@@ -1084,6 +1086,7 @@
 				2481E1DB297C48E700187BB9 /* UIImage.swift */,
 				24F9FFB229841DEC00E534A1 /* GradientLabel.swift */,
 				93A4B8132990EAD700146FD8 /* UIScrollViewSuperTaps.swift */,
+				9373E3B92A2582A100FDB018 /* String+Decimal.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2858,6 +2861,7 @@
 				3619B13B29790AC60051C387 /* AnimationView.swift in Sources */,
 				3619B15929790AC60051C387 /* TextLayer.swift in Sources */,
 				93A4B7FA2990C50700146FD8 /* BasicTabBarController.swift in Sources */,
+				9373E3BA2A2582A100FDB018 /* String+Decimal.swift in Sources */,
 				3619B10429790AC50051C387 /* OpenSeaNFT.swift in Sources */,
 				3619B1C329790AC60051C387 /* Mask.swift in Sources */,
 				3619B10F29790AC50051C387 /* NFTRepositoryEvent.swift in Sources */,

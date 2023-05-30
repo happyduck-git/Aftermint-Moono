@@ -7,11 +7,18 @@
 
 import Foundation
 
+protocol GameViewViewModelDelegate: AnyObject {
+    func dataSaved()
+}
+
 protocol GameViewViewModelProtocol {
     func getOwnedNfts()
+    func saveToNewDB(popScore: Int64, actionCount: Int64, nftTokenId: [String], ownerAddress: String, completion: @escaping (() -> Void))
 }
 
 final class GameViewViewModel: GameViewViewModelProtocol {
+    
+    weak var delegate: GameViewViewModelDelegate?
     
     private let firestoreRepository = FirestoreRepository.shared
     
@@ -31,14 +38,25 @@ final class GameViewViewModel: GameViewViewModelProtocol {
     
     func saveToNewDB(
         popScore: Int64,
+        actionCount: Int64,
         nftTokenId: [String],
-        ownerAddress: String
+        ownerAddress: String,
+        completion: @escaping (() -> Void)
     ) {
         firestoreRepository.saveToNewDB(
             popScore: popScore,
+            actionCount: actionCount,
             nftTokenId: nftTokenId,
-            ownerAddress: ownerAddress
+            ownerAddress: ownerAddress,
+            completion: completion
         )
+    }
+    
+    // new db get data test
+    func getAllScore() {
+        firestoreRepository.getAllAddress { _ in
+            
+        }
     }
     
 }

@@ -48,7 +48,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     
     func getAddressSectionVM() {
 
-        self.fireStoreRepository.getAllAddress { addressList in
+        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
             guard let addressList = addressList else {
                 return
             }
@@ -80,7 +80,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     /// DifferenceKit Test
     func getAddressSectionVM(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
         
-        self.fireStoreRepository.getAllAddress { addressList in
+        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
             guard let addressList = addressList else {
                 return
             }

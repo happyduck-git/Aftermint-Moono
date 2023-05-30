@@ -25,6 +25,7 @@ final class BottomSheetViewModel {
     var source: [ArraySection<SectionID, AnyDifferentiable>] = []
     
     func getItems() {
+        self.firstListVM.newSchemeTest()
         guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
               var secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
             return

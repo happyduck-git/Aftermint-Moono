@@ -61,6 +61,7 @@ struct K {
         static let walletAccountSetField: String = "wallet_account_set"
         static let popgameField: String = "popgame"
         static let totalCountField: String = "total_count"
+        static let totalScoreField: String = "total_score"
         static let tokenIdField: String = "token_id"
         static let scoreField: String = "score"
         static let countField: String = "count"

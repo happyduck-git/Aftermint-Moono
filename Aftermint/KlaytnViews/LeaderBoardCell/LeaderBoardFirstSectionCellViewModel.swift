@@ -32,7 +32,7 @@ final class LeaderBoardFirstSectionCellListViewModel {
     }
     
     func getFirstSectionVM(ofCollection collectionType: CollectionType) {
-        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
+        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
             guard let collection = collection else {
                 return
             }
@@ -55,7 +55,7 @@ final class LeaderBoardFirstSectionCellListViewModel {
     }
     
     func getFirstSectionVM(ofCollection collectionType: CollectionType, completion: @escaping ((LeaderBoardFirstSectionCellViewModel) -> Void)) {
-        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
+        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
             guard let collection = collection else {
                 return
             }

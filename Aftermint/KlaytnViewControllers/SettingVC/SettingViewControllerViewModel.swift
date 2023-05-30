@@ -60,7 +60,7 @@ final class SettingViewControllerViewModel {
     }
 
     func getAllAddressFields() {
-        self.fireStoreRepository.getAllAddress { addressList in
+        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
                 
@@ -84,7 +84,7 @@ final class SettingViewControllerViewModel {
     }
     
     func getNftData(ofCollectionType collectionType: CollectionType) {
-        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
+        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
             guard let collection = collection else { return }
             self.usersCellViewModel.currentNft.value = collection
         }
@@ -142,13 +142,14 @@ final class SettingViewControllerViewModel {
                 projectsCellViewModel.totalNumberOfHolders.value = holders?.totalHolder
                 
                 let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
-                guard let mintedNFTs = contractInfoResult?.totalSupply.dropFirst(2) else { return }
-                let convertedNumber = Int(mintedNFTs, radix: 16)
-                projectsCellViewModel.totalNumberOfMintedNFTs.value = convertedNumber
+                guard let totalNumberOfNFTs = contractInfoResult?.totalSupply.convertToDecimal() else { return }
+                projectsCellViewModel.totalNumberOfMintedNFTs.value = totalNumberOfNFTs
 
-                FirestoreRepository.shared.saveNumberOfHoldersAndMintedNfts(collectionType: .moono,
-                                                                            totalHolders: Int64(holders?.totalHolder ?? 0),
-                                                                            totalMintedNFTs: Int64(convertedNumber ?? 0))
+                FirestoreRepository.shared.saveNumberOfHoldersAndMintedNfts(
+                    collectionType: .moono,
+                    totalHolders: Int64(holders?.totalHolder ?? 0),
+                    totalMintedNFTs: Int64(totalNumberOfNFTs)
+                )
             } catch {
                 print(error.localizedDescription)
             }

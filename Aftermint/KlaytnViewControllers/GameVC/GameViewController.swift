@@ -166,15 +166,18 @@ final class GameViewController: UIViewController {
         // NEW SCEHME RELATED
         gameVM.getOwnedNfts()
         bind()
-        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
-            guard let `self` = self else { return }
-            gameVM.saveToNewDB(
-                popScore: self.touchCount * self.numberOfOwnedNfts,
-                nftTokenId: gameVM.ownedNftTokenIds.value ?? [],
-                ownerAddress: MoonoMockUserData().getOneUserData().address
-            )
-        }
-        
+//        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+//            guard let `self` = self else { return }
+//            self.gameVM.saveToNewDB(
+//                popScore: self.touchCount * self.numberOfOwnedNfts,
+//                actionCount: self.touchCount,
+//                nftTokenId: self.gameVM.ownedNftTokenIds.value ?? [],
+//                ownerAddress: MoonoMockUserData().getOneUserData().address
+//            ) {
+//                self.touchCount = 0
+//            }
+//        }
+        gameVM.getAllScore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
