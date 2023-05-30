@@ -46,6 +46,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
         return currentUserViewModel?.first
     }
     
+    /// Currently NOT in use.
     func getAddressSectionVM() {
 
         self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
@@ -77,7 +78,8 @@ final class LeaderBoardSecondSectionCellListViewModel {
         }
     }
     
-    /// DifferenceKit Test
+    // TODO: NO2. User별 점수 받아오기
+    /// For using DifferenceKit
     func getAddressSectionVM(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
         
         self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
@@ -132,6 +134,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
         return
     }
     
+    // TODO: NO1. GameVM으로 이동
     func saveCountNumber(
         popScore: Int64,
         actionCount: Int64,

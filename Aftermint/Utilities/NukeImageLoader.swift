@@ -16,7 +16,9 @@ struct NukeImageLoader {
         ImagePipeline.shared.loadImage(with: url) { result in
             switch result {
             case .success(let imageResponse):
-                completion(imageResponse.image)
+                DispatchQueue.main.async {
+                    completion(imageResponse.image)
+                }
                 return
             case .failure(let failure):
                 print("Nuke load image failed: \(failure)")

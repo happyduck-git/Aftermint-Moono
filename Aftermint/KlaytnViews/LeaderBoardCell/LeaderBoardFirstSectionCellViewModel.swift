@@ -31,6 +31,7 @@ final class LeaderBoardFirstSectionCellListViewModel {
         return self.leaderBoardFirstSectionVMList.value?[indexPath.row]
     }
     
+    /// Currently NOT in use.
     func getFirstSectionVM(ofCollection collectionType: CollectionType) {
         self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
             guard let collection = collection else {
@@ -54,6 +55,8 @@ final class LeaderBoardFirstSectionCellListViewModel {
         }
     }
     
+    // TODO: NO3. 현재 앱에서 사용되고 있는 Collection의 점수 받아오기
+    /// For using DifferenceKit
     func getFirstSectionVM(ofCollection collectionType: CollectionType, completion: @escaping ((LeaderBoardFirstSectionCellViewModel) -> Void)) {
         self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
             guard let collection = collection else {

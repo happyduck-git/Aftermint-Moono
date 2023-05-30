@@ -293,6 +293,7 @@ final class GameViewController: UIViewController {
         timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             print("Accumulated touchCount: \(self.touchCount)")
+            // NO1: Touch count 저장
             self.bottomSheetVM.secondListVM.saveCountNumber(
                 popScore: self.touchCount * self.numberOfOwnedNfts,
                 actionCount: self.touchCount,
@@ -304,24 +305,23 @@ final class GameViewController: UIViewController {
             )
             /// Delete if not needed
 //            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
-            self.bottomSheetVM.secondListVM.getAddressSectionVM()
+            
+//            self.bottomSheetVM.secondListVM.getAddressSectionVM()
+            
+            // DifferenceKit 적용된 bottom sheet data fetch
             self.bottomSheetVM.getItems()
         }
     }
     
-    /// Get viewModel for current user information
+    /// Get viewModel for current user information at the top right corner of the vc
     private func getCurrentUserViewModel() {
         let currentUserViewModel = self.bottomSheetVM.secondListVM.currentUserViewModel()
         self.numberOfOwnedNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") ?? 0
         DispatchQueue.main.async {
             /// User information part
-            self.imageStringToImage(with: currentUserViewModel?.userProfileImage ?? "rebecca") { result in
-                switch result {
-                case .success(let image):
-                    self.userImageView.image = image
-                case .failure(let error):
-                    print("Error \(error)")
-                }
+            let url = URL(string: currentUserViewModel?.userProfileImage ?? "N/A")
+            NukeImageLoader.loadImageUsingNuke(url: url) { image in
+                self.userImageView.image = image
             }
 
             self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
@@ -334,13 +334,7 @@ final class GameViewController: UIViewController {
             self.actionCountStack.bottomLabelText = String(describing: self.tempActionCount)
         }
     }
-    
-    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
-        let url = URL(string: urlString)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            completion(.success(image))
-        }
-    }
+
 }
 
 // MARK: - Set GameScene
@@ -389,6 +383,7 @@ extension GameViewController: BottomSheetViewDelegate {
 
 }
 
+// TODO: NO4. BottomSheetVMDelegate으로 이동
 extension GameViewController: LeaderBoardSecondSectionCellListViewModelDelegate {
     func dataFetched2() {
         self.touchCount = 0
