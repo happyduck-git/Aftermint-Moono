@@ -9,10 +9,6 @@ import UIKit
 import DifferenceKit
 import Nuke
 
-protocol BottomSheetViewDelegate: AnyObject {
-    func dataFetched()
-}
-
 enum SectionID: Differentiable {
     case first, second
 }
@@ -22,7 +18,6 @@ final class BottomSheetView: PassThroughView {
     let prefetcher = ImagePrefetcher()
     let bottomSheetVM: BottomSheetViewModel
     
-    weak var bottomSheetDelegate: BottomSheetViewDelegate?
     var currentUserScoreUpdateHandler: ((Int64) -> Void)?
     
     // MARK: - UI Elements
@@ -125,8 +120,6 @@ final class BottomSheetView: PassThroughView {
         setLayout()
         setDelegate()
 
-//        firstSectionVM.getFirstSectionVM(ofCollection: .moono)
-//        secondSectionVM.getAddressSectionVM()
         self.bottomSheetVM.getItems()
         bind()
         
@@ -219,26 +212,6 @@ final class BottomSheetView: PassThroughView {
     }
     
     private func bind() {
-        
-        ///self.bottomSheetVM.changeset으로도 가능하면 firstVM, secondVM 사용부분은 삭제하기
-//        self.firstSectionVM.leaderBoardFirstSectionVMList.bind { [weak self] _ in
-//            DispatchQueue.main.async {
-//                UIView.animate(withDuration: 0.6) {
-//                    self?.leaderBoardTableView.reloadData()
-//                    self?.leaderBoardTableView.alpha = 1.0
-//                }
-//            }
-//        }
-//
-        self.bottomSheetVM.secondListVM.leaderBoardVMList.bind{ [weak self] _ in
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.6) {
-                    self?.leaderBoardTableView.reloadData()
-                    self?.leaderBoardTableView.alpha = 1.0
-                    self?.bottomSheetDelegate?.dataFetched()
-                }
-            }
-        }
 
         self.bottomSheetVM.changeset.bind { [weak self] vm in
             guard let vms = vm else { return }
@@ -278,16 +251,6 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        /*
-        if section == 0 {
-            let numberOfSection = self.firstSectionVM.numberOfRowsInSection()
-            return numberOfSection
-        } else {
-            let numberOfSection = self.secondSectionVM.numberOfRowsInSection()
-            return numberOfSection
-        }
-         */
-        
         if section == 0 {
             guard let numberOfRows = self.bottomSheetVM.source.first?.elements.count else { return 0 }
             return numberOfRows

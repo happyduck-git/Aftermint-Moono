@@ -8,7 +8,13 @@
 import Foundation
 import DifferenceKit
 
+protocol BottomSheetViewModelDelegate: AnyObject {
+    func dataFetched()
+}
+
 final class BottomSheetViewModel {
+    
+    weak var delegate: BottomSheetViewModelDelegate?
     
     public private(set) var firstListVM: LeaderBoardFirstSectionCellListViewModel
     public private(set) var secondListVM: LeaderBoardSecondSectionCellListViewModel
@@ -59,8 +65,9 @@ final class BottomSheetViewModel {
             secondSectionNewVal = $0
         }
         
-        group.notify(queue: .main) {
+        group.notify(queue: .main) { [weak self] in
             
+            guard let `self` = self else { return }
             let typedErasedFirstSectionNewVal = firstSectionNewVal.map {
                 AnyDifferentiable($0)
             }
@@ -75,6 +82,7 @@ final class BottomSheetViewModel {
             ]
 
             self.changeset.value = StagedChangeset(source: self.source, target: target)
+            self.delegate?.dataFetched()
         }
     }
     

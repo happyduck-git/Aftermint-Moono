@@ -59,6 +59,7 @@ struct K {
         static let cachedWalletAddress: String = "cached_wallet_address"
         static let nftSetField: String = "nft_set"
         static let walletAccountSetField: String = "wallet_account_set"
+        static let actionCountSetField: String = "action_count_set"
         static let popgameField: String = "popgame"
         static let totalCountField: String = "total_count"
         static let totalScoreField: String = "total_score"

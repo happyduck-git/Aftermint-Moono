@@ -60,7 +60,7 @@ final class SettingViewControllerViewModel {
     }
 
     func getAllAddressFields() {
-        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
+        self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
                 
@@ -81,17 +81,43 @@ final class SettingViewControllerViewModel {
             }
             self.usersCellViewModel.usersList.value = vmList
         }
+        
+//        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
+//            guard let addressList = addressList else { return }
+//            let vmList = addressList.map { address in
+//
+//                /// Check if address is the same as current (mock) user's
+//                if address.ownerAddress == self.mockUser.address {
+//                    self.youCellViewModel.currentUser.value = address
+//                }
+//
+//                return PopScoreRankCellViewModel(
+//                    rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+//                    rank: 0,
+//                    profileImageUrl: address.profileImageUrl,
+//                    owerAddress: address.ownerAddress,
+//                    totalNfts: address.ownedNFTs,
+//                    popScore: address.popScore,
+//                    actioncount: address.actionCount
+//                )
+//            }
+//            self.usersCellViewModel.usersList.value = vmList
+//        }
     }
     
     func getNftData(ofCollectionType collectionType: CollectionType) {
-        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
+        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
             guard let collection = collection else { return }
             self.usersCellViewModel.currentNft.value = collection
         }
+//        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
+//            guard let collection = collection else { return }
+//            self.usersCellViewModel.currentNft.value = collection
+//        }
     }
     
     func getAllCards(ofCollectionType collectionType: CollectionType) {
-        self.fireStoreRepository.getAllCards(ofCollectionType: collectionType) { cardList in
+        self.fireStoreRepository.getAllCardsFromOldScheme(ofCollectionType: collectionType) { cardList in
             guard let cardList = cardList else { return }
             var currentUserCardList: [NftRankCellViewModel] = []
             let vmList = cardList.map { card in
@@ -118,8 +144,10 @@ final class SettingViewControllerViewModel {
     }
     
     func getAllCollectionFields(ofCollectionType collectionType: CollectionType) {
-        self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType) { nftCollectionList in
-            guard let nftCollectionList = nftCollectionList else { return }
+        
+        Task {
+            let results = try await self.fireStoreRepository.getAllCollectionFields2(ofCollectionType: collectionType)
+            guard let nftCollectionList = results else { return }
             let vmList = nftCollectionList.map { collection in
                 return ProjectPopScoreCellViewModel(
                     rank: 0,
@@ -133,6 +161,7 @@ final class SettingViewControllerViewModel {
             }
             self.projectsCellViewModel.nftCollectionList.value = vmList
         }
+ 
     }
     
     func getHolderAndNumberOfNFTs() {

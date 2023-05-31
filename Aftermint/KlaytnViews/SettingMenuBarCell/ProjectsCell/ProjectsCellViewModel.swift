@@ -17,7 +17,7 @@ final class ProjectsCellViewModel {
     
     func getCurrentNftCollection(ofType collectionType: CollectionType) {
         let filteredCollections = self.nftCollectionList.value?.filter({ vm in
-            vm.nftCollectionName == collectionType.rawValue
+            vm.nftCollectionName == collectionType.displayName
         })
         currentNftCollection.value = filteredCollections?.first
     }

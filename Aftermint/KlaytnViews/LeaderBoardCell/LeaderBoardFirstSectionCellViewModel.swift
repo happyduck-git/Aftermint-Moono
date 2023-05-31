@@ -58,7 +58,9 @@ final class LeaderBoardFirstSectionCellListViewModel {
     // TODO: NO3. 현재 앱에서 사용되고 있는 Collection의 점수 받아오기
     /// For using DifferenceKit
     func getFirstSectionVM(ofCollection collectionType: CollectionType, completion: @escaping ((LeaderBoardFirstSectionCellViewModel) -> Void)) {
-        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
+        
+        // NEW SCHEME
+        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
             guard let collection = collection else {
                 return
             }
@@ -79,6 +81,29 @@ final class LeaderBoardFirstSectionCellListViewModel {
                 return
             }
         }
+        
+        // OLD SCHEME
+//        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
+//            guard let collection = collection else {
+//                return
+//            }
+//            if collection.address == K.ContractAddress.moono {
+//                let viewModel = LeaderBoardFirstSectionCellViewModel(
+//                    nftImage: collection.imageUrl,
+//                    nftCollectionName: collection.name,
+//                    totalActionCount: collection.totalActionCount,
+//                    totalPopScore: collection.totalPopCount
+//                )
+//
+//                if !(self.leaderBoardFirstSectionVMList.value?.isEmpty ?? true) {
+//                    self.leaderBoardFirstSectionVMList.value?.removeFirst()
+//                }
+//                self.leaderBoardFirstSectionVMList.value?.append(viewModel)
+//                completion(viewModel)
+//            } else {
+//                return
+//            }
+//        }
     }
     
 }

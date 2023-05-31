@@ -13,7 +13,7 @@ protocol GameViewViewModelDelegate: AnyObject {
 
 protocol GameViewViewModelProtocol {
     func getOwnedNfts()
-    func saveToNewDB(popScore: Int64, actionCount: Int64, nftTokenId: [String], ownerAddress: String, completion: @escaping (() -> Void))
+    func saveScoreCache(popScore: Int64, actionCount: Int64, ownerAddress: String, completion: @escaping (() -> Void))
 }
 
 final class GameViewViewModel: GameViewViewModelProtocol {
@@ -36,15 +36,39 @@ final class GameViewViewModel: GameViewViewModelProtocol {
         }
     }
     
-    func saveToNewDB(
+    /// Save game scores during the game.
+    /// - Parameters:
+    ///   - popScore: Numbers of touch counted multiplied by numbers of nfts that the owner holds.
+    ///   - actionCount: Numbers of touch counted.
+    ///   - ownerAddress: The owner's wallet address.
+    ///   - completion: Call back.
+    func saveScoreCache(
         popScore: Int64,
+        actionCount: Int64,
+        ownerAddress: String,
+        completion: @escaping (() -> Void)
+    ) {
+        firestoreRepository.saveScoreCache(
+            popScore: popScore,
+            actionCount: actionCount,
+            ownerAddress: ownerAddress,
+            completion: completion)
+    }
+    
+    /// Save touch count to each of NFT that an owner holds.
+    /// Especially when the game ends.
+    /// - Parameters:
+    ///   - actionCount: Numbers of touch counted during the game.
+    ///   - nftTokenId: NFT token ids that the owner holds.
+    ///   - ownerAddress: The owner's wallet address.
+    ///   - completion: Call back.
+    func saveNFTScores(
         actionCount: Int64,
         nftTokenId: [String],
         ownerAddress: String,
         completion: @escaping (() -> Void)
     ) {
-        firestoreRepository.saveToNewDB(
-            popScore: popScore,
+        firestoreRepository.saveNFTScores(
             actionCount: actionCount,
             nftTokenId: nftTokenId,
             ownerAddress: ownerAddress,
@@ -54,8 +78,9 @@ final class GameViewViewModel: GameViewViewModelProtocol {
     
     // new db get data test
     func getAllScore() {
-        firestoreRepository.getAllAddress { _ in
-            
+        firestoreRepository.getAllAddress { adressList in
+            guard let list = adressList else { return }
+            print(list)
         }
     }
     

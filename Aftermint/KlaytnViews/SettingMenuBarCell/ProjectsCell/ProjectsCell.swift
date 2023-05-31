@@ -240,7 +240,7 @@ final class ProjectsCell: UICollectionViewCell {
             guard let `self` = self,
                   let vm = popScoreCellModel
             else { return }
-            
+
             self.collectionTitleLabel.text = vm?.nftCollectionName
             self.popScoreLabel.text = String(describing: vm?.popScore)
             self.actionCountLabel.text = String(describing: vm?.actioncount)

@@ -13,6 +13,7 @@ final class GameViewController: UIViewController {
     // MARK: - Constants
     private var nickNameLabelText: String = ""
     private var initialTouchScore: Int = 0
+    private var mockUser: AfterMintUser = MoonoMockUserData().getOneUserData()
     
     // MARK: - Dependency
     private var bottomSheetVM: BottomSheetViewModel
@@ -27,6 +28,7 @@ final class GameViewController: UIViewController {
     /// ============================
     
     private var touchCount: Int64 = 0
+    private var totalTouchCount: Int64 = 0
     private var touchCountToShow: Int64 = 0 {
         didSet {
             self.popScoreLabel.text = "\(self.touchCountToShow)"
@@ -166,17 +168,7 @@ final class GameViewController: UIViewController {
         // NEW SCEHME RELATED
         gameVM.getOwnedNfts()
         bind()
-//        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
-//            guard let `self` = self else { return }
-//            self.gameVM.saveToNewDB(
-//                popScore: self.touchCount * self.numberOfOwnedNfts,
-//                actionCount: self.touchCount,
-//                nftTokenId: self.gameVM.ownedNftTokenIds.value ?? [],
-//                ownerAddress: MoonoMockUserData().getOneUserData().address
-//            ) {
-//                self.touchCount = 0
-//            }
-//        }
+
         gameVM.getAllScore()
     }
     
@@ -188,13 +180,11 @@ final class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        saveAndRetrieveGameCache(after: 5.0)
         
         if self.navigationController?.isNavigationBarHidden ?? true {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
-        
-//        self.saveAndRetrieveGameData(after: 5.0)
-        
     }
     
     override func viewWillLayoutSubviews() {
@@ -205,10 +195,10 @@ final class GameViewController: UIViewController {
         super.viewDidDisappear(animated)
         ///Disable the timer when the view disappeared
         timer.invalidate()
+        saveGameTotalScore()
     }
     
     private func navigationBarSetup() {
-        
         self.tabBarController?.navigationItem.setHidesBackButton(true, animated: false)
         self.tabBarController?.navigationItem.title = ""
         
@@ -222,7 +212,7 @@ final class GameViewController: UIViewController {
     // MARK: - Set UI & Layout
     
     private func setDelegate() {
-        self.bottomSheetView.bottomSheetDelegate = self
+        self.bottomSheetVM.delegate = self
         self.bottomSheetVM.secondListVM.delegate = self
     }
     
@@ -284,7 +274,46 @@ final class GameViewController: UIViewController {
         
     }
     
+    // NEW SCHEME
+    private func saveGameTotalScore() {
+        self.gameVM.saveScoreCache(
+            popScore: self.touchCount * self.numberOfOwnedNfts,
+            actionCount: self.touchCount,
+            ownerAddress: self.mockUser.address) {
+                print("Touch count saved: \(self.touchCount)")
+                self.touchCount = 0
+            }
+        
+        self.gameVM.saveNFTScores(
+            actionCount: self.totalTouchCount,
+            nftTokenId: self.gameVM.ownedNftTokenIds.value ?? [],
+            ownerAddress: mockUser.address) {
+                print("Total touch count saved: \(self.totalTouchCount)")
+                self.totalTouchCount = 0
+            }
+    }
     
+    private func saveAndRetrieveGameCache(after second: TimeInterval) {
+        timer = Timer.scheduledTimer(
+            withTimeInterval: second,
+            repeats: true,
+            block: { [weak self] _ in
+                guard let `self` = self else { return }
+                // Save game score to db
+                self.gameVM.saveScoreCache(
+                    popScore: self.touchCount * self.numberOfOwnedNfts,
+                    actionCount: self.touchCount,
+                    ownerAddress: self.mockUser.address) {
+                        self.touchCount = 0
+                        print("Touch count saved: \(self.touchCount)")
+                    }
+                // Retrive game score from db
+                self.bottomSheetVM.getItems()
+            })
+    }
+    
+    
+    // OLD SCHEME
     private func saveAndRetrieveGameData(after second: CGFloat) {
         let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
         let mockCardData: Card = MoonoMockMetaData().getOneMockData()
@@ -360,6 +389,7 @@ extension GameViewController: MoonoGameSceneDelegate {
         guard let numberOfNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") else { return }
 
         self.touchCountToShow += number
+        self.totalTouchCount += number
         self.touchCount += number
         
         self.tempPopScore += (number * Int64(numberOfNfts))
@@ -373,10 +403,11 @@ extension GameViewController: MoonoGameSceneDelegate {
 }
 
 //TODO: Export this logic to GameVCViewModel
-extension GameViewController: BottomSheetViewDelegate {
+extension GameViewController: BottomSheetViewModelDelegate {
     
     ///Get notified when the data saved to firestore
     func dataFetched() {
+        print("Fetched")
 //        self.touchCount = 0
 //        self.getCurrentUserViewModel()
     }

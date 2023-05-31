@@ -24,9 +24,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     var touchCount: Box<Int> = Box(0)
     
     // MARK: - Init
-    init() {
-        self.fireStoreRepository.delegate = self
-    }
+    init() {}
     
     // MARK: - Public
     func numberOfRowsInSection() -> Int {
@@ -72,8 +70,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
             }
            
             self.leaderBoardVMList.value = viewModels
-//            self.diff = viewModels.difference(from: self.oldVMList)
-            
             self.delegate?.dataFetched2()
         }
     }
@@ -82,7 +78,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     /// For using DifferenceKit
     func getAddressSectionVM(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
         
-        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
+        self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else {
                 return
             }
@@ -106,7 +102,35 @@ final class LeaderBoardSecondSectionCellListViewModel {
             self.leaderBoardVMList.value = viewModels
             completion(viewModels)
             self.delegate?.dataFetched2()
+            
         }
+        
+        // OLD SCHEME
+//        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
+//            guard let addressList = addressList else {
+//                return
+//            }
+//            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
+//            let initialRank = 1
+//
+//            let viewModels = addressList.map { address in
+//                let viewModel = LeaderBoardSecondSectionCellViewModel(
+//                    ownerAddress: address.ownerAddress,
+//                    rankImage: rankImage,
+//                    rank: initialRank,
+//                    userProfileImage: address.profileImageUrl,
+//                    topLabelText: address.ownerAddress,
+//                    bottomLabelText: "\(address.ownedNFTs)",
+//                    actionCount: address.actionCount,
+//                    popScore: address.popScore
+//                )
+//                return viewModel
+//            }
+//
+//            self.leaderBoardVMList.value = viewModels
+//            completion(viewModels)
+//            self.delegate?.dataFetched2()
+//        }
     }
     
     //TODO: Need to add error handler
@@ -153,15 +177,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
             ownerAddress: ownerAddress,
             collectionType: collectionType
         )
-    }
-    
-}
-
-extension LeaderBoardSecondSectionCellListViewModel: FirestoreRepositoryDelegate {
-    
-    func dataChangedIndex(indices: [UInt]) {
-        
-//        print("Changed indices: \(indices)")
     }
     
 }
