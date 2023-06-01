@@ -82,18 +82,23 @@ class KlaytnNftRequester {
         }
         return jsonData
     }
-    
-    private static func baseUrlRequest(urlString: String) -> URLRequest {
-        let url = URL(string: urlString)! //TODO: Implicit unwrapping need to be handled properly
+
+    private static func addUrlHeaders(url: URL, headers: [String: String]) -> URLRequest {
         var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(
-            KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID,
-            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__CHAIN_ID
-        )
-        urlRequest.addValue(
-            KlaytnNftRequester.TOKEN_HEADER__VALUE__AUTHORIZATION,
-            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__AUTHORIZATION
-        )
+        headers.forEach { header in
+            urlRequest.addValue(
+                header.key,
+                forHTTPHeaderField: header.value
+            )
+        }
+        return urlRequest
+    }
+    
+    private static func addKlaytnBasicHeaders(url: URL) -> URLRequest {
+        let urlRequest = addUrlHeaders(url: url, headers: [
+            KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID: KlaytnNftRequester.TOKEN_HEADER__KEY__CHAIN_ID,
+            KlaytnNftRequester.TOKEN_HEADER__VALUE__AUTHORIZATION: KlaytnNftRequester.TOKEN_HEADER__KEY__AUTHORIZATION
+        ])
         return urlRequest
     }
     
@@ -101,7 +106,10 @@ class KlaytnNftRequester {
 
     public static func getNumberOfIssuedNFTs(ofCollection nftAddress: String) async throws -> NFTContractInfoResponse? {
         let urlString = String(format: TOKEN_URL__GET_NFT_CONTRACT_INFO, nftAddress)
-        let urlRequest = self.baseUrlRequest(urlString: urlString)
+        guard let url = URL(string: urlString) else {
+            throw(KlaytnRequestError.convertUrlError(urlString))
+        }
+        let urlRequest = addKlaytnBasicHeaders(url: url)
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
         if self.processResponse(data: data, response: response, error: nil) {
             guard let result = self.convertTo(type: NFTContractInfoResponse.self, data: data) else {
@@ -116,7 +124,10 @@ class KlaytnNftRequester {
     // MARK: - Get Number of Holders
     public static func getNumberOfHolders(ofCollection nftAddress: String) async throws -> NFTHolderResponse? {
         let urlString = String(format: TOKEN_URL__GET_NUMBER_OF_HOLDERS, nftAddress)
-        let urlRequest = self.baseUrlRequest(urlString: urlString)
+        guard let url = URL(string: urlString) else {
+            throw(KlaytnRequestError.convertUrlError(urlString))
+        }
+        let urlRequest = addKlaytnBasicHeaders(url: url)
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
         if self.processResponse(data: data, response: response, error: nil) {
             guard let result = self.convertTo(type: NFTHolderResponse.self, data: data) else {
@@ -131,12 +142,41 @@ class KlaytnNftRequester {
     
     //MARK: - Get Nfts
     
+    public static func requestMoonoNftImageUrl(contractAddress: String, tokenId: String) async -> String? {
+        
+        do {
+            let urlSession = URLSession(configuration: .default)
+            guard let nft = try await requestToGetNftInfo(contractAddress: contractAddress, tokenId: tokenId),
+                  let tokenUri = nft.tokenUri else {
+                return nil
+            }
+            
+            let convertedTokenUri = tokenUri.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
+            guard let url = URL(string: convertedTokenUri) else { return nil }
+            
+            let (data, response) = try await urlSession.data(from: url)
+            if processResponse(data: data, response: response, error: nil) {
+                guard let metaData = convertTo(type: MoonoNftMetadata.self, data: data) else { return nil }
+                let imageUrl = metaData.image.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
+                return imageUrl
+            } else {
+                return nil
+            }
+            
+        }
+        catch {
+            print("Error requesting moono nft image url: \(error)")
+            return nil
+        }
+
+    }
     
     /// Request to retrieve a single nft's information
     /// - Parameters:
     ///   - contractAddress: Contract adress of the collection
     ///   - tokenId: NFT token id
     ///   - completion: Call back
+    // TODO: private으로 변경하기
     public static func requestToGetNftInfo(
         contractAddress: String,
         tokenId: String
@@ -147,15 +187,7 @@ class KlaytnNftRequester {
         guard let url = URL(string: urlToken) else {
             throw(KlaytnRequestError.urlError(urlToken))
         }
-        var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(
-            KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID,
-            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__CHAIN_ID
-        )
-        urlRequest.addValue(
-            KlaytnNftRequester.TOKEN_HEADER__VALUE__AUTHORIZATION,
-            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__AUTHORIZATION
-        )
+        let urlRequest = addKlaytnBasicHeaders(url: url)
         
         // Check cache.
         if let cachedData = cacheManager.getDataCache(for: .singleNFTInfo, url: url) {
@@ -210,15 +242,7 @@ class KlaytnNftRequester {
             return true
         }
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.addValue(
-            KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID,
-            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__CHAIN_ID
-        )
-        urlRequest.addValue(
-            KlaytnNftRequester.TOKEN_HEADER__VALUE__AUTHORIZATION,
-            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__AUTHORIZATION
-        )
+        let urlRequest = addKlaytnBasicHeaders(url: url)
         
         let dataTask = urlSession.dataTask(with: urlRequest, completionHandler: completionHandler)
         dataTask.resume()

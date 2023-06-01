@@ -177,7 +177,7 @@ final class NftRankCell: UITableViewCell {
     public func configure(vm: NftRankCellViewModel) {
         self.rankLabel.text = "\(vm.rank)"
         let url = URL(string: vm.nftImageUrl)
-        print("IMGAE URL: \(vm.nftImageUrl)")
+//        print("IMGAE URL: \(vm.nftImageUrl)")
         NukeImageLoader.loadImageUsingNuke(url: url) { image in
             DispatchQueue.main.async {
                 self.nftImageView.image = image

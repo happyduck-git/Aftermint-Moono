@@ -392,17 +392,15 @@ class FirestoreRepository {
                 .data()
             
             let convertedId = id.convertToHex() ?? "0x219"
-            async let tokenUri = KlaytnNftRequester.requestToGetNftInfo(
+            async let imageUri = KlaytnNftRequester.requestMoonoNftImageUrl(
                 contractAddress: collectionType.address,
                 tokenId: convertedId
             )
-            
+
             let ownerAddress = try await nftInfoData?[K.FStore.cachedWalletAddress] as? String ?? "N/A"
             let score = try await nftScoreData?[K.FStore.scoreField] as? Int64 ?? 0
-            let imageUrl = try await tokenUri?.tokenUri ?? "N/A"
-            let convertedUrl = imageUrl.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
-            //https://ipfs.io/ipfs/QmfXTKDUQYbRixkFb5caCHnt3shAvcjPqKfV4nGGaaDJVY/json/845.json
-            //https://ipfs.io/ipfs/QmaVx2pfreYteSmJffxFPqThp9FxqMTixvUfapBsChDsJx/845.png
+            let imageUrl = await imageUri ?? "N/A"
+
             let card = Card(
                 tokenId: id,
                 ownerAddress: ownerAddress,
