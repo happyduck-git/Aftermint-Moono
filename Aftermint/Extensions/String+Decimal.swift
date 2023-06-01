@@ -15,4 +15,12 @@ extension String {
         return decimalNumber
     }
     
+    func convertToHex() -> String? {
+        guard let convertedInt = Int(self) else {
+            return nil
+        }
+        let hex = String(convertedInt, radix: 16)
+        return "0x" + hex
+    }
+    
 }

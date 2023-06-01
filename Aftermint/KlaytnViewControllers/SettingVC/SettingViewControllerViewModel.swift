@@ -81,28 +81,7 @@ final class SettingViewControllerViewModel {
             }
             self.usersCellViewModel.usersList.value = vmList
         }
-        
-//        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
-//            guard let addressList = addressList else { return }
-//            let vmList = addressList.map { address in
-//
-//                /// Check if address is the same as current (mock) user's
-//                if address.ownerAddress == self.mockUser.address {
-//                    self.youCellViewModel.currentUser.value = address
-//                }
-//
-//                return PopScoreRankCellViewModel(
-//                    rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
-//                    rank: 0,
-//                    profileImageUrl: address.profileImageUrl,
-//                    owerAddress: address.ownerAddress,
-//                    totalNfts: address.ownedNFTs,
-//                    popScore: address.popScore,
-//                    actioncount: address.actionCount
-//                )
-//            }
-//            self.usersCellViewModel.usersList.value = vmList
-//        }
+
     }
     
     func getNftData(ofCollectionType collectionType: CollectionType) {
@@ -110,17 +89,16 @@ final class SettingViewControllerViewModel {
             guard let collection = collection else { return }
             self.usersCellViewModel.currentNft.value = collection
         }
-//        self.fireStoreRepository.getNftCollectionFromOldScheme(ofType: collectionType) { collection in
-//            guard let collection = collection else { return }
-//            self.usersCellViewModel.currentNft.value = collection
-//        }
     }
     
     func getAllCards(ofCollectionType collectionType: CollectionType) {
-        self.fireStoreRepository.getAllCardsFromOldScheme(ofCollectionType: collectionType) { cardList in
-            guard let cardList = cardList else { return }
+        
+        Task {
+            let results = try await self.fireStoreRepository.getAllCards(ofCollectionType: collectionType)
+
+            guard let cards = results else { return }
             var currentUserCardList: [NftRankCellViewModel] = []
-            let vmList = cardList.map { card in
+            let vmList = cards.map { card in
                 
                 let vm = NftRankCellViewModel(
                     rank: 0,
@@ -137,10 +115,10 @@ final class SettingViewControllerViewModel {
                 
                 return vm
             }
-            print("Current user list: \(currentUserCardList.count)")
             self.youCellViewModel.nftRankViewModels.value = currentUserCardList
             self.nftsCellViewModel.nftsList.value = vmList
         }
+        
     }
     
     func getAllCollectionFields(ofCollectionType collectionType: CollectionType) {

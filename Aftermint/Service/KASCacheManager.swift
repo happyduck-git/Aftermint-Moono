@@ -7,41 +7,48 @@
 
 import Foundation
 
+enum KASRequestType: CaseIterable {
+    case allNFTsInfo
+    case singleNFTInfo
+}
+
 protocol CacheManagerProtocol {
-    func getDataCache(url: URL?) -> Data?
-    func setCache(url: URL?, data: Data, response: URLResponse?)
+    func getDataCache(for type: KASRequestType, url: URL?) -> Data?
+    func setCache(for type: KASRequestType, url: URL?, data: Data, response: URLResponse?)
 }
 
 final class KASCacheManager: CacheManagerProtocol {
     
-    private let collectionType: CollectionType
-    private var cacheDictionary: [CollectionType: NSCache<NSString, NSData>] = [:]
-    private var urlResponseCacheDictionary: [CollectionType: NSCache<NSString, URLResponse>] = [:]
+    private var cacheDictionary: [KASRequestType: NSCache<NSString, NSData>] = [:]
+    private var urlResponseCacheDictionary: [KASRequestType: NSCache<NSString, URLResponse>] = [:]
     
-    init(type: CollectionType) {
-        self.collectionType = type
+//    private let collectionType: CollectionType
+//    private var cacheDictionary: [CollectionType: NSCache<NSString, NSData>] = [:]
+//    private var urlResponseCacheDictionary: [CollectionType: NSCache<NSString, URLResponse>] = [:]
+    
+    init() {
         setInitialCache()
     }
 
-    func getDataCache(url: URL?) -> Data? {
-        guard let targetCache = cacheDictionary[collectionType],
+    func getDataCache(for type: KASRequestType, url: URL?) -> Data? {
+        guard let targetCache = cacheDictionary[type],
               let url = url
         else { return nil }
         let key = url.absoluteString as NSString
         return targetCache.object(forKey: key) as? Data
     }
     
-    func getResponseCache(url: URL?) -> URLResponse? {
-        guard let urlResponseCache = urlResponseCacheDictionary[collectionType],
+    func getResponseCache(for type: KASRequestType, url: URL?) -> URLResponse? {
+        guard let urlResponseCache = urlResponseCacheDictionary[type],
               let url = url
         else { return nil }
         let key = url.absoluteString as NSString
         return urlResponseCache.object(forKey: key)
     }
     
-    func setCache(url: URL?, data: Data, response: URLResponse?) {
-        guard let targetCache = cacheDictionary[collectionType],
-              let urlResponseCache = urlResponseCacheDictionary[collectionType],
+    func setCache(for type: KASRequestType, url: URL?, data: Data, response: URLResponse?) {
+        guard let targetCache = cacheDictionary[type],
+              let urlResponseCache = urlResponseCacheDictionary[type],
               let response = response,
               let url = url
         else { return }
@@ -52,8 +59,10 @@ final class KASCacheManager: CacheManagerProtocol {
     }
     
     private func setInitialCache() {
-        cacheDictionary[collectionType] = NSCache<NSString, NSData>()
-        urlResponseCacheDictionary[collectionType] = NSCache<NSString, URLResponse>()
+        KASRequestType.allCases.forEach { type in
+            cacheDictionary[type] = NSCache<NSString, NSData>()
+            urlResponseCacheDictionary[type] = NSCache<NSString, URLResponse>()
+        }
     }
     
 }

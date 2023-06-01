@@ -15,7 +15,9 @@ class FirestoreRepository {
     static let shared: FirestoreRepository = FirestoreRepository(of: .moono)
     
     let db = Firestore.firestore()
-    let baseDBPath = Firestore.firestore()
+    
+    private var tokenIds: [String] = []
+    private let baseDBPath = Firestore.firestore()
         .collection(K.FStore.rootV2Field)
         .document(K.FStore.nftScoreSystemField)
         .collection(K.FStore.nftCollectionSetField)
@@ -357,25 +359,61 @@ class FirestoreRepository {
     // MARK: - Retrieve data
     
     func getAllCards(ofCollectionType collectionType: CollectionType) async throws -> [Card]? {
+        var cards: [Card] = []
         
-        var tokens: [String] = []
-        
-        let docRefForNft = self.db
+        let collectionRefForNft = self.db
             .collection(K.FStore.rootV2Field)
             .document(K.FStore.nftScoreSystemField)
             .collection(K.FStore.nftCollectionSetField)
             .document(collectionType.rawValue)
             .collection(K.FStore.nftSetField)
         
-        let documents = try await docRefForNft
+        let documents = try await collectionRefForNft
             .getDocuments()
             .documents
-        
-        tokens = documents.map { snapshot in
+
+        tokenIds = documents.map { snapshot in
             snapshot.documentID
         }
+    
+        for id in tokenIds {
             
+            let docRef = collectionRefForNft
+                .document(id)
+            
+            async let nftInfoData = docRef
+                .getDocument()
+                .data()
+            
+            async let nftScoreData = docRef
+                .collection(K.FStore.nftScoreSetField)
+                .document(K.FStore.popgameField)
+                .getDocument()
+                .data()
+            
+            let convertedId = id.convertToHex() ?? "0x219"
+            async let tokenUri = KlaytnNftRequester.requestToGetNftInfo(
+                contractAddress: collectionType.address,
+                tokenId: convertedId
+            )
+            
+            let ownerAddress = try await nftInfoData?[K.FStore.cachedWalletAddress] as? String ?? "N/A"
+            let score = try await nftScoreData?[K.FStore.scoreField] as? Int64 ?? 0
+            let imageUrl = try await tokenUri?.tokenUri ?? "N/A"
+            let convertedUrl = imageUrl.replace(target: "ipfs://", withString: "https://ipfs.io/ipfs/")
+            //https://ipfs.io/ipfs/QmfXTKDUQYbRixkFb5caCHnt3shAvcjPqKfV4nGGaaDJVY/json/845.json
+            //https://ipfs.io/ipfs/QmaVx2pfreYteSmJffxFPqThp9FxqMTixvUfapBsChDsJx/845.png
+            let card = Card(
+                tokenId: id,
+                ownerAddress: ownerAddress,
+                popScore: score, // TODO: DELETE this property if it is not needed.
+                actionCount: 0,
+                imageUrl: imageUrl
+            )
+            cards.append(card)
+        }
         
+        return cards
     }
     
     /// Fetch all the document exists in `NFT collection` in firestore

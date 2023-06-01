@@ -19,4 +19,13 @@ enum CollectionType: String {
             return "Moono Week"
         }
     }
+    
+    var address: String {
+        switch self {
+        case .bellyGom:
+            return "0xce70eef5adac126c37c8bc0c1228d48b70066d03"
+        case .moono:
+            return "0x29421a3c92075348fcbcb04de965e802ed187302"
+        }
+    }
 }

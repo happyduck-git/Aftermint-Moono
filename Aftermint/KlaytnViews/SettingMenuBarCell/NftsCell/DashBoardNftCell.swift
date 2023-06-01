@@ -63,7 +63,9 @@ final class DashBoardNftCell: UICollectionViewCell {
         vm.nftsList.bind { [weak self] nfts in
             guard let `self` = self else { return }
             self.nftsList = nfts ?? []
-            self.nftScoreTableView.reloadData()
+            DispatchQueue.main.async {
+                self.nftScoreTableView.reloadData()
+            }
         }
         
         vm.highestNft.bind { [weak self] rankCellVM in

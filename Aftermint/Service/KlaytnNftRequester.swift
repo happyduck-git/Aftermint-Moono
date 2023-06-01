@@ -9,18 +9,22 @@ import Foundation
 
 class KlaytnNftRequester {
     
-    private static let cacheManager = KASCacheManager(type: .moono)
+    private static let cacheManager = KASCacheManager()
     private static var requestToNftsURL: URL?
-    
+    // URLs
     private static let TOKEN_URL__GET_NFT_CONTRACT_INFO = "https://th-api.klaytnapi.com/v2/contract/nft/%@"
     private static let TOKEN_URL__GET_NUMBER_OF_HOLDERS = "https://th-api.klaytnapi.com/v2/contract/nft/%@/holder"
     private static let TOKEN_URL__GET_NFTS_BY_OWNER_ADDRESS__PARAMS_2 = "https://th-api.klaytnapi.com/v2/contract/nft/%@/owner/%@"
+    private static let TOKEN_URL__GET_NFT_TOKEN_INFO = "https://th-api.klaytnapi.com/v2/contract/nft/%@/token/%@"
+    // Headers
     private static let TOKEN_HEADER__KEY__CHAIN_ID = "x-chain-id"
     private static let TOKEN_HEADER__VALUE__CHAIN_ID = "8217"
     private static let TOKEN_HEADER__KEY__AUTHORIZATION = "Authorization"
     private static let TOKEN_HEADER__VALUE__AUTHORIZATION = "Basic S0FTSzEyQ1JKNTNZTk9GQkUwMzM0TUJFOkwwUUpYTHJNam43cUNDWXVJUG05OWZ5Rko5MnJtNjRlaWxGMTJwdkQ="
+    // Params
     private static let TOKEN_PARAMS__KEY__SIZE = "size"
     private static let TOKEN_PARAMS__VALUE__SIZE_MAX = "1000"
+    // Contract Address
     private static let CONTRACT_ADDRESS__BELLY_GOM = "0xce70eef5adac126c37c8bc0c1228d48b70066d03"
     private static let CONTRACT_ADDRESS__MOONO = "0x29421a3c92075348fcbcb04de965e802ed187302"
     
@@ -126,6 +130,59 @@ class KlaytnNftRequester {
     
     
     //MARK: - Get Nfts
+    
+    
+    /// Request to retrieve a single nft's information
+    /// - Parameters:
+    ///   - contractAddress: Contract adress of the collection
+    ///   - tokenId: NFT token id
+    ///   - completion: Call back
+    public static func requestToGetNftInfo(
+        contractAddress: String,
+        tokenId: String
+    ) async throws -> KlaytnNft? {
+        
+        let urlSession = URLSession(configuration: .default)
+        let urlToken = String(format: KlaytnNftRequester.TOKEN_URL__GET_NFT_TOKEN_INFO, contractAddress, tokenId)
+        guard let url = URL(string: urlToken) else {
+            throw(KlaytnRequestError.urlError(urlToken))
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.addValue(
+            KlaytnNftRequester.TOKEN_HEADER__VALUE__CHAIN_ID,
+            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__CHAIN_ID
+        )
+        urlRequest.addValue(
+            KlaytnNftRequester.TOKEN_HEADER__VALUE__AUTHORIZATION,
+            forHTTPHeaderField: KlaytnNftRequester.TOKEN_HEADER__KEY__AUTHORIZATION
+        )
+        
+        // Check cache.
+        if let cachedData = cacheManager.getDataCache(for: .singleNFTInfo, url: url) {
+            guard let nft = convertTo(type: KlaytnNft.self, data: cachedData) else {
+                throw(KlaytnRequestError.convertUrlError(urlToken))
+            }
+            return nft
+        } else {
+            let (data, response) = try await urlSession.data(for: urlRequest)
+            // Set cache.
+            cacheManager.setCache(for: .singleNFTInfo, url: url, data: data, response: response)
+            
+            if KlaytnNftRequester.processResponse(data: data, response: response, error: nil) {
+                guard let nft = convertTo(type: KlaytnNft.self, data: data) else {
+//                    throw(KlaytnRequestError.convertUrlError(urlToken))
+                    return nil
+                }
+                return nft
+            } else {
+                return nil
+//                throw(KlaytnRequestError.badUrlResponse(response.description))
+            }
+        }
+        
+        
+    }
+    
     public static func requestToGetNfts(
         contractAddress: String,
         walletAddress: String,
@@ -145,11 +202,10 @@ class KlaytnNftRequester {
         
         requestToNftsURL = url
         
-        if let cachedData = cacheManager.getDataCache(url: url),
-           let cachedUrlResponse = cacheManager.getResponseCache(url: url)
+        if let cachedData = cacheManager.getDataCache(for: .allNFTsInfo, url: url),
+           let cachedUrlResponse = cacheManager.getResponseCache(for: .allNFTsInfo, url: url)
         {
             print("Using cached API Response")
-            let response = URLResponse()
             completionHandler(cachedData, cachedUrlResponse, nil)
             return true
         }
@@ -190,7 +246,7 @@ class KlaytnNftRequester {
                 return
             }
             
-            cacheManager.setCache(url: requestToNftsURL, data: data, response: response) //TODO: setting cache is occurring everytime this method is called. Need to find another way to avoid unnecessary set.
+            cacheManager.setCache(for: .allNFTsInfo, url: requestToNftsURL, data: data, response: response) //TODO: setting cache is occurring everytime this method is called. Need to find another way to avoid unnecessary set.
             nftsHandler(nfts, nil)
         }
     }
@@ -317,4 +373,25 @@ class KlaytnNftRequester {
             hair: attributeMap[MoonoNft.TraitType.hair_string.rawValue] as! String
         )
     }
+}
+
+extension KlaytnNftRequester {
+    
+    enum KlaytnRequestError: Error {
+        case urlError(String)
+        case convertUrlError(String)
+        case badUrlResponse(String)
+        
+        var description: String {
+            switch self {
+            case .urlError(let urlToken):
+                return "Url is nil : urlToken: \(urlToken)."
+            case .convertUrlError(let urlToken):
+                return "Converting result data is failed : urlToken: \(urlToken)."
+            case .badUrlResponse(let response):
+                return "Bad URL Response - \(response)."
+            }
+        }
+    }
+    
 }

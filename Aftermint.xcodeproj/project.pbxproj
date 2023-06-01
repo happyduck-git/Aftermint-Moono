@@ -424,7 +424,6 @@
 		939DE063297A2E0600EFA71E /* KlaytnPrepareResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE05F297A2E0600EFA71E /* KlaytnPrepareResponse.swift */; };
 		939DE064297A2E0600EFA71E /* KlaytnTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE060297A2E0600EFA71E /* KlaytnTokenResponse.swift */; };
 		939DE065297A2E0600EFA71E /* KlaytnAuthResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE061297A2E0600EFA71E /* KlaytnAuthResult.swift */; };
-		939DE066297A2E0600EFA71E /* KlaytnNFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE062297A2E0600EFA71E /* KlaytnNFT.swift */; };
 		93A4B7AB298C9E3200146FD8 /* NanumSquareRoundOTF-R.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93A4B7A7298C9E3200146FD8 /* NanumSquareRoundOTF-R.otf */; };
 		93A4B7AC298C9E3200146FD8 /* NanumSquareRoundOTF-EB.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93A4B7A8298C9E3200146FD8 /* NanumSquareRoundOTF-EB.otf */; };
 		93A4B7AD298C9E3200146FD8 /* NanumSquareRoundOTF-L.otf in Resources */ = {isa = PBXBuildFile; fileRef = 93A4B7A9298C9E3200146FD8 /* NanumSquareRoundOTF-L.otf */; };
@@ -858,7 +857,6 @@
 		939DE05F297A2E0600EFA71E /* KlaytnPrepareResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlaytnPrepareResponse.swift; sourceTree = "<group>"; };
 		939DE060297A2E0600EFA71E /* KlaytnTokenResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlaytnTokenResponse.swift; sourceTree = "<group>"; };
 		939DE061297A2E0600EFA71E /* KlaytnAuthResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlaytnAuthResult.swift; sourceTree = "<group>"; };
-		939DE062297A2E0600EFA71E /* KlaytnNFT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KlaytnNFT.swift; sourceTree = "<group>"; };
 		93A4B7A7298C9E3200146FD8 /* NanumSquareRoundOTF-R.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumSquareRoundOTF-R.otf"; sourceTree = "<group>"; };
 		93A4B7A8298C9E3200146FD8 /* NanumSquareRoundOTF-EB.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumSquareRoundOTF-EB.otf"; sourceTree = "<group>"; };
 		93A4B7A9298C9E3200146FD8 /* NanumSquareRoundOTF-L.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NanumSquareRoundOTF-L.otf"; sourceTree = "<group>"; };
@@ -2464,7 +2462,6 @@
 			children = (
 				9300BB6129C821E900C67A29 /* Firestore */,
 				939DE061297A2E0600EFA71E /* KlaytnAuthResult.swift */,
-				939DE062297A2E0600EFA71E /* KlaytnNFT.swift */,
 				36A8CEE62983B5FC007BF65A /* KlaytnRawNft.swift */,
 				939DE05F297A2E0600EFA71E /* KlaytnPrepareResponse.swift */,
 				939DE060297A2E0600EFA71E /* KlaytnTokenResponse.swift */,
@@ -2940,7 +2937,6 @@
 				3619B1A529790AC60051C387 /* GroupInterpolator.swift in Sources */,
 				93A4B8012990D0DA00146FD8 /* VoteCell.swift in Sources */,
 				3619B0E229790AC50051C387 /* Template.swift in Sources */,
-				939DE066297A2E0600EFA71E /* KlaytnNFT.swift in Sources */,
 				3619B1C429790AC60051C387 /* Marker.swift in Sources */,
 				245A4DD329DEB582004B28A2 /* ProjectPopScoreCellViewModel.swift in Sources */,
 				240121AA29A7B49200F60BDA /* Coordinator.swift in Sources */,

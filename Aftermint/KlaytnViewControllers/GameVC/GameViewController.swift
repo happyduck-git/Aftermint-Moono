@@ -180,7 +180,7 @@ final class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        saveAndRetrieveGameCache(after: 5.0)
+//        saveAndRetrieveGameCache(after: 5.0)
         
         if self.navigationController?.isNavigationBarHidden ?? true {
             self.navigationController?.setNavigationBarHidden(false, animated: false)

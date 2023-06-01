@@ -27,7 +27,7 @@ final class DashBoardNftCellViewModel {
     /// Among current user's nfts, get the nft which has the highest score
     func getTheHighestScoreNftOfCurrentUser() {
         highestNft.value = self.getCurrentUsersNfts().first
-        print("Highest: \(highestNft.value)")
+//        print("Highest: \(highestNft.value)")
     }
     
 }
