@@ -358,7 +358,6 @@ class FirestoreRepository {
     
     // MARK: - Retrieve data
     
-    
     /// Get all the nft information
     /// - Parameter collectionType: NFT Collection type
     /// - Returns: Array of Cards
@@ -369,18 +368,13 @@ class FirestoreRepository {
         let start = CFAbsoluteTimeGetCurrent()
 
         var cards: [Card] = []
-        /*
-        let collectionRefForNft = self.db
-            .collection(K.FStore.rootV2Field)
-            .document(K.FStore.nftScoreSystemField)
-            .collection(K.FStore.nftCollectionSetField)
-            .document(collectionType.rawValue)
-            .collection(K.FStore.nftSetField)
-         */
+
         let nftScoreSetColletion = self.db
             .collectionGroup(K.FStore.nftScoreSetField)
+//            .order(by: K.FStore.scoreField, descending: true) // TODO: 확인 필요.
         
         let groupSnapshot = try await nftScoreSetColletion.getDocuments()
+        print(groupSnapshot.count)
         let groupDocuments = groupSnapshot.documents
         
         for doc in groupDocuments {
@@ -417,58 +411,17 @@ class FirestoreRepository {
             )
             cards.append(card)
         }
-
-        /*
-        let documents = try await collectionRefForNft
-            .getDocuments()
-            .documents
-
-        tokenIds = documents.map { snapshot in
-            snapshot.documentID
-        }
-    
-        for id in tokenIds {
-            
-            let docRef = collectionRefForNft
-                .document(id)
-            
-            async let nftInfoData = docRef
-                .getDocument()
-                .data()
-            
-            async let nftScoreData = docRef
-                .collection(K.FStore.nftScoreSetField)
-                .document(K.FStore.popgameField)
-                .getDocument()
-                .data()
-            
-            let convertedId = id.convertToHex() ?? "0x219"
-            async let imageUri = KlaytnNftRequester.requestMoonoNftImageUrl(
-                contractAddress: collectionType.address,
-                tokenId: convertedId
-            )
-
-            let ownerAddress = try await nftInfoData?[K.FStore.cachedWalletAddress] as? String ?? "N/A"
-            let score = try await nftScoreData?[K.FStore.scoreField] as? Int64 ?? 0
-            let imageUrl = await imageUri ?? "N/A"
-
-            let card = Card(
-                tokenId: id,
-                ownerAddress: ownerAddress,
-                popScore: score,
-                actionCount: 0, // TODO: DELETE this property if it is not needed.
-                imageUrl: imageUrl
-            )
-            cards.append(card)
-        }
-         */
+         
         let end = CFAbsoluteTimeGetCurrent()
 
         print("Time consumed: \(end - start)")
         return cards
     }
  
-    // NEW SCHEME
+    
+    /// Get all the NFT Collection information.
+    /// - Parameter collectionType: NFT Collection type.
+    /// - Returns: An optional array of NftCollection.
     func getAllCollectionFields(ofCollectionType collectionType: CollectionType) async throws -> [NftCollection]? {
         var documentIds: [String] = []
         var imageUrls: [String] = []
@@ -531,8 +484,14 @@ class FirestoreRepository {
         return nftCollections
     }
     
-    // NEW SCHEME
-    func getAllAddress(completion: @escaping (([Address]?) -> Void)) {
+    
+    /// Get all the address information.
+    /// - Parameter completion: Call back.
+    func getAllAddress(
+        collectionType: CollectionType,
+        gameType: GameType,
+        completion: @escaping (([Address]?) -> Void)
+    ) {
         let group = DispatchGroup()
         var results: [Address] = []
         
@@ -541,7 +500,11 @@ class FirestoreRepository {
             
             addressList.forEach { address in
                 group.enter()
-                self.getDataforAddress(address: address) { address in
+                self.getDataforAddress(
+                    address,
+                    collectionType: collectionType,
+                    gameType: gameType
+                ) { address in
                     group.leave()
                     guard let address = address else { return }
                     results.append(address)
@@ -552,16 +515,19 @@ class FirestoreRepository {
             }
         }
     }
+
     
+    /// Get all the document ids.
+    /// - Parameter completion: Call back.
     private func getAllAddressDocumentIds(completion: @escaping (([String]) -> Void)) {
         let group = DispatchGroup()
-        
+
         let collectionRef = self.db.collection(K.FStore.rootV2Field)
             .document(K.FStore.nftScoreSystemField)
             .collection(K.FStore.nftCollectionSetField)
             .document(CollectionType.moono.rawValue)
             .collection(K.FStore.walletAccountSetField)
-            
+
         var docIDs: [String] = []
         group.enter()
         collectionRef.getDocuments { snapshot, error in
@@ -577,28 +543,37 @@ class FirestoreRepository {
                 }
             }
         }
-        
+
         group.notify(queue: .main) {
             completion(docIDs)
         }
-        
+
     }
     
-    private func getDataforAddress(address: String, completion: @escaping ((Address?) -> Void)) {
-        
+    
+    /// Get one address information.
+    /// - Parameters:
+    ///   - address: An wallet address to get the information.
+    ///   - completion: Call back.
+    func getDataforAddress(
+        _ address: String,
+        collectionType: CollectionType,
+        gameType: GameType,
+        completion: @escaping ((Address?) -> Void)
+    ) {
         let group = DispatchGroup()
         
         let collectionRef = self.db
             .collection(K.FStore.rootV2Field)
             .document(K.FStore.nftScoreSystemField)
             .collection(K.FStore.nftCollectionSetField)
-            .document(CollectionType.moono.rawValue)
+            .document(collectionType.rawValue)
             .collection(K.FStore.walletAccountSetField)
         
         var username: String = ""
         var imageUrl: String = ""
-        var actionCount: Int64 = 10
-        var popScore: Int64 = 90
+        var actionCount: Int64 = 0
+        var popScore: Int64 = 0
         
         let docRef = collectionRef.document(address)
         
@@ -617,7 +592,7 @@ class FirestoreRepository {
         
         group.enter()
         docRef.collection(K.FStore.cachedTotalNftScoreSetField)
-            .document(K.FStore.popgameField)
+            .document(gameType.rawValue)
             .getDocument { snapshot, error in
                 group.leave()
                 guard error == nil,
@@ -631,7 +606,7 @@ class FirestoreRepository {
         
         group.enter()
         docRef.collection(K.FStore.actionCountSetField)
-            .document(K.FStore.popgameField)
+            .document(gameType.rawValue)
             .getDocument { snapshot, error in
                 group.leave()
                 guard error == nil,
@@ -654,9 +629,14 @@ class FirestoreRepository {
             )
             completion(address)
         }
+         
     }
 
-    // NEW SCHEME
+    
+    /// Get a specific type of collection data from Nft Collection in Firestore.
+    /// - Parameters:
+    ///   - collectionType: NFT Collection type.
+    ///   - completion: Call back.
     func getNftCollection(ofType collectionType: CollectionType,
                           completion: @escaping ((NftCollection?) -> ())) {
         
@@ -716,7 +696,6 @@ class FirestoreRepository {
             }
         
         group.notify(queue: .global()) {
-            print("Collection: \(totalCount), \(totalScore)")
             let nftCollection = NftCollection(
                 name: collectionName,
                 address: collectionAddress,
@@ -730,49 +709,7 @@ class FirestoreRepository {
         }
         
     }
-    
-    // OLD SCHEME
-    //Get a specific type of collection data from Nft Collection in Firestore
-    func getNftCollectionFromOldScheme(ofType collectionType: CollectionType,
-                          completion: @escaping ((NftCollection?) -> ())) {
-        
-        let docRefForNftCollection = self.db.collection(K.FStore.nftCardCollectionName)
-        docRefForNftCollection
-            .getDocuments { snapshot, error in
-                guard let snapshot = snapshot, error == nil else {
-                    print("Error fetching cards list: \(String(describing: error))")
-                    completion(nil)
-                    return
-                }
-                
-                let documents = snapshot.documents
-                if !documents.isEmpty {
-                    let moonoDocuments = documents.filter { doc in
-                        return doc.documentID.uppercased() == collectionType.rawValue.uppercased()
-                    }
-                    if !moonoDocuments.isEmpty {
-                        let moonoDocument = moonoDocuments[0]
-                        ///TODO: Currently Fetching Moono Collection Data => Need to generalize this
-                        let collection = NftCollection(name: moonoDocument.documentID,
-                                                       address: K.ContractAddress.moono,
-                                                       imageUrl: moonoDocument[K.FStore.imageUrlFieldKey] as? String ?? "N/A",
-                                                       totalPopCount: moonoDocument[K.FStore.popScoreFieldKey] as? Int64 ?? 0,
-                                                       totalActionCount: moonoDocument[K.FStore.actionCountFieldKey] as? Int64 ?? 0,
-                                                       totalNfts: moonoDocument[K.FStore.totalMintedNFTsFieldKey] as? Int64 ?? 0,
-                                                       totalHolders: moonoDocument[K.FStore.totalHolderFieldKey] as? Int64 ?? 0)
-                        completion(collection)
-                        return
-                    } else {
-                        completion(nil)
-                        return
-                    }
-                    
-                } else {
-                    completion(nil)
-                    return
-                }
-            }
-    }
+
 }
 
 extension FirestoreRepository {

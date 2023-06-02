@@ -61,7 +61,10 @@ final class SettingViewControllerViewModel {
 
     func getAllAddressFields() {
         
-        self.fireStoreRepository.getAllAddress { addressList in
+        self.fireStoreRepository.getAllAddress(
+            collectionType: .moono,
+            gameType: .popgame
+        ) { addressList in
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
                 /// Check if address is the same as current (mock) user's
@@ -92,6 +95,7 @@ final class SettingViewControllerViewModel {
     func getAllCards(ofCollectionType collectionType: CollectionType) {
         
         Task {
+         
             let results = try await self.fireStoreRepository.getAllCards(
                 ofCollectionType: collectionType,
                 gameType: .popgame

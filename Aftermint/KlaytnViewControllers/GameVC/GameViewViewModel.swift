@@ -78,10 +78,10 @@ final class GameViewViewModel: GameViewViewModelProtocol {
     
     // new db get data test
     func getAllScore() {
-        firestoreRepository.getAllAddress { adressList in
-            guard let list = adressList else { return }
-            print(list)
-        }
+//        firestoreRepository.getAllAddress { adressList in
+//            guard let list = adressList else { return }
+//            print(list)
+//        }
     }
     
 }
