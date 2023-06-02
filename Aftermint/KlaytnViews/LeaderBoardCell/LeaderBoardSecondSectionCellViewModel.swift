@@ -44,36 +44,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
         return currentUserViewModel?.first
     }
     
-    /// Currently NOT in use.
-    func getAddressSectionVM() {
-
-        self.fireStoreRepository.getAllAddressFromOldScheme { addressList in
-            guard let addressList = addressList else {
-                return
-            }
-            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
-            let initialRank = 1
-            
-            let viewModels = addressList.map { address in
-                let viewModel = LeaderBoardSecondSectionCellViewModel(
-                    ownerAddress: address.ownerAddress,
-                    rankImage: rankImage,
-                    rank: initialRank,
-                    userProfileImage: address.profileImageUrl,
-                    topLabelText: address.ownerAddress,
-//                    bottomLabelText: "NFTs \(address.ownedNFTs)",
-                    bottomLabelText: "\(address.ownedNFTs)",
-                    actionCount: address.actionCount,
-                    popScore: address.popScore
-                )
-                return viewModel
-            }
-           
-            self.leaderBoardVMList.value = viewModels
-            self.delegate?.dataFetched2()
-        }
-    }
-    
     // TODO: NO2. User별 점수 받아오기
     /// For using DifferenceKit
     func getAddressSectionVM(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {

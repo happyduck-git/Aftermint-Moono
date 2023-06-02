@@ -195,7 +195,7 @@ final class GameViewController: UIViewController {
         super.viewDidDisappear(animated)
         ///Disable the timer when the view disappeared
         timer.invalidate()
-        saveGameTotalScore()
+//        saveGameTotalScore()
     }
     
     private func navigationBarSetup() {

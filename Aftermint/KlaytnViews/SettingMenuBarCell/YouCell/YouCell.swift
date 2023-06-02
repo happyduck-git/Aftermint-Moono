@@ -149,22 +149,24 @@ final class YouCell: UICollectionViewCell {
     public func configure(with vm: YouCellViewModel) {
         
         vm.currentUser.bind { [weak self] address in
-            guard let address = address else { return }
+            guard let address = address,
+                  let `self` = self
+            else { return }
             
             DispatchQueue.main.async {
-                self?.imageStringToImage(with: address?.profileImageUrl ?? "N/A", completion: { result in
+                self.imageStringToImage(with: address?.profileImageUrl ?? "N/A", completion: { result in
                     switch result {
                     case .success(let image):
-                        self?.profileImageView.image = image
+                        self.profileImageView.image = image
                     case .failure(let error):
                         print("Error rendering image \(error)")
                     }
                 })
                 
-                self?.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
-                self?.usernameStack.bottomLabelText = address?.username ?? "N/A"
-                self?.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
-                self?.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
+                self.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
+                self.usernameStack.bottomLabelText = address?.username ?? "N/A"
+                self.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
+                self.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
             }
         }
         

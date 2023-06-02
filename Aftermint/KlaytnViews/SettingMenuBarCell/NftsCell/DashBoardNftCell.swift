@@ -58,11 +58,10 @@ final class DashBoardNftCell: UICollectionViewCell {
     /// Bind function - Test
     public func configure(with vm: DashBoardNftCellViewModel) {
         
-        vm.getTheHighestScoreNftOfCurrentUser()
-        
         vm.nftsList.bind { [weak self] nfts in
             guard let `self` = self else { return }
             self.nftsList = nfts ?? []
+            vm.getTheHighestScoreNftOfCurrentUser()
             DispatchQueue.main.async {
                 self.nftScoreTableView.reloadData()
             }

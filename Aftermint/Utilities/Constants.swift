@@ -54,6 +54,7 @@ struct K {
         static let contractAddressField: String = "contract_address"
         static let profileImageField: String = "profile_image_url"
         static let profileNameField: String = "profile_name"
+        static let profileNicknameField: String = "profile_nickname"
         static let cachedTotalActionCountSetField: String = "cached_total_action_count_set"
         static let cachedTotalNftScoreSetField: String = "cached_total_nft_score_set"
         static let cachedWalletAddress: String = "cached_wallet_address"

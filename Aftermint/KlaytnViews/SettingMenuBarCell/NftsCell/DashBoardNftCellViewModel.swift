@@ -17,7 +17,7 @@ final class DashBoardNftCellViewModel {
     /// Among nftsList, filter and return current user's nfts
     private func getCurrentUsersNfts() -> [NftRankCellViewModel] {
         let currentUsersNfts = self.nftsList.value?.filter({ vm in
-            vm.ownerAddress == mockUser.address
+            return vm.ownerAddress == mockUser.address
         })
         
         guard let currentUsersNfts = currentUsersNfts else { return [] }

@@ -60,15 +60,14 @@ final class SettingViewControllerViewModel {
     }
 
     func getAllAddressFields() {
+        
         self.fireStoreRepository.getAllAddress { addressList in
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
-                
                 /// Check if address is the same as current (mock) user's
                 if address.ownerAddress == self.mockUser.address {
                     self.youCellViewModel.currentUser.value = address
                 }
-                
                 return PopScoreRankCellViewModel(
                     rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                     rank: 0,
@@ -81,7 +80,6 @@ final class SettingViewControllerViewModel {
             }
             self.usersCellViewModel.usersList.value = vmList
         }
-
     }
     
     func getNftData(ofCollectionType collectionType: CollectionType) {
@@ -94,7 +92,10 @@ final class SettingViewControllerViewModel {
     func getAllCards(ofCollectionType collectionType: CollectionType) {
         
         Task {
-            let results = try await self.fireStoreRepository.getAllCards(ofCollectionType: collectionType)
+            let results = try await self.fireStoreRepository.getAllCards(
+                ofCollectionType: collectionType,
+                gameType: .popgame
+            )
 
             guard let cards = results else { return }
             var currentUserCardList: [NftRankCellViewModel] = []
@@ -124,7 +125,7 @@ final class SettingViewControllerViewModel {
     func getAllCollectionFields(ofCollectionType collectionType: CollectionType) {
         
         Task {
-            let results = try await self.fireStoreRepository.getAllCollectionFields2(ofCollectionType: collectionType)
+            let results = try await self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType)
             guard let nftCollectionList = results else { return }
             let vmList = nftCollectionList.map { collection in
                 return ProjectPopScoreCellViewModel(
