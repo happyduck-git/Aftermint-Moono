@@ -30,7 +30,60 @@ final class BottomSheetViewModel {
     
     var source: [ArraySection<SectionID, AnyDifferentiable>] = []
     
-    func getItems() {
+    func getItems(of collectionType: CollectionType, gameType: GameType) {
+        
+        Task {
+            guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
+                  var secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
+                return
+            }
+            
+            let typedErasedFirstSectionOldVal = firstSectionOldVal.map {
+                return AnyDifferentiable($0)
+            }
+            let typedErasedSecondSectionOldVal = secondSectionOldVal.map {
+                return AnyDifferentiable($0)
+            }
+            
+            self.source = [
+                ArraySection(model: .first, elements: typedErasedFirstSectionOldVal),
+                ArraySection(model: .second, elements: typedErasedSecondSectionOldVal)
+            ]
+            
+            var firstSectionNewVal: [LeaderBoardFirstSectionCellViewModel] = []
+            async let firstSectionVM = self.firstListVM.getFirstSectionVM(of: collectionType, gameType: gameType)
+            guard let firstVM = try await firstSectionVM else { return }
+            firstSectionOldVal.append(firstVM)
+            firstSectionNewVal.append(firstVM)
+            
+            var secondSectionNewVal: [LeaderBoardSecondSectionCellViewModel] = []
+            async let secondSectionVM = self.secondListVM.getAddressSectionVM(of: collectionType, gameType: gameType)
+            guard let secondVM = try await secondSectionVM else { return }
+            secondSectionOldVal = secondVM
+            secondSectionNewVal = secondVM
+            
+            let typedErasedFirstSectionNewVal = firstSectionNewVal.map {
+                AnyDifferentiable($0)
+            }
+            
+            let typedErasedSecondSectionNewVal = secondSectionNewVal.map {
+                return AnyDifferentiable($0)
+            }
+            
+            let target: [ArraySection<SectionID, AnyDifferentiable>] = [
+                ArraySection(model: .first, elements: typedErasedFirstSectionNewVal),
+                ArraySection(model: .second, elements: typedErasedSecondSectionNewVal)
+            ]
+
+            self.changeset.value = StagedChangeset(source: self.source, target: target)
+            self.delegate?.dataFetched()
+            
+        }
+        
+    }
+    
+    /*
+    func getItemsOld() {
         guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
               var secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
             return
@@ -51,7 +104,7 @@ final class BottomSheetViewModel {
         let group = DispatchGroup()
         var firstSectionNewVal: [LeaderBoardFirstSectionCellViewModel] = []
         group.enter()
-        self.firstListVM.getFirstSectionVM(ofCollection: .moono) {
+        self.firstListVM.getFirstSectionVMOld(ofCollection: .moono) {
             group.leave()
             firstSectionOldVal.append($0)
             firstSectionNewVal.append($0)
@@ -59,7 +112,7 @@ final class BottomSheetViewModel {
         
         var secondSectionNewVal: [LeaderBoardSecondSectionCellViewModel] = []
         group.enter()
-        self.secondListVM.getAddressSectionVM {
+        self.secondListVM.getAddressSectionVMOld {
             group.leave()
             secondSectionOldVal = $0
             secondSectionNewVal = $0
@@ -85,6 +138,7 @@ final class BottomSheetViewModel {
             self.delegate?.dataFetched()
         }
     }
+     */
     
 }
 

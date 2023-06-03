@@ -169,7 +169,6 @@ final class GameViewController: UIViewController {
         gameVM.getOwnedNfts()
         bind()
 
-        gameVM.getAllScore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -180,7 +179,7 @@ final class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        saveAndRetrieveGameCache(after: 5.0)
+        saveAndRetrieveGameCache(after: 5.0)
         
         if self.navigationController?.isNavigationBarHidden ?? true {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -195,7 +194,7 @@ final class GameViewController: UIViewController {
         super.viewDidDisappear(animated)
         ///Disable the timer when the view disappeared
         timer.invalidate()
-//        saveGameTotalScore()
+        saveGameTotalScore()
     }
     
     private func navigationBarSetup() {
@@ -276,21 +275,29 @@ final class GameViewController: UIViewController {
     
     // NEW SCHEME
     private func saveGameTotalScore() {
-        self.gameVM.saveScoreCache(
-            popScore: self.touchCount * self.numberOfOwnedNfts,
-            actionCount: self.touchCount,
-            ownerAddress: self.mockUser.address) {
-                print("Touch count saved: \(self.touchCount)")
-                self.touchCount = 0
-            }
         
-        self.gameVM.saveNFTScores(
-            actionCount: self.totalTouchCount,
-            nftTokenId: self.gameVM.ownedNftTokenIds.value ?? [],
-            ownerAddress: mockUser.address) {
-                print("Total touch count saved: \(self.totalTouchCount)")
-                self.totalTouchCount = 0
-            }
+        Task {
+            try await self.gameVM.saveScoreCache(
+                of: .popgame,
+                popScore: self.touchCount * self.numberOfOwnedNfts,
+                actionCount: self.touchCount,
+                ownerAddress: self.mockUser.address
+            )
+            print("Touch count saved: \(self.touchCount)")
+            self.touchCount = 0
+        }
+        
+        Task {
+            try await self.gameVM.saveNFTScores(
+                of: .popgame,
+                actionCount: self.totalTouchCount,
+                nftTokenId: self.gameVM.ownedNftTokenIds.value ?? [],
+                ownerAddress: mockUser.address
+            )
+            print("Total touch count saved: \(self.totalTouchCount)")
+            self.totalTouchCount = 0
+        }
+
     }
     
     private func saveAndRetrieveGameCache(after second: TimeInterval) {
@@ -300,46 +307,19 @@ final class GameViewController: UIViewController {
             block: { [weak self] _ in
                 guard let `self` = self else { return }
                 // Save game score to db
-                self.gameVM.saveScoreCache(
-                    popScore: self.touchCount * self.numberOfOwnedNfts,
-                    actionCount: self.touchCount,
-                    ownerAddress: self.mockUser.address) {
-                        self.touchCount = 0
-                        print("Touch count saved: \(self.touchCount)")
-                    }
+                Task {
+                    try await self.gameVM.saveScoreCache(
+                        of: .popgame,
+                        popScore: self.touchCount * self.numberOfOwnedNfts,
+                        actionCount: self.touchCount,
+                        ownerAddress: self.mockUser.address
+                    )
+                    self.touchCount = 0
+                }
                 // Retrive game score from db
-                self.bottomSheetVM.getItems()
+                self.bottomSheetVM.getItems(of: .moono, gameType: .popgame)
+
             })
-    }
-    
-    
-    // OLD SCHEME
-    private func saveAndRetrieveGameData(after second: CGFloat) {
-        let mockUserData: AfterMintUser = MoonoMockUserData().getOneUserData()
-        let mockCardData: Card = MoonoMockMetaData().getOneMockData()
-        
-        ///Set Timer scheduler to repeat certain action
-        timer = Timer.scheduledTimer(withTimeInterval: second, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            print("Accumulated touchCount: \(self.touchCount)")
-            // NO1: Touch count 저장
-            self.bottomSheetVM.secondListVM.saveCountNumber(
-                popScore: self.touchCount * self.numberOfOwnedNfts,
-                actionCount: self.touchCount,
-                ownerAddress: mockUserData.address,
-                nftImageUrl: mockCardData.imageUrl,
-                nftTokenId: mockCardData.tokenId,
-                totalNfts: mockUserData.totalNfts,
-                ofCollectionType: .moono
-            )
-            /// Delete if not needed
-//            self.leaderBoardFirstSectionViewModel.getFirstSectionVM(ofCollection: .moono)
-            
-//            self.bottomSheetVM.secondListVM.getAddressSectionVM()
-            
-            // DifferenceKit 적용된 bottom sheet data fetch
-            self.bottomSheetVM.getItems()
-        }
     }
     
     /// Get viewModel for current user information at the top right corner of the vc

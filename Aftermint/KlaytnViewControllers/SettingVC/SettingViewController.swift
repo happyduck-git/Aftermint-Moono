@@ -76,10 +76,10 @@ final class SettingViewController: UIViewController {
         
         vm.getHolderAndNumberOfNFTs()
         
-        vm.getAllAddressFields()
-        vm.getNftData(ofCollectionType: .moono)
-        vm.getAllCards(ofCollectionType: .moono)
-        vm.getAllCollectionFields(ofCollectionType: .moono)
+        vm.getAllAddressFields(gameType: .popgame)
+        vm.getNftData(gameType: .popgame)
+        vm.getAllCards()
+        vm.getAllCollectionFields()
         
     }
     

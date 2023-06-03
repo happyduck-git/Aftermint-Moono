@@ -44,35 +44,67 @@ final class LeaderBoardSecondSectionCellListViewModel {
         return currentUserViewModel?.first
     }
     
+    
     /// For using DifferenceKit
-    func getAddressSectionVM(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
+    func getAddressSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
         
-        self.fireStoreRepository.getAllAddress { addressList in
-            guard let addressList = addressList else {
-                return
-            }
-            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
-            let initialRank = 1
-            
-            let viewModels = addressList.map { address in
-                let viewModel = LeaderBoardSecondSectionCellViewModel(
-                    ownerAddress: address.ownerAddress,
-                    rankImage: rankImage,
-                    rank: initialRank,
-                    userProfileImage: address.profileImageUrl,
-                    topLabelText: address.ownerAddress,
-                    bottomLabelText: "\(address.ownedNFTs)",
-                    actionCount: address.actionCount,
-                    popScore: address.popScore
-                )
-                return viewModel
-            }
-           
-            self.leaderBoardVMList.value = viewModels
-            completion(viewModels)
-            self.delegate?.dataFetched2()
-            
+        let addressList = try await self.fireStoreRepository
+            .getAllAddressAsync(gameType: gameType)
+        
+        guard let addressList = addressList,
+              let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
+        else { return nil }
+        let initialRank = 1
+        
+        let viewModels = addressList.map { address in
+            let viewModel = LeaderBoardSecondSectionCellViewModel(
+                ownerAddress: address.ownerAddress,
+                rankImage: rankImage,
+                rank: initialRank,
+                userProfileImage: address.profileImageUrl,
+                topLabelText: address.ownerAddress,
+                bottomLabelText: "\(address.ownedNFTs)",
+                actionCount: address.actionCount,
+                popScore: address.popScore
+            )
+            return viewModel
         }
+       
+        self.leaderBoardVMList.value = viewModels
+        self.delegate?.dataFetched2()
+        
+        return viewModels
+    }
+    
+    // Currently NOT in use.
+    func getAddressSectionVMOld(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
+        
+//        self.fireStoreRepository.getAllAddress(collectionType: .moono, gameType: .popgame) { addressList in
+//            guard let addressList = addressList else {
+//                return
+//            }
+//            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
+//            let initialRank = 1
+//
+//            let viewModels = addressList.map { address in
+//                let viewModel = LeaderBoardSecondSectionCellViewModel(
+//                    ownerAddress: address.ownerAddress,
+//                    rankImage: rankImage,
+//                    rank: initialRank,
+//                    userProfileImage: address.profileImageUrl,
+//                    topLabelText: address.ownerAddress,
+//                    bottomLabelText: "\(address.ownedNFTs)",
+//                    actionCount: address.actionCount,
+//                    popScore: address.popScore
+//                )
+//                return viewModel
+//            }
+//
+//            self.leaderBoardVMList.value = viewModels
+//            completion(viewModels)
+//            self.delegate?.dataFetched2()
+//
+//        }
         
     }
     
@@ -99,27 +131,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
         }
         completion(.success(viewModels))
         return
-    }
-    
-    // TODO: NO1. GameVM으로 이동
-    func saveCountNumber(
-        popScore: Int64,
-        actionCount: Int64,
-        ownerAddress: String,
-        nftImageUrl: String,
-        nftTokenId: String,
-        totalNfts: Int,
-        ofCollectionType collectionType: CollectionType
-    ) {
-        
-        fireStoreRepository.save(
-            actionCount: actionCount,
-            popScore: popScore,
-            nftImageUrl: nftImageUrl,
-            nftTokenId: nftTokenId,
-            ownerAddress: ownerAddress,
-            collectionType: collectionType
-        )
     }
     
 }

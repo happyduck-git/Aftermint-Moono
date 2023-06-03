@@ -59,12 +59,10 @@ final class SettingViewControllerViewModel {
         }
     }
 
-    func getAllAddressFields() {
+    func getAllAddressFields(gameType: GameType) {
         
-        self.fireStoreRepository.getAllAddress(
-            collectionType: .moono,
-            gameType: .popgame
-        ) { addressList in
+        Task {
+            let addressList = try await self.fireStoreRepository.getAllAddressAsync(gameType: gameType)
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
                 /// Check if address is the same as current (mock) user's
@@ -83,21 +81,23 @@ final class SettingViewControllerViewModel {
             }
             self.usersCellViewModel.usersList.value = vmList
         }
+        
     }
     
-    func getNftData(ofCollectionType collectionType: CollectionType) {
-        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
-            guard let collection = collection else { return }
+    func getNftData(gameType: GameType) {
+
+        Task {
+            let collection = try await self.fireStoreRepository.getCurrentNftCollection(gameType: gameType)
             self.usersCellViewModel.currentNft.value = collection
         }
+        
     }
     
-    func getAllCards(ofCollectionType collectionType: CollectionType) {
+    func getAllCards() {
         
         Task {
          
             let results = try await self.fireStoreRepository.getAllCards(
-                ofCollectionType: collectionType,
                 gameType: .popgame
             )
 
@@ -126,10 +126,10 @@ final class SettingViewControllerViewModel {
         
     }
     
-    func getAllCollectionFields(ofCollectionType collectionType: CollectionType) {
+    func getAllCollectionFields() {
         
         Task {
-            let results = try await self.fireStoreRepository.getAllCollectionFields(ofCollectionType: collectionType)
+            let results = try await self.fireStoreRepository.getAllCollectionFields(gameType: .popgame)
             guard let nftCollectionList = results else { return }
             let vmList = nftCollectionList.map { collection in
                 return ProjectPopScoreCellViewModel(
@@ -157,8 +157,7 @@ final class SettingViewControllerViewModel {
                 guard let totalNumberOfNFTs = contractInfoResult?.totalSupply.convertToDecimal() else { return }
                 projectsCellViewModel.totalNumberOfMintedNFTs.value = totalNumberOfNFTs
 
-                FirestoreRepository.shared.saveNumberOfHoldersAndMintedNfts(
-                    collectionType: .moono,
+                fireStoreRepository.saveNumberOfHoldersAndMintedNfts(
                     totalHolders: Int64(holders?.totalHolder ?? 0),
                     totalMintedNFTs: Int64(totalNumberOfNFTs)
                 )

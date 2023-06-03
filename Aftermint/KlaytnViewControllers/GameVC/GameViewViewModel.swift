@@ -13,7 +13,7 @@ protocol GameViewViewModelDelegate: AnyObject {
 
 protocol GameViewViewModelProtocol {
     func getOwnedNfts()
-    func saveScoreCache(popScore: Int64, actionCount: Int64, ownerAddress: String, completion: @escaping (() -> Void))
+    func saveScoreCache(of gameType: GameType, popScore: Int64, actionCount: Int64, ownerAddress: String) async throws
 }
 
 final class GameViewViewModel: GameViewViewModelProtocol {
@@ -41,18 +41,21 @@ final class GameViewViewModel: GameViewViewModelProtocol {
     ///   - popScore: Numbers of touch counted multiplied by numbers of nfts that the owner holds.
     ///   - actionCount: Numbers of touch counted.
     ///   - ownerAddress: The owner's wallet address.
-    ///   - completion: Call back.
     func saveScoreCache(
+        of gameType: GameType,
         popScore: Int64,
         actionCount: Int64,
-        ownerAddress: String,
-        completion: @escaping (() -> Void)
-    ) {
-        firestoreRepository.saveScoreCache(
-            popScore: popScore,
-            actionCount: actionCount,
-            ownerAddress: ownerAddress,
-            completion: completion)
+        ownerAddress: String
+    ) async throws {
+        
+        try await self.firestoreRepository
+            .saveScoreCache(
+                of: gameType,
+                popScore: popScore,
+                actionCount: actionCount,
+                ownerAddress: ownerAddress
+            )
+        
     }
     
     /// Save touch count to each of NFT that an owner holds.
@@ -61,27 +64,20 @@ final class GameViewViewModel: GameViewViewModelProtocol {
     ///   - actionCount: Numbers of touch counted during the game.
     ///   - nftTokenId: NFT token ids that the owner holds.
     ///   - ownerAddress: The owner's wallet address.
-    ///   - completion: Call back.
     func saveNFTScores(
+        of gameType: GameType,
         actionCount: Int64,
         nftTokenId: [String],
-        ownerAddress: String,
-        completion: @escaping (() -> Void)
-    ) {
-        firestoreRepository.saveNFTScores(
+        ownerAddress: String
+    ) async throws {
+        
+        try await firestoreRepository.saveNFTScores(
+            of: gameType,
             actionCount: actionCount,
             nftTokenId: nftTokenId,
-            ownerAddress: ownerAddress,
-            completion: completion
+            ownerAddress: ownerAddress
         )
-    }
-    
-    // new db get data test
-    func getAllScore() {
-//        firestoreRepository.getAllAddress { adressList in
-//            guard let list = adressList else { return }
-//            print(list)
-//        }
+        
     }
     
 }

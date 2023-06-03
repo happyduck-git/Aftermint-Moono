@@ -31,33 +31,25 @@ final class LeaderBoardFirstSectionCellListViewModel {
         return self.leaderBoardFirstSectionVMList.value?[indexPath.row]
     }
     
-    
     /// For using DifferenceKit
-    func getFirstSectionVM(ofCollection collectionType: CollectionType, completion: @escaping ((LeaderBoardFirstSectionCellViewModel) -> Void)) {
+    func getFirstSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> LeaderBoardFirstSectionCellViewModel? {
         
-        // NEW SCHEME
-        self.fireStoreRepository.getNftCollection(ofType: collectionType) { collection in
-            guard let collection = collection else {
-                return
+        let collection = try await self.fireStoreRepository.getCurrentNftCollection(gameType: gameType)
+        
+        if collection.address == collectionType.address {
+            let viewModel = LeaderBoardFirstSectionCellViewModel(
+                nftImage: collection.imageUrl,
+                nftCollectionName: collection.name,
+                totalActionCount: collection.totalActionCount,
+                totalPopScore: collection.totalPopCount
+            )
+            if !(self.leaderBoardFirstSectionVMList.value?.isEmpty ?? true) {
+                self.leaderBoardFirstSectionVMList.value?.removeFirst()
             }
-            if collection.address == K.ContractAddress.moono {
-                let viewModel = LeaderBoardFirstSectionCellViewModel(
-                    nftImage: collection.imageUrl,
-                    nftCollectionName: collection.name,
-                    totalActionCount: collection.totalActionCount,
-                    totalPopScore: collection.totalPopCount
-                )
-                
-                if !(self.leaderBoardFirstSectionVMList.value?.isEmpty ?? true) {
-                    self.leaderBoardFirstSectionVMList.value?.removeFirst()
-                }
-                self.leaderBoardFirstSectionVMList.value?.append(viewModel)
-                completion(viewModel)
-            } else {
-                return
-            }
+            self.leaderBoardFirstSectionVMList.value?.append(viewModel)
+            return viewModel
         }
- 
+        return nil
     }
     
 }
