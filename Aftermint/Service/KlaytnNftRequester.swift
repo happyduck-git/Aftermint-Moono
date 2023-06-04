@@ -249,6 +249,7 @@ class KlaytnNftRequester {
         return true
     }
     
+    // TODO: Leverage this function to get numbers of NFTs owned by a particular wallet address!
     public static func requestToGetNfts(
         contractAddress: String,
         walletAddress: String,

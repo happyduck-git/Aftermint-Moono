@@ -77,7 +77,7 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "Pop Rank"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-        stack.bottomLabelText = "12"
+        stack.bottomLabelText = "12" // TODO: TEMPORARY VALUE
         stack.bottomLabelFont = BellyGomFont.header09
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -88,7 +88,7 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "Pop Score"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-        stack.bottomLabelText = "358,732"
+//        stack.bottomLabelText = "358,732"
         stack.bottomLabelFont = BellyGomFont.header09
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -99,7 +99,7 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "NFTs"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-        stack.bottomLabelText = "17"
+//        stack.bottomLabelText = "17"
         stack.bottomLabelFont = BellyGomFont.header05
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack

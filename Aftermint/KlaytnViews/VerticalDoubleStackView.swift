@@ -15,7 +15,7 @@ class VerticalDoubleStackView: UIStackView {
         }
     }
     
-    var bottomLabelText: String = "Description" {
+    var bottomLabelText: String = "" {
         didSet {
             self.bottomLabel.text = self.bottomLabelText
         }
