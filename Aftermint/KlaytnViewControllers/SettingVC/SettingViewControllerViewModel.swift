@@ -62,14 +62,14 @@ final class SettingViewControllerViewModel {
     func getAllAddressFields(gameType: GameType) {
         
         Task {
-            let addressList = try await self.fireStoreRepository.getAllAddressAsync(gameType: gameType)
+            let addressList = try await self.fireStoreRepository.getAllAddress(gameType: gameType)
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
                 /// Check if address is the same as current (mock) user's
                 if address.ownerAddress == self.mockUser.address {
                     self.youCellViewModel.currentUser.value = address
                 }
-                print("Owned nfts: \(address.ownedNFTs)")
+          
                 return PopScoreRankCellViewModel(
                     rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                     rank: 0,
@@ -157,7 +157,7 @@ final class SettingViewControllerViewModel {
                 let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
                 guard let totalNumberOfNFTs = contractInfoResult?.totalSupply.convertToDecimal() else { return }
                 projectsCellViewModel.totalNumberOfMintedNFTs.value = totalNumberOfNFTs
-                print("TOTAL NUMBER OF NFTS: \(totalNumberOfNFTs)")
+                
                 fireStoreRepository.saveNumberOfHoldersAndMintedNfts(
                     totalHolders: Int64(holders?.totalHolder ?? 0),
                     totalMintedNFTs: Int64(totalNumberOfNFTs)

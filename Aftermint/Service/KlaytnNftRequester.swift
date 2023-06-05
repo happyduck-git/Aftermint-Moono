@@ -144,14 +144,37 @@ class KlaytnNftRequester {
     }
     
     // MARK: - Get Number of Holders
-    public static func getNumberOfHolders(ofCollection nftAddress: String) async throws -> NFTHolderResponse? {
-        let urlString = String(format: TOKEN_URL__GET_NUMBER_OF_HOLDERS, nftAddress)
+    public static func getNumberOfHolders(ofCollection collectionAddress: String) async throws -> NFTHolderResponse? {
+        let requestType = KASRequestType.numberOfHolders
+        
+        let urlString = String(format: TOKEN_URL__GET_NUMBER_OF_HOLDERS, collectionAddress)
         guard let url = URL(string: urlString) else {
             throw(KlaytnRequestError.convertUrlError(urlString))
         }
-        let urlRequest = addKlaytnBasicHeaders(url: url)
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        if self.processResponse(data: data, response: response, error: nil) {
+        
+        var dataToProcess: Data?
+        var responseToProcess: URLResponse?
+        if let cachedData = cacheManager.getDataCache(for: requestType, url: url),
+           let cachedResponse = cacheManager.getResponseCache(for: requestType, url: url)
+        {
+            dataToProcess = cachedData
+            responseToProcess = cachedResponse
+            guard let result = self.convertTo(type: NFTHolderResponse.self, data: cachedData) else {
+                throw URLError(.cannotParseResponse)
+            }
+            return result
+        } else {
+            let urlRequest = addKlaytnBasicHeaders(url: url)
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            dataToProcess = data
+            responseToProcess = response
+            cacheManager.setCache(for: requestType, url: url, data: data, response: response)
+        }
+      
+        if self.processResponse(data: dataToProcess, response: responseToProcess, error: nil) {
+            guard let data = dataToProcess else {
+                throw KlaytnRequestError.badData
+            }
             guard let result = self.convertTo(type: NFTHolderResponse.self, data: data) else {
                 throw URLError(.cannotParseResponse)
             }
@@ -159,6 +182,7 @@ class KlaytnNftRequester {
         } else {
             throw URLError(.cannotParseResponse)
         }
+        
     }
     
     
@@ -440,7 +464,7 @@ extension KlaytnNftRequester {
             case .badUrlResponse(let response):
                 return "Bad URL Response - \(response)."
             case .badData:
-                return self.description
+                return self.localizedDescription
             }
         }
     }

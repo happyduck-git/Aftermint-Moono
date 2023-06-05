@@ -19,9 +19,7 @@ class NFTCardViewModel {
             return 0
         }
         self.nftSelected = Array(repeating: false, count: numberOfItems)
-        UserDefaults.standard.set(numberOfItems, forKey: "total-nfts-owned")
-        print("numberofNfts: \(numberOfItems)")
-        
+    
         /// Save total number of nfts an owner has
         let mockUser = MoonoMockUserData().getOneUserData()
         

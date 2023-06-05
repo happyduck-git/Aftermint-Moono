@@ -49,7 +49,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     func getAddressSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
         
         let addressList = try await self.fireStoreRepository
-            .getAllAddressAsync(gameType: gameType)
+            .getAllAddress(gameType: gameType)
         
         guard let addressList = addressList,
               let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue)

@@ -81,6 +81,16 @@ final class SettingViewController: UIViewController {
         vm.getAllCards()
         vm.getAllCollectionFields()
         
+        Task {
+            do {
+                try await FirestoreRepository.shared.getPopgameScoreFromGroup()
+            }
+            catch {
+                print("Error getting pop scores -- \(error)")
+            }
+            
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

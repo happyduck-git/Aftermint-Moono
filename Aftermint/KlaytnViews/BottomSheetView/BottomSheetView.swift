@@ -304,7 +304,6 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             
             if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
-                print("Index: \(indexPath.row)")
                 self.currentUserScoreUpdateHandler = { count in
                     cell.popScoreLabel.text = "\(count)"
                 }

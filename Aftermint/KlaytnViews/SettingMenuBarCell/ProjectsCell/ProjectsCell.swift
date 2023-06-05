@@ -245,17 +245,11 @@ final class ProjectsCell: UICollectionViewCell {
             self.popScoreLabel.text = String(describing: vm?.popScore)
             self.actionCountLabel.text = String(describing: vm?.actioncount)
             
-            let imageUrl = vm?.nftImageUrl ?? "N/A"
-            self.imageStringToImage(with: imageUrl) {  result in
-                switch result {
-                case .success(let image):
-                    self.nftImageView.image = image
-                case .failure(let error):
-                    print("Error converting image -- \(error)")
-                }
+            let imageUrl = URL(string: vm?.nftImageUrl ?? "N/A")
+            NukeImageLoader.loadImageUsingNuke(url: imageUrl) { image in
+                self.nftImageView.image = image
             }
         }
-        
         
         vm.totalNumberOfHolders.bind { [weak self] numberOfHolder in
             guard let `self` = self else { return }
@@ -266,14 +260,7 @@ final class ProjectsCell: UICollectionViewCell {
             self.totalNftsLabel.text = "\(numberOfNFTs ?? 0)"
         }
     }
-    
-    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
-        let url = URL(string: urlString)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            completion(.success(image))
-        }
-    }
-    
+
 }
 
 extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {

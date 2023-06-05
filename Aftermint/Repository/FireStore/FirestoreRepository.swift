@@ -285,10 +285,10 @@ class FirestoreRepository {
 
         let nftScoreSetColletion = self.db
             .collectionGroup(K.FStore.nftScoreSetField)
-            .order(by: K.FStore.scoreField, descending: true) // TODO: 확인 필요.
+            .order(by: K.FStore.scoreField, descending: true)
         
         let groupSnapshot = try await nftScoreSetColletion.getDocuments()
-        print(groupSnapshot.count)
+   
         let groupDocuments = groupSnapshot.documents
         
         for doc in groupDocuments {
@@ -374,29 +374,40 @@ class FirestoreRepository {
                 .getDocument()
                 .data()
             
-            // TODO: collection의 holder 수 && number of issued nfts
             async let collectionData = baseDBPath
                 .document(collection)
                 .getDocument()
                 .data()
-            let collectionAddress = try await collectionData?[K.FStore.contractAddressField] as? String ?? "N/A"
+            let collectionAddress = try await collectionData?[K.FStore.contractAddressField] as? String
+            guard let collectionAddress = collectionAddress else {
+                throw FirestoreError.documenetFieldNotFound
+            }
             
-            async let numberOfIssuedNfts = KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: collectionAddress)?.totalSupply.convertToDecimal()
+            async let numberOfIssuedNfts = KlaytnNftRequester
+                .getNumberOfIssuedNFTs(ofCollection: collectionAddress)?
+                .totalSupply
+                .convertToDecimal()
             guard let numberOfNfts = try await numberOfIssuedNfts else { return nil }
+            
+            async let numberOfTotalHolders = KlaytnNftRequester
+                .getNumberOfHolders(ofCollection: collectionAddress)?
+                .totalHolder
+            guard let numberOfHolders = try await numberOfTotalHolders else { return nil }
             
             let collectionName = profileNames[i]
             let imagUrl = imageUrls[i]
             let contractAddress = contractAddress[i]
             let actionCount = try await actionCountData?[K.FStore.totalCountField] as? Int64 ?? 0
             let totalScore = try await totalNftScore?[K.FStore.totalScoreField] as? Int64 ?? 0
+            
             let nftCollection = NftCollection(
                 name: collectionName,
                 address: contractAddress,
                 imageUrl: imagUrl,
                 totalPopCount: totalScore,
                 totalActionCount: actionCount,
-                totalNfts: Int64(numberOfNfts), //TODO: API call
-                totalHolders: 0 //TODO: API call
+                totalNfts: Int64(numberOfNfts),
+                totalHolders: Int64(numberOfHolders)
             )
             nftCollections.append(nftCollection)
         }
@@ -405,12 +416,12 @@ class FirestoreRepository {
     }
     
     
-    /// Get all the address information.
+    /// Get all the owner(address) information.
     /// - Parameters:
     ///   - collectionType: Collection type.
     ///   - gameType: Game type.
     /// - Returns: An array of Address objects.
-    func getAllAddressAsync(
+    func getAllAddress(
         gameType: GameType
     ) async throws -> [Address]? {
         
@@ -522,5 +533,40 @@ extension FirestoreRepository {
     enum FirestoreError: Error {
         case getDocumentsError
         case gameTypeNotFound
+        case documenetFieldNotFound
     }
+}
+
+extension FirestoreRepository {
+    
+    // TODO: 아래와 같은 쿼리로 정렬하기
+    func getPopgameScoreFromGroup() async throws {
+        let snapshots = try await db
+            .collectionGroup(K.FStore.cachedTotalNftScoreSetField)
+            .order(by: K.FStore.countField, descending: true)
+            .getDocuments()
+            .documents
+        
+        for snshot in snapshots {
+            let walletAccountSet = snshot.reference.parent.parent?.parent // wallet_account_set Collection
+            guard let documents = try await walletAccountSet?.getDocuments().documents else {
+                return
+            }
+            
+            for doc in documents {
+                let walletAddress = doc.documentID
+                let popgameDoc = try await doc.reference
+                    .collection(K.FStore.cachedTotalNftScoreSetField)
+                    .document(K.FStore.popgameField)
+                    .getDocument()
+                
+                let data = popgameDoc.data()
+                let count = data?[K.FStore.countField] as? Int64 ?? 0
+                print("Address: \(walletAddress) -- Count: \(count)")
+            }
+          
+        }
+        
+    }
+    
 }
