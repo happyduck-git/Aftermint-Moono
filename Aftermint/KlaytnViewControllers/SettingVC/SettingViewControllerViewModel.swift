@@ -69,6 +69,7 @@ final class SettingViewControllerViewModel {
                 if address.ownerAddress == self.mockUser.address {
                     self.youCellViewModel.currentUser.value = address
                 }
+                print("Owned nfts: \(address.ownedNFTs)")
                 return PopScoreRankCellViewModel(
                     rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                     rank: 0,
@@ -156,7 +157,7 @@ final class SettingViewControllerViewModel {
                 let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
                 guard let totalNumberOfNFTs = contractInfoResult?.totalSupply.convertToDecimal() else { return }
                 projectsCellViewModel.totalNumberOfMintedNFTs.value = totalNumberOfNFTs
-
+                print("TOTAL NUMBER OF NFTS: \(totalNumberOfNFTs)")
                 fireStoreRepository.saveNumberOfHoldersAndMintedNfts(
                     totalHolders: Int64(holders?.totalHolder ?? 0),
                     totalMintedNFTs: Int64(totalNumberOfNFTs)

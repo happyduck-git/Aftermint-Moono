@@ -173,13 +173,8 @@ final class PopScoreRankCell: UITableViewCell {
     public func configureRankScoreCell(with vm: PopScoreRankCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.imageStringToImage(with: vm.profileImageUrl) { result in
-            switch result {
-            case .success(let image):
-                self.userProfileImageView.image = image
-            case .failure(let error):
-                print("Error -- \(error)")
-            }
+        NukeImageLoader.loadImageUsingNuke(url: URL(string: vm.profileImageUrl)) { image in
+            self.userProfileImageView.image = image
         }
         self.nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
@@ -189,13 +184,8 @@ final class PopScoreRankCell: UITableViewCell {
     public func configureActionCountCell(with vm: PopScoreRankCellViewModel) {
         self.rankImageView.image = vm.rankImage
         self.rankLabel.text = "\(vm.rank)"
-        self.imageStringToImage(with: vm.profileImageUrl) { result in
-            switch result {
-            case .success(let image):
-                self.userProfileImageView.image = image
-            case .failure(let error):
-                print("Error -- \(error)")
-            }
+        NukeImageLoader.loadImageUsingNuke(url: URL(string: vm.profileImageUrl)) { image in
+            self.userProfileImageView.image = image
         }
         self.nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
         self.nftInfoStackView.bottomLabelText = "Nfts \(vm.totalNfts)"
@@ -210,13 +200,6 @@ final class PopScoreRankCell: UITableViewCell {
     public func switchRankImageToLabel() {
         self.rankImageView.isHidden = true
         self.rankLabel.isHidden = false
-    }
-    
-    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
-        let url = URL(string: urlString)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            completion(.success(image))
-        }
     }
     
     enum ImageError: Error {

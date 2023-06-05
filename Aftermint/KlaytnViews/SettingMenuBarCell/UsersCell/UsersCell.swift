@@ -199,6 +199,8 @@ final class UsersCell: UICollectionViewCell {
             }
         }
         
+        vm.numberOfNfts
+        
     }
     
     private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {

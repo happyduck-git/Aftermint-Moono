@@ -7,9 +7,15 @@
 
 import Foundation
 
-enum KASRequestType: CaseIterable {
-    case allNFTsInfo
+enum KASRequestType: CaseIterable, Hashable {
+    static var allCases: [KASRequestType] {
+        return [.allNFTsInfo(""), singleNFTInfo]
+    }
+    
+    case allNFTsInfo(String)
     case singleNFTInfo
+    case numberOfNfts
+    case numberOfHolders
 }
 
 protocol CacheManagerProtocol {
@@ -26,9 +32,7 @@ final class KASCacheManager: CacheManagerProtocol {
 //    private var cacheDictionary: [CollectionType: NSCache<NSString, NSData>] = [:]
 //    private var urlResponseCacheDictionary: [CollectionType: NSCache<NSString, URLResponse>] = [:]
     
-    init() {
-        setInitialCache()
-    }
+    init() {}
 
     func getDataCache(for type: KASRequestType, url: URL?) -> Data? {
         guard let targetCache = cacheDictionary[type],
@@ -47,22 +51,15 @@ final class KASCacheManager: CacheManagerProtocol {
     }
     
     func setCache(for type: KASRequestType, url: URL?, data: Data, response: URLResponse?) {
-        guard let targetCache = cacheDictionary[type],
-              let urlResponseCache = urlResponseCacheDictionary[type],
-              let response = response,
+        guard let response = response,
               let url = url
         else { return }
         let key = url.absoluteString as NSString
         let data = data as NSData
-        targetCache.setObject(data, forKey: key)
-        urlResponseCache.setObject(response, forKey: key)
+        cacheDictionary[type] = NSCache<NSString, NSData>()
+        cacheDictionary[type]?.setObject(data, forKey: key)
+        urlResponseCacheDictionary[type] = NSCache<NSString, URLResponse>()
+        urlResponseCacheDictionary[type]?.setObject(response, forKey: key)
     }
-    
-    private func setInitialCache() {
-        KASRequestType.allCases.forEach { type in
-            cacheDictionary[type] = NSCache<NSString, NSData>()
-            urlResponseCacheDictionary[type] = NSCache<NSString, URLResponse>()
-        }
-    }
-    
+
 }

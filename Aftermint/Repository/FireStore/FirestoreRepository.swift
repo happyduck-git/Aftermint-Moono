@@ -152,63 +152,77 @@ class FirestoreRepository {
         ownerAddress: String
     ) async throws {
         let collectionDocRef = baseDBPath.document(self.type.rawValue)
-        // Save to cached_total_action_count_set
-        async let _ = collectionDocRef
-            .collection(K.FStore.cachedTotalActionCountSetField)
-            .document(gameType.rawValue)
-            .setData(
-                [
-                    K.FStore.totalCountField: FieldValue.increment(actionCount)
-                ],
-                merge: true
-            )
-        // Save to cached_total_nft_score_set
-        async let _ = collectionDocRef
-            .collection(K.FStore.cachedTotalNftScoreSetField)
-            .document(gameType.rawValue)
-            .setData(
-                [
-                    K.FStore.totalScoreField: FieldValue.increment(popScore)
-                ],
-                merge: true
-            )
         
-        // Save wallet_address field TODO: Need to add other fields as well.
-        async let _ = collectionDocRef
-            .collection(K.FStore.walletAccountSetField)
-            .document(ownerAddress)
-            .setData(
-                [
-                    "wallet_address": ownerAddress
-                ],
-                merge: true
-            )
-        
-        // Save to wallet_account_set
-        async let _ = collectionDocRef
-            .collection(K.FStore.walletAccountSetField)
-            .document(ownerAddress)
-            .collection(K.FStore.cachedTotalNftScoreSetField)
-            .document(gameType.rawValue)
-            .setData(
-                [
-                    K.FStore.countField: FieldValue.increment(actionCount)
-                ],
-                merge: true
-            )
-
-        async let _ = collectionDocRef
-            .collection(K.FStore.walletAccountSetField)
-            .document(ownerAddress)
-            .collection(K.FStore.actionCountSetField)
-            .document(gameType.rawValue)
-            .setData(
-                [
-                    K.FStore.countField: FieldValue.increment(actionCount)
-                ],
-                merge: true
-            )
-        
+        await withThrowingTaskGroup(of: Void.self, body: { group in
+            // Save to cached_total_action_count_set
+            group.addTask {
+                collectionDocRef
+                    .collection(K.FStore.cachedTotalActionCountSetField)
+                    .document(gameType.rawValue)
+                    .setData(
+                        [
+                            K.FStore.totalCountField: FieldValue.increment(actionCount)
+                        ],
+                        merge: true
+                    )
+            }
+            
+            // Save to cached_total_nft_score_set
+            group.addTask {
+                collectionDocRef
+                    .collection(K.FStore.cachedTotalNftScoreSetField)
+                    .document(gameType.rawValue)
+                    .setData(
+                        [
+                            K.FStore.totalScoreField: FieldValue.increment(popScore)
+                        ],
+                        merge: true
+                    )
+            }
+            
+            // Save wallet_address field TODO: Need to add other fields as well.
+            group.addTask {
+                collectionDocRef
+                    .collection(K.FStore.walletAccountSetField)
+                    .document(ownerAddress)
+                    .setData(
+                        [
+                            "wallet_address": ownerAddress
+                        ],
+                        merge: true
+                    )
+            }
+            
+            // Save to wallet_account_set
+            group.addTask {
+                collectionDocRef
+                    .collection(K.FStore.walletAccountSetField)
+                    .document(ownerAddress)
+                    .collection(K.FStore.cachedTotalNftScoreSetField)
+                    .document(gameType.rawValue)
+                    .setData(
+                        [
+                            K.FStore.countField: FieldValue.increment(actionCount)
+                        ],
+                        merge: true
+                    )
+            }
+            
+            group.addTask {
+                async let _ = collectionDocRef
+                    .collection(K.FStore.walletAccountSetField)
+                    .document(ownerAddress)
+                    .collection(K.FStore.actionCountSetField)
+                    .document(gameType.rawValue)
+                    .setData(
+                        [
+                            K.FStore.countField: FieldValue.increment(actionCount)
+                        ],
+                        merge: true
+                    )
+            }
+            
+        })
     }
     
     func saveNFTScores(
@@ -220,7 +234,7 @@ class FirestoreRepository {
         
         let collectionDocRef = baseDBPath.document(self.type.rawValue)
         
-        try await withThrowingTaskGroup(
+        await withThrowingTaskGroup(
             of: Void.self,
             body: { group in
                 // Save to nft_set collection
@@ -271,7 +285,7 @@ class FirestoreRepository {
 
         let nftScoreSetColletion = self.db
             .collectionGroup(K.FStore.nftScoreSetField)
-//            .order(by: K.FStore.scoreField, descending: true) // TODO: 확인 필요.
+            .order(by: K.FStore.scoreField, descending: true) // TODO: 확인 필요.
         
         let groupSnapshot = try await nftScoreSetColletion.getDocuments()
         print(groupSnapshot.count)
@@ -360,19 +374,28 @@ class FirestoreRepository {
                 .getDocument()
                 .data()
             
+            // TODO: collection의 holder 수 && number of issued nfts
+            async let collectionData = baseDBPath
+                .document(collection)
+                .getDocument()
+                .data()
+            let collectionAddress = try await collectionData?[K.FStore.contractAddressField] as? String ?? "N/A"
+            
+            async let numberOfIssuedNfts = KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: collectionAddress)?.totalSupply.convertToDecimal()
+            guard let numberOfNfts = try await numberOfIssuedNfts else { return nil }
+            
             let collectionName = profileNames[i]
             let imagUrl = imageUrls[i]
             let contractAddress = contractAddress[i]
             let actionCount = try await actionCountData?[K.FStore.totalCountField] as? Int64 ?? 0
             let totalScore = try await totalNftScore?[K.FStore.totalScoreField] as? Int64 ?? 0
-            print("Collection name: \(collectionName)")
             let nftCollection = NftCollection(
                 name: collectionName,
                 address: contractAddress,
                 imageUrl: imagUrl,
                 totalPopCount: totalScore,
                 totalActionCount: actionCount,
-                totalNfts: 0, //TODO: API call
+                totalNfts: Int64(numberOfNfts), //TODO: API call
                 totalHolders: 0 //TODO: API call
             )
             nftCollections.append(nftCollection)
@@ -419,7 +442,7 @@ class FirestoreRepository {
                 .getDocument()
                 .data()
             let totalScore = try await cachedTotalScoreData?[K.FStore.countField] as? Int64 ?? 0
-            
+             
             // 3. action_count
             async let actionCountSetData = doc.reference
                 .collection(K.FStore.actionCountSetField)
@@ -428,13 +451,23 @@ class FirestoreRepository {
                 .data()
             let actionCount = try await actionCountSetData?[K.FStore.countField] as? Int64 ?? 0
             
+            // 4. number of owned nfts
+            let numberOfNfts = await withCheckedContinuation({ continuation in
+                let _ = KlaytnNftRequester.requestToGetNfts(
+                    contractAddress: self.type.address,
+                    walletAddress: docId) { nfts, error in
+                        guard let nfts = nfts else { return }
+                        continuation.resume(returning: nfts.items.count)
+                    }
+            })
+  
             let address = Address(
                 ownerAddress: docId,
                 actionCount: actionCount,
                 popScore: totalScore,
                 profileImageUrl: imageUrl,
                 username: username,
-                ownedNFTs: 0
+                ownedNFTs: Int64(numberOfNfts)
             )
             addressList.append(address)
         }

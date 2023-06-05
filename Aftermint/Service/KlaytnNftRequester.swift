@@ -109,9 +109,30 @@ class KlaytnNftRequester {
         guard let url = URL(string: urlString) else {
             throw(KlaytnRequestError.convertUrlError(urlString))
         }
-        let urlRequest = addKlaytnBasicHeaders(url: url)
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        if self.processResponse(data: data, response: response, error: nil) {
+        
+        var dataToProcess: Data?
+        var responseToProcess: URLResponse?
+        if let cachedData = cacheManager.getDataCache(for: .numberOfNfts, url: url),
+           let cachedResponse = cacheManager.getResponseCache(for: .numberOfNfts, url: url)
+        {
+            dataToProcess = cachedData
+            responseToProcess = cachedResponse
+            guard let result = self.convertTo(type: NFTContractInfoResponse.self, data: cachedData) else {
+                throw URLError(.cannotParseResponse)
+            }
+            return result
+        } else {
+            let urlRequest = addKlaytnBasicHeaders(url: url)
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            dataToProcess = data
+            responseToProcess = response
+            cacheManager.setCache(for: .numberOfNfts, url: url, data: data, response: response)
+        }
+        
+        if self.processResponse(data: dataToProcess, response: responseToProcess, error: nil) {
+            guard let data = dataToProcess else {
+                throw KlaytnRequestError.badData
+            }
             guard let result = self.convertTo(type: NFTContractInfoResponse.self, data: data) else {
                 throw URLError(.cannotParseResponse)
             }
@@ -119,6 +140,7 @@ class KlaytnNftRequester {
         } else {
             throw URLError(.cannotParseResponse)
         }
+        
     }
     
     // MARK: - Get Number of Holders
@@ -234,14 +256,14 @@ class KlaytnNftRequester {
         
         requestToNftsURL = url
         
-        if let cachedData = cacheManager.getDataCache(for: .allNFTsInfo, url: url),
-           let cachedUrlResponse = cacheManager.getResponseCache(for: .allNFTsInfo, url: url)
+        if let cachedData = cacheManager.getDataCache(for: .allNFTsInfo(walletAddress), url: url),
+           let cachedUrlResponse = cacheManager.getResponseCache(for: .allNFTsInfo(walletAddress), url: url)
         {
             print("Using cached API Response")
             completionHandler(cachedData, cachedUrlResponse, nil)
             return true
         }
-        
+        print("Using Network Response")
         let urlRequest = addKlaytnBasicHeaders(url: url)
         
         let dataTask = urlSession.dataTask(with: urlRequest, completionHandler: completionHandler)
@@ -271,7 +293,8 @@ class KlaytnNftRequester {
                 return
             }
             
-            cacheManager.setCache(for: .allNFTsInfo, url: requestToNftsURL, data: data, response: response) //TODO: setting cache is occurring everytime this method is called. Need to find another way to avoid unnecessary set.
+            cacheManager.setCache(for: .allNFTsInfo(walletAddress), url: requestToNftsURL, data: data, response: response) //TODO: setting cache is occurring everytime this method is called. Need to find another way to avoid unnecessary set.
+            
             nftsHandler(nfts, nil)
         }
     }
@@ -406,6 +429,7 @@ extension KlaytnNftRequester {
         case urlError(String)
         case convertUrlError(String)
         case badUrlResponse(String)
+        case badData
         
         var description: String {
             switch self {
@@ -415,6 +439,8 @@ extension KlaytnNftRequester {
                 return "Converting result data is failed : urlToken: \(urlToken)."
             case .badUrlResponse(let response):
                 return "Bad URL Response - \(response)."
+            case .badData:
+                return self.description
             }
         }
     }
