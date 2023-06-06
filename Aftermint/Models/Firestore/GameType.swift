@@ -9,4 +9,5 @@ import Foundation
 
 enum GameType: String {
     case popgame
+    case gun
 }

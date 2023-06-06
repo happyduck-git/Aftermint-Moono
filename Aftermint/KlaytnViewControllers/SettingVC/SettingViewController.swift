@@ -83,7 +83,7 @@ final class SettingViewController: UIViewController {
         
         Task {
             do {
-                try await FirestoreRepository.shared.getPopgameScoreFromGroup()
+                try await FirestoreRepository.shared.getGameScoreFromGroup(.popgame)
             }
             catch {
                 print("Error getting pop scores -- \(error)")

@@ -539,32 +539,35 @@ extension FirestoreRepository {
 
 extension FirestoreRepository {
     
-    // TODO: 아래와 같은 쿼리로 정렬하기
-    func getPopgameScoreFromGroup() async throws {
+    // TODO: 아래와 같은 쿼리로 정렬하기 | action count 정렬은 또 별도로 읽어옴?
+    func getGameScoreFromGroup(_ gameType: GameType) async throws {
         let snapshots = try await db
             .collectionGroup(K.FStore.cachedTotalNftScoreSetField)
             .order(by: K.FStore.countField, descending: true)
             .getDocuments()
             .documents
-        
+       
         for snshot in snapshots {
-            let walletAccountSet = snshot.reference.parent.parent?.parent // wallet_account_set Collection
-            guard let documents = try await walletAccountSet?.getDocuments().documents else {
-                return
+            
+            let cachedTotalNftScoreSet = snshot.reference.parent
+            let documents = try await cachedTotalNftScoreSet.getDocuments().documents
+            
+            let filteredDocument = documents.filter { snapshot in
+                snapshot.documentID == gameType.rawValue
+            }
+            // 현재 function에서 필요한 GameType document가 없는 경우 에러 throw.
+            guard !filteredDocument.isEmpty,
+                  let currentGameDoc = filteredDocument.first
+            else {
+                throw FirestoreError.gameTypeNotFound
             }
             
-            for doc in documents {
-                let walletAddress = doc.documentID
-                let popgameDoc = try await doc.reference
-                    .collection(K.FStore.cachedTotalNftScoreSetField)
-                    .document(K.FStore.popgameField)
-                    .getDocument()
-                
-                let data = popgameDoc.data()
-                let count = data?[K.FStore.countField] as? Int64 ?? 0
-                print("Address: \(walletAddress) -- Count: \(count)")
-            }
-          
+            let walletAddress = currentGameDoc.reference.parent.parent?.documentID
+            let popgameData = currentGameDoc.data()
+            let count = popgameData[K.FStore.countField] as? Int64 ?? 0
+            
+            print("Address: \(walletAddress) -- Count: \(count)")
+            
         }
         
     }
