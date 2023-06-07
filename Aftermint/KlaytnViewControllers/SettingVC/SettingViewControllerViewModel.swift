@@ -63,7 +63,7 @@ final class SettingViewControllerViewModel {
         
         Task {
             let addressList = try await self.fireStoreRepository
-                .getAllAddressNew(
+                .getAllAddressAggregated(
                     gameType: gameType,
                     currentUserAddress: mockUser.address
                 )
@@ -102,9 +102,10 @@ final class SettingViewControllerViewModel {
         
         Task {
          
-            let results = try await self.fireStoreRepository.getAllCards(
-                gameType: .popgame
-            )
+            let results = try await self.fireStoreRepository
+                .getAllCards(
+                    gameType: .popgame
+                )
 
             guard let cards = results else { return }
             var currentUserCardList: [NftRankCellViewModel] = []

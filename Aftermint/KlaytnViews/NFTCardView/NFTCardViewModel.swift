@@ -79,8 +79,8 @@ class NFTCardViewModel {
         async let recordedNftSet = self.fireStoreRepository
             .getCurrentUserOwnedNfts(mockUser.address)
         
-        let newNfts = await result.tokens
-        let oldNfts = try await recordedNftSet
+        let newNfts = await result.tokens.sorted()
+        let oldNfts = try await recordedNftSet.sorted()
         
         let diff = newNfts.difference(from: oldNfts)
         
@@ -94,9 +94,7 @@ class NFTCardViewModel {
                     break
                 }
             }
-            
         }
-        
         /// Set owned NFTs to related variable.
         self.nftCardCellViewModel.value = await result.vms
         self.isLoaded.value = true

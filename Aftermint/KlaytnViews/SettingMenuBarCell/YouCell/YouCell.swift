@@ -153,16 +153,16 @@ final class YouCell: UICollectionViewCell {
                   let `self` = self
             else { return }
             
+            guard let urlString = address?.profileImageUrl else {
+                return
+            }
+            let url = URL(string: urlString)
+            NukeImageLoader.loadImageUsingNuke(url: url) { image in
+                DispatchQueue.main.async { [weak self] in
+                    self?.profileImageView.image = image
+                }
+            }
             DispatchQueue.main.async {
-                self.imageStringToImage(with: address?.profileImageUrl ?? "N/A", completion: { result in
-                    switch result {
-                    case .success(let image):
-                        self.profileImageView.image = image
-                    case .failure(let error):
-                        print("Error rendering image \(error)")
-                    }
-                })
-                
                 self.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
                 self.usernameStack.bottomLabelText = address?.username ?? "N/A"
                 self.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
