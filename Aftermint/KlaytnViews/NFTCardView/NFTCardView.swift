@@ -293,7 +293,15 @@ extension NFTCardView {
         /// TempAddress used when there was no game features
 //        let tempAddress: String = K.Wallet.temporaryAddress
         let tempAddress: String = MoonoMockUserData().getOneUserData().address
-        self.viewModel.getNftCardCellViewModels(of: tempAddress)
+
+        Task {
+            do {
+                try await self.viewModel.getNftCardCellViewModel(of: tempAddress)
+            }
+            catch {
+                print("Error getting nft card cell view model: \(error)")
+            }
+        }
         
     }
     

@@ -35,3 +35,15 @@ final class NftCardCellViewModel {
         self.imageUrl = imageUrl
     }
 }
+
+extension NftCardCellViewModel: Hashable {
+   
+    static func == (lhs: NftCardCellViewModel, rhs: NftCardCellViewModel) -> Bool {
+        return lhs.name == rhs.name
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
+    
+}

@@ -283,7 +283,7 @@ final class GameViewController: UIViewController {
                 actionCount: self.touchCount,
                 ownerAddress: self.mockUser.address
             )
-            print("Touch count saved: \(self.touchCount)")
+            print("Touch count saved to cache: \(self.touchCount)")
             self.touchCount = 0
         }
         
@@ -294,7 +294,7 @@ final class GameViewController: UIViewController {
                 nftTokenId: self.gameVM.ownedNftTokenIds.value ?? [],
                 ownerAddress: mockUser.address
             )
-            print("Total touch count saved: \(self.totalTouchCount)")
+            print("Total touch count saved to each nft: \(self.totalTouchCount)")
             self.totalTouchCount = 0
         }
 
@@ -317,7 +317,7 @@ final class GameViewController: UIViewController {
                     self.touchCount = 0
                 }
                 // Retrive game score from db
-                self.bottomSheetVM.getItems(of: .moono, gameType: .popgame)
+                self.bottomSheetVM.getCachedItems(of: .moono, gameType: .popgame)
 
             })
     }

@@ -120,7 +120,7 @@ final class BottomSheetView: PassThroughView {
         setLayout()
         setDelegate()
 
-        self.bottomSheetVM.getItems(of: .moono, gameType: .popgame)
+        self.bottomSheetVM.getInitialItems(of: .moono, gameType: .popgame)
         bind()
         
     }

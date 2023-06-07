@@ -16,6 +16,8 @@ final class LeaderBoardSecondSectionCellListViewModel {
     
     weak var delegate: LeaderBoardSecondSectionCellListViewModelDelegate?
     
+    let mockUser = MoonoMockUserData().getOneUserData()
+    
     private let fireStoreRepository = FirestoreRepository.shared
     var leaderBoardVMList: Box<[LeaderBoardSecondSectionCellViewModel]> = Box([])
 
@@ -38,22 +40,63 @@ final class LeaderBoardSecondSectionCellListViewModel {
     func currentUserViewModel() -> LeaderBoardSecondSectionCellViewModel? {
         let currentUserViewModel = self.leaderBoardVMList.value?.filter({ viewModel in
             //TODO: Change mock user address to currently logged in user
-            let mockUser = MoonoMockUserData().getOneUserData()
+            
             return viewModel.topLabelText == mockUser.address
         })
         return currentUserViewModel?.first
     }
     
     
-    /// For using DifferenceKit
-    func getAddressSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
+    /// Get initial address section view model.
+    func getInitialAddressSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
         
         let addressList = try await self.fireStoreRepository
-            .getAllAddress(gameType: gameType)
+            .getAllAddressNew(
+                gameType: .popgame,
+                currentUserAddress: mockUser.address
+            )
         
         guard let addressList = addressList,
               let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
-        else { return nil }
+        else {
+            return nil
+        }
+        let initialRank = 1
+        
+        let viewModels = addressList.map { address in
+            let viewModel = LeaderBoardSecondSectionCellViewModel(
+                ownerAddress: address.ownerAddress,
+                rankImage: rankImage,
+                rank: initialRank,
+                userProfileImage: address.profileImageUrl,
+                topLabelText: address.ownerAddress,
+                bottomLabelText: "\(address.ownedNFTs)",
+                actionCount: address.actionCount,
+                popScore: address.popScore
+            )
+            return viewModel
+        }
+       
+        self.leaderBoardVMList.value = viewModels
+        self.delegate?.dataFetched2()
+        
+        return viewModels
+    }
+    
+    /// For using DifferenceKit
+    func getCachedAddressSectionVM(
+        of collectionType: CollectionType,
+        gameType: GameType
+    ) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
+        
+        let addressList = try await self.fireStoreRepository
+            .getAllAddressOld(gameType: .popgame)
+        
+        guard let addressList = addressList,
+              let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue)
+        else {
+            return nil
+        }
         let initialRank = 1
         
         let viewModels = addressList.map { address in

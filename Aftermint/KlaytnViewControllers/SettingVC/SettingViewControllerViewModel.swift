@@ -62,7 +62,11 @@ final class SettingViewControllerViewModel {
     func getAllAddressFields(gameType: GameType) {
         
         Task {
-            let addressList = try await self.fireStoreRepository.getAllAddress(gameType: gameType)
+            let addressList = try await self.fireStoreRepository
+                .getAllAddressNew(
+                    gameType: gameType,
+                    currentUserAddress: mockUser.address
+                )
             guard let addressList = addressList else { return }
             let vmList = addressList.map { address in
                 /// Check if address is the same as current (mock) user's

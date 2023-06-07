@@ -417,6 +417,7 @@
 		936295F929EF707700E92AAB /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936295F829EF707700E92AAB /* NetworkMonitor.swift */; };
 		936295FE29EFC23F00E92AAB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936295FD29EFC23F00E92AAB /* BaseViewController.swift */; };
 		9373E3BA2A2582A100FDB018 /* String+Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9373E3B92A2582A100FDB018 /* String+Decimal.swift */; };
+		939A4BB62A306770005B2B5B /* FirestoreCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939A4BB52A306770005B2B5B /* FirestoreCacheManager.swift */; };
 		939DE050297A232100EFA71E /* KlaytnTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE04F297A232100EFA71E /* KlaytnTabBarController.swift */; };
 		939DE052297A23DB00EFA71E /* KlaytnHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE051297A23DB00EFA71E /* KlaytnHomeViewController.swift */; };
 		939DE054297A242500EFA71E /* BenefitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939DE053297A242500EFA71E /* BenefitViewController.swift */; };
@@ -851,6 +852,7 @@
 		936295F829EF707700E92AAB /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		936295FD29EFC23F00E92AAB /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		9373E3B92A2582A100FDB018 /* String+Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Decimal.swift"; sourceTree = "<group>"; };
+		939A4BB52A306770005B2B5B /* FirestoreCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreCacheManager.swift; sourceTree = "<group>"; };
 		939DE04F297A232100EFA71E /* KlaytnTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnTabBarController.swift; sourceTree = "<group>"; };
 		939DE051297A23DB00EFA71E /* KlaytnHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnHomeViewController.swift; sourceTree = "<group>"; };
 		939DE053297A242500EFA71E /* BenefitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitViewController.swift; sourceTree = "<group>"; };
@@ -1116,6 +1118,7 @@
 				93199EF02989EDE1008D532B /* KASConnectService.swift */,
 				3620690929B9A564008764BE /* OpenSeaApiRequester.swift */,
 				2404DFB52A1F9FDB00FF69F6 /* KASCacheManager.swift */,
+				939A4BB52A306770005B2B5B /* FirestoreCacheManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -3072,6 +3075,7 @@
 				3619B1D229790AC60051C387 /* SnapshotTestSupport.swift in Sources */,
 				3619B0F929790AC50051C387 /* MediaUploadVideoType.swift in Sources */,
 				9300BB6029C8214000C67A29 /* FirestoreRepository.swift in Sources */,
+				939A4BB62A306770005B2B5B /* FirestoreCacheManager.swift in Sources */,
 				93266CA629D5510200D351DC /* Address.swift in Sources */,
 				3619B0F329790AC50051C387 /* MediaUploadFinalizeResponse.swift in Sources */,
 				3619AF13297908F90051C387 /* AppDelegate.swift in Sources */,
