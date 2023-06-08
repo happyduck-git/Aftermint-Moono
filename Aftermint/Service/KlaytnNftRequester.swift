@@ -20,7 +20,7 @@ class KlaytnNftRequester {
     private static let TOKEN_HEADER__KEY__CHAIN_ID = "x-chain-id"
     private static let TOKEN_HEADER__VALUE__CHAIN_ID = "8217"
     private static let TOKEN_HEADER__KEY__AUTHORIZATION = "Authorization"
-    private static let TOKEN_HEADER__VALUE__AUTHORIZATION = "Basic S0FTSzEyQ1JKNTNZTk9GQkUwMzM0TUJFOkwwUUpYTHJNam43cUNDWXVJUG05OWZ5Rko5MnJtNjRlaWxGMTJwdkQ="
+    private static let TOKEN_HEADER__VALUE__AUTHORIZATION = "Basic " + (Bundle.main.object(forInfoDictionaryKey: "KlaytnKey") as? String ?? "no key found")
     // Params
     private static let TOKEN_PARAMS__KEY__SIZE = "size"
     private static let TOKEN_PARAMS__VALUE__SIZE_MAX = "1000"

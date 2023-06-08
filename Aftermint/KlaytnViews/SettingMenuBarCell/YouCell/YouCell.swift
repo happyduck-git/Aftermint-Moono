@@ -73,12 +73,21 @@ final class YouCell: UICollectionViewCell {
         return table
     }()
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
         setLayout()
         setDelegate()
+        
+        self.spinner.startAnimating()
     }
     
     required init?(coder: NSCoder) {
@@ -106,10 +115,12 @@ final class YouCell: UICollectionViewCell {
         self.contentView.addSubview(popScoreStack)
         self.contentView.addSubview(actionCountStack)
         self.contentView.addSubview(nftsTableView)
+        self.contentView.addSubview(spinner)
     }
     
     private func setLayout() {
         let profileImageHeight: CGFloat = 90
+        let spinnerHeight: CGFloat = 50
         
         NSLayoutConstraint.activate([
             self.profileImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
@@ -129,7 +140,12 @@ final class YouCell: UICollectionViewCell {
             self.nftsTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.popScoreStack.bottomAnchor, multiplier: 2),
             self.nftsTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             self.nftsTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            self.nftsTableView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            self.nftsTableView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            
+            self.spinner.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            self.spinner.heightAnchor.constraint(equalToConstant: spinnerHeight),
+            self.spinner.widthAnchor.constraint(equalTo: self.spinner.heightAnchor)
         ])
         
         self.profileImageView.layer.cornerRadius = profileImageHeight / 2
@@ -171,12 +187,21 @@ final class YouCell: UICollectionViewCell {
         }
         
         vm.nftRankViewModels.bind { [weak self] viewModels in
+            guard let `self` = self
+            else { return }
+            self.nftsList = viewModels ?? []
+        }
+        
+        vm.isLoaded.bind { [weak self] isLoaded in
+            guard let `self` = self,
+                  isLoaded != nil,
+                  isLoaded == true
+            else { return }
             DispatchQueue.main.async {
-                self?.nftsList = viewModels ?? []
-         
                 UIView.animate(withDuration: 0.6) {
-                    self?.nftsTableView.reloadData()
-                    self?.nftsTableView.alpha = 1.0
+                    self.nftsTableView.reloadData()
+                    self.nftsTableView.alpha = 1.0
+                    self.spinner.stopAnimating()
                 }
             }
         }

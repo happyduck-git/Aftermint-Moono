@@ -94,6 +94,10 @@ class LoginViewController: BaseViewController, View {
         
         setUI()
         setLayout()
+        
+        
+        let key = Bundle.main.object(forInfoDictionaryKey: "KlaytnKey") as? String
+        print("Klaytnkey: \(key ?? "No key found")")
     }
     
     override func viewWillDisappear(_ animated: Bool) {

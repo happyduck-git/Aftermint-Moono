@@ -853,6 +853,8 @@
 		936295FD29EFC23F00E92AAB /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		9373E3B92A2582A100FDB018 /* String+Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Decimal.swift"; sourceTree = "<group>"; };
 		939A4BB52A306770005B2B5B /* FirestoreCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreCacheManager.swift; sourceTree = "<group>"; };
+		939A4BB72A3164F1005B2B5B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		939A4BB82A316507005B2B5B /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		939DE04F297A232100EFA71E /* KlaytnTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnTabBarController.swift; sourceTree = "<group>"; };
 		939DE051297A23DB00EFA71E /* KlaytnHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnHomeViewController.swift; sourceTree = "<group>"; };
 		939DE053297A242500EFA71E /* BenefitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitViewController.swift; sourceTree = "<group>"; };
@@ -1078,6 +1080,8 @@
 				3619AF1B297908FA0051C387 /* Assets.xcassets */,
 				3619AF1D297908FA0051C387 /* LaunchScreen.storyboard */,
 				2481E1D2297A94BC00187BB9 /* AftermintColor.swift */,
+				939A4BB72A3164F1005B2B5B /* Debug.xcconfig */,
+				939A4BB82A316507005B2B5B /* Release.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -3142,6 +3146,7 @@
 /* Begin XCBuildConfiguration section */
 		3619AF21297908FA0051C387 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 939A4BB72A3164F1005B2B5B /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -3202,6 +3207,7 @@
 		};
 		3619AF22297908FA0051C387 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 939A4BB82A316507005B2B5B /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

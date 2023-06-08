@@ -127,6 +127,7 @@ final class SettingViewControllerViewModel {
                 return vm
             }
             self.youCellViewModel.nftRankViewModels.value = currentUserCardList
+            self.youCellViewModel.isLoaded.value = true
             self.nftsCellViewModel.nftsList.value = vmList
         }
         

@@ -15,5 +15,6 @@ final class YouCellViewModel {
     
     var currentUser: Box<Address?> = Box(nil)
     var nftRankViewModels: Box<[NftRankCellViewModel]> = Box([])
+    var isLoaded: Box<Bool> = Box(false)
     
 }

@@ -1,0 +1,11 @@
+//
+//  Release.xcconfig
+//  Aftermint
+//
+//  Created by Platfarm on 2023/06/08.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+KLAYTN_KEY = S0FTS0hBME1MMFNMOVIzNDYxNDhMMUFBOk03bEpNY2NJeHZSMUZ6MTJEUnJhVzNoVWViY01HM2NfYi05azFqTTQ=
