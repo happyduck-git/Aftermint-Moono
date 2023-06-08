@@ -22,18 +22,24 @@ final class GameViewController: UIViewController {
     
     //MARK: - Game score data variables
     var timer: Timer = Timer()
-    /// TEMP ========================
-    var tempPopScore: Int64 = 0
-    var tempActionCount: Int64 = 0
-    /// ============================
     
+    /// Pop score retrieve from db.
+    var popScoreFromDB: Int64 = 0
+    /// Action count retrieve from db.
+    var actionCountFromDB: Int64 = 0
+    
+    /// Touch counts before send set query to db.
+    /// Will be reset to `0` after saved to db.
     private var touchCount: Int64 = 0
+    /// Reset when resume game.
     private var totalTouchCount: Int64 = 0
+    /// Stays until app termination
     private var touchCountToShow: Int64 = 0 {
         didSet {
             self.popScoreLabel.text = "\(self.touchCountToShow)"
         }
     }
+    
     private var numberOfOwnedNfts: Int64 = 0
     
     // MARK: - UI Elements
@@ -145,12 +151,20 @@ final class GameViewController: UIViewController {
         return bottomSheet
     }()
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
     // MARK: - Init
     init(
         bottomSheetVM: BottomSheetViewModel
     ) {
         self.bottomSheetVM = bottomSheetVM
         super.init(nibName: nil, bundle: nil)
+        self.spinner.startAnimating()
     }
 
     required init?(coder: NSCoder) {
@@ -165,7 +179,6 @@ final class GameViewController: UIViewController {
         setGameScene()
         setDelegate()
         
-        // NEW SCEHME RELATED
         gameVM.getOwnedNfts()
         bind()
 
@@ -211,7 +224,6 @@ final class GameViewController: UIViewController {
     // MARK: - Set UI & Layout
     
     private func setDelegate() {
-        self.bottomSheetVM.delegate = self
         self.bottomSheetVM.secondListVM.delegate = self
     }
     
@@ -225,6 +237,7 @@ final class GameViewController: UIViewController {
         view.addSubview(popScoreStack)
         view.addSubview(nftsStack)
         view.addSubview(actionCountStack)
+        view.addSubview(spinner)
         
         userInfoStackView.addArrangedSubview(walletAddressLabel)
         userInfoStackView.addArrangedSubview(nickNameLabel)
@@ -233,6 +246,8 @@ final class GameViewController: UIViewController {
     private func setLayout() {
         let viewHeight = view.frame.size.height
         gameSKView.frame = view.bounds
+        let spinnerHeight: CGFloat = 50
+        
         NSLayoutConstraint.activate([
             self.userImageView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
             self.userImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
@@ -258,7 +273,12 @@ final class GameViewController: UIViewController {
             self.bottomSheetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             self.bottomSheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             self.bottomSheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            self.bottomSheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            self.bottomSheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            self.spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            self.spinner.heightAnchor.constraint(equalToConstant: spinnerHeight),
+            self.spinner.widthAnchor.constraint(equalTo: spinner.heightAnchor)
         ])
     }
     
@@ -271,9 +291,18 @@ final class GameViewController: UIViewController {
             // TODO: tokenIds는 Fire store에 저장할 때 사용될 예정
         }
         
+        bottomSheetVM.isLoaded.bind { [weak self] isLoaded in
+            guard let `self` = self,
+                  isLoaded != nil,
+                  isLoaded == true else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.spinner.stopAnimating()
+            }
+        }
     }
     
-    // NEW SCHEME
     private func saveGameTotalScore() {
         
         Task {
@@ -318,7 +347,6 @@ final class GameViewController: UIViewController {
                 }
                 // Retrive game score from db
                 self.bottomSheetVM.getCachedItems(of: .moono, gameType: .popgame)
-
             })
     }
     
@@ -337,10 +365,10 @@ final class GameViewController: UIViewController {
             self.nickNameLabel.text = "NFTs \(currentUserViewModel?.bottomLabelText ?? "0")"
             /// Scoreboard part
             self.nftsStack.bottomLabelText = currentUserViewModel?.bottomLabelText ?? "0"
-            self.tempPopScore = currentUserViewModel?.popScore ?? 0
-            self.tempActionCount = currentUserViewModel?.actionCount ?? 0
-            self.popScoreStack.bottomLabelText = String(describing: self.tempPopScore)
-            self.actionCountStack.bottomLabelText = String(describing: self.tempActionCount)
+            self.popScoreFromDB = currentUserViewModel?.popScore ?? 0
+            self.actionCountFromDB = currentUserViewModel?.actionCount ?? 0
+            self.popScoreStack.bottomLabelText = String(describing: self.popScoreFromDB)
+            self.actionCountStack.bottomLabelText = String(describing: self.actionCountFromDB)
         }
     }
 
@@ -372,32 +400,21 @@ extension GameViewController: MoonoGameSceneDelegate {
         self.totalTouchCount += number
         self.touchCount += number
         
-        self.tempPopScore += (number * Int64(numberOfNfts))
-        self.tempActionCount += number
-        self.popScoreStack.bottomLabelText = "\(self.tempPopScore)"
-        self.actionCountStack.bottomLabelText = "\(self.tempActionCount)"
+        self.popScoreFromDB += (number * Int64(numberOfNfts))
+        self.actionCountFromDB += number
         
-        self.bottomSheetView.currentUserScoreUpdateHandler?(self.tempPopScore)
-    }
-
-}
-
-//TODO: Export this logic to GameVCViewModel
-extension GameViewController: BottomSheetViewModelDelegate {
-    
-    ///Get notified when the data saved to firestore
-    func dataFetched() {
-        print("Fetched")
-//        self.touchCount = 0
-//        self.getCurrentUserViewModel()
+        self.popScoreStack.bottomLabelText = "\(self.popScoreFromDB)"
+        self.actionCountStack.bottomLabelText = "\(self.actionCountFromDB)"
+        
+        self.bottomSheetView.currentUserScoreUpdateHandler?(self.popScoreFromDB)
+        
     }
 
 }
 
 // TODO: NO4. BottomSheetVMDelegate으로 이동
 extension GameViewController: LeaderBoardSecondSectionCellListViewModelDelegate {
-    func dataFetched2() {
-        self.touchCount = 0
+    func dataFetched() {
         self.getCurrentUserViewModel()
     }
 }

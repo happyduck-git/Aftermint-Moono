@@ -242,8 +242,8 @@ final class ProjectsCell: UICollectionViewCell {
             else { return }
 
             self.collectionTitleLabel.text = vm?.nftCollectionName
-            self.popScoreLabel.text = String(describing: vm?.popScore)
-            self.actionCountLabel.text = String(describing: vm?.actioncount)
+            self.popScoreLabel.text = "\(vm?.popScore ?? 0)"
+            self.actionCountLabel.text = "\(vm?.actioncount ?? 0)"
             
             let imageUrl = URL(string: vm?.nftImageUrl ?? "N/A")
             NukeImageLoader.loadImageUsingNuke(url: imageUrl) { image in

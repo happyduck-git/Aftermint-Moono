@@ -63,7 +63,7 @@ final class SettingViewControllerViewModel {
         
         Task {
             let addressList = try await self.fireStoreRepository
-                .getAllAddressAggregated(
+                .getGameActionScoreFromGroup(
                     gameType: gameType,
                     currentUserAddress: mockUser.address
                 )
@@ -136,7 +136,8 @@ final class SettingViewControllerViewModel {
     func getAllCollectionFields() {
         
         Task {
-            let results = try await self.fireStoreRepository.getAllCollectionFields(gameType: .popgame)
+            let results = try await self.fireStoreRepository
+                .getAllCollectionFieldsOrdered(gameType: .popgame)
             guard let nftCollectionList = results else { return }
             let vmList = nftCollectionList.map { collection in
                 return ProjectPopScoreCellViewModel(

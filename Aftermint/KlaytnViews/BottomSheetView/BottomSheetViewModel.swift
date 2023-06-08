@@ -8,17 +8,12 @@
 import Foundation
 import DifferenceKit
 
-protocol BottomSheetViewModelDelegate: AnyObject {
-    func dataFetched()
-}
-
 final class BottomSheetViewModel {
-    
-    weak var delegate: BottomSheetViewModelDelegate?
     
     public private(set) var firstListVM: LeaderBoardFirstSectionCellListViewModel
     public private(set) var secondListVM: LeaderBoardSecondSectionCellListViewModel
     var changeset: Box<StagedChangeset<[ArraySection<SectionID, AnyDifferentiable>]>> = Box(StagedChangeset([]))
+    var isLoaded: Box<Bool> = Box(false)
     
     init(
         firstListVM: LeaderBoardFirstSectionCellListViewModel,
@@ -77,8 +72,7 @@ final class BottomSheetViewModel {
             ]
 
             self.changeset.value = StagedChangeset(source: self.source, target: target)
-            self.delegate?.dataFetched()
- 
+            self.isLoaded.value = true
         }
 
     }
@@ -129,7 +123,6 @@ final class BottomSheetViewModel {
             ]
 
             self.changeset.value = StagedChangeset(source: self.source, target: target)
-            self.delegate?.dataFetched()
             
         }
         

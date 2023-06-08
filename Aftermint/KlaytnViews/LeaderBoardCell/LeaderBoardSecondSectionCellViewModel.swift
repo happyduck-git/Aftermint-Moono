@@ -9,7 +9,7 @@ import UIKit.UIImage
 import DifferenceKit
 
 protocol LeaderBoardSecondSectionCellListViewModelDelegate: AnyObject {
-    func dataFetched2()
+    func dataFetched()
 }
 
 final class LeaderBoardSecondSectionCellListViewModel {
@@ -39,8 +39,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
     
     func currentUserViewModel() -> LeaderBoardSecondSectionCellViewModel? {
         let currentUserViewModel = self.leaderBoardVMList.value?.filter({ viewModel in
-            //TODO: Change mock user address to currently logged in user
-            
             return viewModel.topLabelText == mockUser.address
         })
         return currentUserViewModel?.first
@@ -78,7 +76,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
         }
        
         self.leaderBoardVMList.value = viewModels
-        self.delegate?.dataFetched2()
+        self.delegate?.dataFetched()
         
         return viewModels
     }
@@ -114,41 +112,9 @@ final class LeaderBoardSecondSectionCellListViewModel {
         }
        
         self.leaderBoardVMList.value = viewModels
-        self.delegate?.dataFetched2()
+        self.delegate?.dataFetched()
         
         return viewModels
-    }
-    
-    // Currently NOT in use.
-    func getAddressSectionVMOld(completion: @escaping (([LeaderBoardSecondSectionCellViewModel]) -> Void)) {
-        
-//        self.fireStoreRepository.getAllAddress(collectionType: .moono, gameType: .popgame) { addressList in
-//            guard let addressList = addressList else {
-//                return
-//            }
-//            guard let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue) else { return }
-//            let initialRank = 1
-//
-//            let viewModels = addressList.map { address in
-//                let viewModel = LeaderBoardSecondSectionCellViewModel(
-//                    ownerAddress: address.ownerAddress,
-//                    rankImage: rankImage,
-//                    rank: initialRank,
-//                    userProfileImage: address.profileImageUrl,
-//                    topLabelText: address.ownerAddress,
-//                    bottomLabelText: "\(address.ownedNFTs)",
-//                    actionCount: address.actionCount,
-//                    popScore: address.popScore
-//                )
-//                return viewModel
-//            }
-//
-//            self.leaderBoardVMList.value = viewModels
-//            completion(viewModels)
-//            self.delegate?.dataFetched2()
-//
-//        }
-        
     }
     
     //TODO: Need to add error handler
