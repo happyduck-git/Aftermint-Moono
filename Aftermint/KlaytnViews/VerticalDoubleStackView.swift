@@ -60,7 +60,9 @@ class VerticalDoubleStackView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
+//        setLayout()
         self.axis = .vertical
+        self.distribution = .fillEqually
         self.bottomLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
     
@@ -72,6 +74,7 @@ class VerticalDoubleStackView: UIStackView {
         let label = UILabel()
         label.textColor = .white
         label.text = self.topLabelText
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -79,12 +82,30 @@ class VerticalDoubleStackView: UIStackView {
         let label = UILabel()
         label.textColor = .white
         label.text = self.bottomLabelText
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private func setUI() {
         self.addArrangedSubview(topLabel)
         self.addArrangedSubview(bottomLabel)
+    }
+    
+    private func setLayout() {
+        let height = self.frame.height
+        print("HEIGHT: \(height)")
+        NSLayoutConstraint.activate([
+            topLabel.topAnchor.constraint(equalTo: self.topAnchor),
+            topLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            topLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            
+            topLabel.heightAnchor.constraint(equalToConstant: height),
+            bottomLabel.heightAnchor.constraint(equalToConstant: height),
+            
+            bottomLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            bottomLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            bottomLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
     
 }
