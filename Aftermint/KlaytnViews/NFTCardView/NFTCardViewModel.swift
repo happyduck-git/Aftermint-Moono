@@ -21,21 +21,6 @@ class NFTCardViewModel {
             return 0
         }
         self.nftSelected = Array(repeating: false, count: numberOfItems)
-    
-        /// Save total number of nfts an owner has
-        let mockUser = MoonoMockUserData().getOneUserData()
-        
-        /// TEMP: Only for demo purpose
-        self.fireStoreRepository.saveAddressBaseFields(
-            ownerAddress: mockUser.address,
-            username: mockUser.username
-        ) { [weak self] _ in
-            self?.fireStoreRepository.saveTotalNumbersOfNFTs(
-                ofOwner: mockUser.address,
-                ownedNFTs: Int64(numberOfItems)
-            )
-        }
-
         return numberOfItems
     }
     
@@ -81,55 +66,73 @@ class NFTCardViewModel {
         
         let newNfts = await result.tokens.sorted()
         let oldNfts = try await recordedNftSet.sorted()
+        async let _ = self.checkChangesInOwnedNfts(newNfts: newNfts, oldNfts: oldNfts)
         
-        let diff = newNfts.difference(from: oldNfts)
-        
-        if !diff.isEmpty { // When there is any change.
-            
-            for change in diff {
-                switch change {
-                case .remove(_, let element, _):
-                    await self.fireStoreRepository.updateNftOwner(of: element, to: "owner not found.")
-                case .insert(_, _, _):
-                    break
-                }
-            }
-        }
         /// Set owned NFTs to related variable.
         self.nftCardCellViewModel.value = await result.vms
         self.isLoaded.value = true
         
+        await self.saveUserInitialInfo(
+            ownerAddress: mockUser.address,
+            gameType: .popgame,
+            initialScore: 0,
+            ownedNftList: newNfts
+        )
     }
     
-    // OLD
-    /*
-    func getNftCardCellViewModels(of wallet: String) {
+    func checkChangesInOwnedNfts(
+        newNfts: [String],
+        oldNfts: [String]
+    ) async {
+        let diff = newNfts.difference(from: oldNfts)
         
-        _ = KlaytnNftRequester.requestToGetMoonoNfts(walletAddress: wallet,
-                                                     nftsHandler: { [weak self] in
-            guard let `self` = self else { return }
-            let viewModels = $0.map { nft in
-                
-                let viewModel: NftCardCellViewModel = NftCardCellViewModel(
-                    accDesc: nft.traits.accessories,
-                    backgroundDesc: nft.traits.background,
-                    bodyDesc: nft.traits.body,
-                    dayDesc: nft.traits.day,
-                    effectDesc: nft.traits.accessories,
-                    expressionDesc: nft.traits.expression,
-                    hairDesc: nft.traits.hair,
-                    name: nft.name,
-                    updatedAt: nft.updateAt,
-                    imageUrl: nft.imageUrl
-                )
-                return viewModel
+        if !diff.isEmpty { // When there is any change.
+            for change in diff {
+                switch change {
+                case .remove(_, let element, _):
+                    await self.fireStoreRepository.updateNftOwner(of: element, to: K.FStore.noOwnerFound)
+                case .insert(_, let element, _):
+                    await self.fireStoreRepository.updateNftOwner(of: element, to: mockUser.address)
+                }
             }
-            self.nftCardCellViewModel.value = viewModels
-            self.isLoaded.value = true
-        })
+        } else {
+            return
+        }
+    }
+    
+    func saveUserInitialInfo(
+        ownerAddress: String,
+        gameType: GameType,
+        initialScore: Int64,
+        ownedNftList: [String]
+    ) async {
+        
+        /// Set initial NFT scores for games for a new user.
+        let isOldUser = await self.fireStoreRepository.checkIfSavedUserNew(
+            ownerAddress: mockUser.address,
+            of: .popgame
+        )
+        
+        if !isOldUser {
+            do {
+                try await self.fireStoreRepository
+                    .saveNewUserInitialData(
+                        ownerAddress: ownerAddress,
+                        gameType: gameType,
+                        initialScore: initialScore,
+                        nftList: ownedNftList
+                    )
+            }
+            catch {
+                print("Error saving NFT score: \(error)")
+            }
+            
+        } else {
+            return
+        }
         
     }
-    */
+  
 }
 
 extension NFTCardViewModel {

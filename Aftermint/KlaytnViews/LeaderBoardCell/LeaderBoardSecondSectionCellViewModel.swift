@@ -49,7 +49,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     func getInitialAddressSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
         
         let addressList = try await self.fireStoreRepository
-            .getAllAddressAggregated(
+            .getAllInitialAddress(
                 gameType: .popgame,
                 currentUserAddress: mockUser.address
             )
@@ -88,7 +88,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     ) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
         
         let addressList = try await self.fireStoreRepository
-            .getAllAddressOld(gameType: .popgame)
+            .getAllCachedAddress(gameType: .popgame)
         
         guard let addressList = addressList,
               let rankImage = UIImage(named: LeaderBoardAsset.firstPlace.rawValue)

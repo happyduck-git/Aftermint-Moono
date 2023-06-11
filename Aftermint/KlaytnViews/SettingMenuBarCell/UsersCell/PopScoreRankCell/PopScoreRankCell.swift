@@ -22,6 +22,13 @@ final class PopScoreRankCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        
+    }
+    
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+//        print("Width: \(userProfileImageView.frame.size.width)")
         userProfileImageView.layer.cornerRadius = userProfileImageView.frame.size.width / 2
     }
     
@@ -44,7 +51,7 @@ final class PopScoreRankCell: UITableViewCell {
     
     private let userProfileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
         imageView.layer.borderWidth = 1.0
         imageView.clipsToBounds = true

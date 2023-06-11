@@ -283,7 +283,7 @@ class KlaytnNftRequester {
         if let cachedData = cacheManager.getDataCache(for: .allNFTsInfo(walletAddress), url: url),
            let cachedUrlResponse = cacheManager.getResponseCache(for: .allNFTsInfo(walletAddress), url: url)
         {
-            print("Using cached API Response")
+//            print("Using cached API Response")
             completionHandler(cachedData, cachedUrlResponse, nil)
             return true
         }

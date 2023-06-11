@@ -343,6 +343,7 @@ final class GameViewController: UIViewController {
                         actionCount: self.touchCount,
                         ownerAddress: self.mockUser.address
                     )
+                    print("Touch saved: \(self.touchCount)")
                     self.touchCount = 0
                 }
                 // Retrive game score from db
@@ -356,7 +357,7 @@ final class GameViewController: UIViewController {
         self.numberOfOwnedNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") ?? 0
         DispatchQueue.main.async {
             /// User information part
-            let url = URL(string: currentUserViewModel?.userProfileImage ?? "N/A")
+            let url = URL(string: currentUserViewModel?.userProfileImage ?? LeaderBoardAsset.userImagePlaceHolder.rawValue)
             NukeImageLoader.loadImageUsingNuke(url: url) { image in
                 self.userImageView.image = image
             }

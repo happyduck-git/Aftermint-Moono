@@ -10,7 +10,26 @@ import Foundation
 final class UsersCellViewModel {
     
     let currentNft: Box<NftCollection?> = Box(nil)
-    var usersList: Box<[PopScoreRankCellViewModel]> = Box([])
-    let numberOfNfts: Box<[String: Int]> = Box([:])
+    let usersList: Box<[PopScoreRankCellViewModel]> = Box([])
+    let currentUserInfo: Box<PopScoreRankCellViewModel?> = Box(nil)
+    let isLoaded: Box<Bool> = Box(false)
+    
+    func numberOfRowsAt(_ section: Int) -> Int {
+        if section == 0 {
+            guard currentUserInfo.value! != nil else {
+                return 0
+            }
+            return 1
+        } else {
+            return usersList.value?.count ?? 0
+        }
+    }
 
+    func viewModelAt(_ indexPath: IndexPath) -> PopScoreRankCellViewModel? {
+        if indexPath.section == 0 {
+            return currentUserInfo.value ?? nil
+        } else {
+            return usersList.value?[indexPath.row]
+        }
+    }
 }

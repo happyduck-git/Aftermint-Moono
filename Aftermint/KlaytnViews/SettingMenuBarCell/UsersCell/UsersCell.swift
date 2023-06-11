@@ -9,8 +9,11 @@ import UIKit
 
 final class UsersCell: UICollectionViewCell {
     
-    private var usersList: [PopScoreRankCellViewModel] = []
-    private var currentUserVM: PopScoreRankCellViewModel?
+    private var viewModel: UsersCellViewModel? {
+        didSet {
+            self.bind()
+        }
+    }
     
     /// Bool property to check which view should the segmentedControl show
     private var shouldHideFirstSegment: Bool = false {
@@ -90,6 +93,13 @@ final class UsersCell: UICollectionViewCell {
         return table
     }()
     
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
+    }()
+    
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,6 +107,8 @@ final class UsersCell: UICollectionViewCell {
         setUI()
         setLayout()
         setDelegate()
+        
+        spinner.startAnimating()
     }
     
     required init?(coder: NSCoder) {
@@ -113,9 +125,11 @@ final class UsersCell: UICollectionViewCell {
         self.contentView.addSubview(segmentedControl)
         self.contentView.addSubview(popScoreTableView)
         self.contentView.addSubview(actionCountTableView)
+        self.contentView.addSubview(spinner)
     }
     
     private func setLayout() {
+        let spinnerHeight: CGFloat = 50
         NSLayoutConstraint.activate([
             self.nftImageView.topAnchor.constraint(equalToSystemSpacingBelow: self.contentView.topAnchor, multiplier: 1),
             self.nftImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.contentView.leadingAnchor, multiplier: 1),
@@ -142,7 +156,12 @@ final class UsersCell: UICollectionViewCell {
             self.actionCountTableView.topAnchor.constraint(equalToSystemSpacingBelow: self.segmentedControl.bottomAnchor, multiplier: 1),
             self.actionCountTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             self.actionCountTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor)
+            self.contentView.bottomAnchor.constraint(equalTo: self.actionCountTableView.bottomAnchor),
+            
+            self.spinner.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            self.spinner.heightAnchor.constraint(equalToConstant: spinnerHeight),
+            self.spinner.widthAnchor.constraint(equalTo: self.spinner.heightAnchor)
         ])
         
         self.nftImageView.layer.cornerRadius = 80 / 2
@@ -166,6 +185,13 @@ final class UsersCell: UICollectionViewCell {
     
     //MARK: - Public
     public func configure(with vm: UsersCellViewModel) {
+        self.viewModel = vm
+    }
+    
+    private func bind() {
+        guard let vm = self.viewModel else {
+            return
+        }
         
         vm.currentNft.bind { [weak self] collection in
             guard let `self` = self,
@@ -173,43 +199,38 @@ final class UsersCell: UICollectionViewCell {
             DispatchQueue.main.async {
                 self.popScoreLabel.text = "\(collection?.totalPopCount ?? 0)"
                 self.actionCountLabel.text = "\(collection?.totalActionCount ?? 0)"
-                guard let image = collection?.imageUrl else { return }
-                self.imageStringToImage(with: image) { result in
-                    switch result {
-                    case .success(let image):
-                        self.nftImageView.image = image
-                    case .failure(let error):
-                        print("Error converting image -- \(error)")
-                    }
+                guard let imageUrl = collection?.imageUrl else { return }
+                let url = URL(string: imageUrl)
+                NukeImageLoader.loadImageUsingNuke(url: url) { image in
+                    self.nftImageView.image = image
                 }
             }
         }
         
         vm.usersList.bind { [weak self] viewModels in
-            self?.usersList = viewModels ?? []
+            guard let `self` = self else { return }
           
             let filteredList = vm.usersList.value?.filter({ vm in
                 vm.ownerAddress == MoonoMockUserData().getOneUserData().address
             })
-            self?.currentUserVM = filteredList?.first
             
+            vm.currentUserInfo.value = filteredList?.first
+
+        }
+        
+        vm.isLoaded.bind { [weak self] isLoaded in
+            guard let `self` = self,
+                  isLoaded != nil,
+                  isLoaded == true
+            else { return }
             DispatchQueue.main.async {
-                self?.popScoreTableView.reloadData()
-                self?.actionCountTableView.reloadData()
+                self.popScoreTableView.reloadData()
+                self.actionCountTableView.reloadData()
+                self.spinner.stopAnimating()
             }
         }
-        
-        vm.numberOfNfts
-        
     }
-    
-    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
-        let url = URL(string: urlString)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            completion(.success(image))
-        }
-    }
-    
+
 }
 
 extension UsersCell: UITableViewDelegate, UITableViewDataSource {
@@ -241,75 +262,64 @@ extension UsersCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return self.usersList.count
-        }
+        return self.viewModel?.numberOfRowsAt(section) ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell,
-              let currentUserVM = currentUserVM
+
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PopScoreRankCell.identifier, for: indexPath) as? PopScoreRankCell
         else { return UITableViewCell() }
         cell.selectionStyle = .none
         cell.resetCell()
         
-        let vm = self.usersList[indexPath.row]
-        
-        /// Check if vm is the owner's vm;
-        /// if so, change the cell content background color
-        if vm.ownerAddress == MoonoMockUserData().getOneUserData().address {
+        guard let vmNew = self.viewModel?.viewModelAt(indexPath) else {
+            return UITableViewCell()
+        }
+       
+        if vmNew.ownerAddress == MoonoMockUserData().getOneUserData().address {
             self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
             cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
         }
-
-        /// Set Rank Image for 1st to 3rd rank and give number of rank to below seats
+        
         if indexPath.row <= 2 {
-            vm.setRankImage(with: cellRankImageAt(indexPath.row))
+            vmNew.setRankImage(with: cellRankImageAt(indexPath.row))
         } else {
             cell.switchRankImageToLabel()
-            vm.setRankNumberWithIndexPath(indexPath.row + 1)
+            vmNew.setRankNumberWithIndexPath(indexPath.row + 1)
         }
-
+        
         if tableView == self.popScoreTableView {
             if indexPath.section == 0 {
-                print("Rank image of the popScoreTableView: \(String(describing: currentUserVM.rank))")
+                print("Rank image of the popScoreTableView: \(String(describing: vmNew.rank))")
                 self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 
-                if currentUserVM.rank >= 3 {
+                if vmNew.rank >= 3 {
                     cell.switchRankImageToLabel()
-                    vm.setRankNumberWithIndexPath(indexPath.row + 1)
+                    vmNew.setRankNumberWithIndexPath(indexPath.row + 1)
                 }
-                
-                cell.configureRankScoreCell(with: currentUserVM)
-                return cell
-            } else {
-                cell.configureRankScoreCell(with: vm)
-                return cell
             }
+            cell.configureRankScoreCell(with: vmNew)
+            return cell
             
         } else if tableView == self.actionCountTableView {
             if indexPath.section == 0 {
-//                print("Rank image of the actionCountTableView: \(String(describing: currentUserVM.rankImage))")
                 self.setCurrentUserColor(at: cell, color: AftermintColor.bellyGreen)
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 
-                if currentUserVM.rank >= 3 {
+                if vmNew.rank >= 3 {
                     cell.switchRankImageToLabel()
-                    vm.setRankNumberWithIndexPath(indexPath.row + 1)
+                    vmNew.setRankNumberWithIndexPath(indexPath.row + 1)
                 }
-                
-                cell.configureActionCountCell(with: currentUserVM)
-                return cell
-            } else {
-                cell.configureActionCountCell(with: vm)
-                return cell
             }
+            
+            cell.configureActionCountCell(with: vmNew)
+            return cell
+            
         }
 
         return UITableViewCell()
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -214,31 +214,71 @@ final class BottomSheetView: PassThroughView {
     private func bind() {
 
         self.bottomSheetVM.changeset.bind { [weak self] vm in
-            guard let vms = vm else { return }
-            
-            #if DEBUG
+            guard let vms = vm,
+                  let `self` = self
+            else { return }
+
+            var hasChanges: Bool = false
+
+            var changes: Set<IndexPath> = []
+
+            var arrSections: [ArraySection<SectionID, AnyDifferentiable>] = []
             for vm in vms {
-                print("updated vm: \(vm.elementUpdated)")
-                print("inserted vm: \(vm.elementInserted)")
+
+//                print("updated vm: \(vm.elementUpdated)")
+//                print("inserted vm: \(vm.elementInserted)")
+//                print("deleted vm: \(vm.elementDeleted)")
+//                print("Moved vm: \(vm.elementMoved)")
+
+                for data in vm.data {
+                    arrSections.append(ArraySection(model: data.model, elements: data.elements))
+                }
+                let elementsMoved = vm.elementMoved
+
+                for ele in elementsMoved {
+                    let sourceEle = ele.source.element
+                    let sourceSec = ele.source.section
+
+                    let targetEle = ele.target.element
+                    let targetSec = ele.target.section
+
+                    changes.insert(IndexPath(row: sourceEle, section: sourceSec))
+                    changes.insert(IndexPath(row: targetEle, section: targetSec))
+                }
+//                print("Orginals: \(original)")
+//                print("News: \(new)")
+
+                if vm.hasElementChanges {
+                    hasChanges = true
+                }
+                
             }
-            #endif
-            
-            DispatchQueue.main.async {
-                self?.leaderBoardTableView.alpha = 1.0
-                self?.leaderBoardTableView.reload(
-                    using: vms,
-                    deleteSectionsAnimation: .none,
-                    insertSectionsAnimation: .none,
-                    reloadSectionsAnimation: .none,
-                    deleteRowsAnimation: .fade,
-                    insertRowsAnimation: .bottom,
-                    reloadRowsAnimation: .middle,
-                    setData: { coll in
-                        self?.bottomSheetVM.source = coll
-                    })
+
+            if hasChanges {
+                DispatchQueue.main.async {
+                    self.leaderBoardTableView.alpha = 1.0
+
+                    self.leaderBoardTableView.reload(
+                        using: vms,
+                        deleteSectionsAnimation: .none,
+                        insertSectionsAnimation: .none,
+                        reloadSectionsAnimation: .none,
+                        deleteRowsAnimation: .fade,
+                        insertRowsAnimation: .bottom,
+                        reloadRowsAnimation: .middle,
+                        setData: { coll in
+                            self.bottomSheetVM.source = coll
+                        }
+                    )
+                    
+                    self.leaderBoardTableView.reloadRows(at: Array(changes), with: .middle)
+                     
+                }
+                hasChanges = false
             }
+
         }
-         
+      
     }
     
 }
@@ -260,6 +300,7 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
@@ -271,16 +312,6 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             
-            /*
-            UIView.transition(with: cell.popScoreLabel, duration: 0.8, options: .transitionCrossDissolve) {
-                cell.popScoreLabel.textColor = .systemOrange
-            } completion: { _ in
-                UIView.transition(with: cell.popScoreLabel, duration: 0.8, options: .transitionCrossDissolve) {
-                    cell.popScoreLabel.textColor = .white
-                }
-            }
-             */
-            
             cell.configure(with: vm)
             
             return cell
@@ -291,16 +322,6 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             else { return UITableViewCell()}
             cell.selectionStyle = .none
             cell.resetCell()
-          
-            /*
-            UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
-                cell.popScoreLabel.textColor = .systemOrange
-            } completion: { _ in
-                UIView.transition(with: cell, duration: 0.8, options: .transitionCrossDissolve) {
-                    cell.popScoreLabel.textColor = .white
-                }
-            }
-             */
             
             if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)

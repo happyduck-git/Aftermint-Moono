@@ -26,7 +26,7 @@ final class BottomSheetViewModel {
     var source: [ArraySection<SectionID, AnyDifferentiable>] = []
     
     func getInitialItems(of collectionType: CollectionType, gameType: GameType) {
-        print("Getting initial items...")
+        
         Task {
             
             guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
@@ -78,7 +78,7 @@ final class BottomSheetViewModel {
     }
     
     func getCachedItems(of collectionType: CollectionType, gameType: GameType) {
-        print("Getting cached items...")
+
         Task {
             guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
                   var secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
@@ -127,64 +127,6 @@ final class BottomSheetViewModel {
         }
         
     }
-    
-    /*
-    func getItemsOld() {
-        guard var firstSectionOldVal = self.firstListVM.leaderBoardFirstSectionVMList.value,
-              var secondSectionOldVal = self.secondListVM.leaderBoardVMList.value else {
-            return
-        }
-        
-        let typedErasedFirstSectionOldVal = firstSectionOldVal.map {
-            return AnyDifferentiable($0)
-        }
-        let typedErasedSecondSectionOldVal = secondSectionOldVal.map {
-            return AnyDifferentiable($0)
-        }
-        
-        self.source = [
-            ArraySection(model: .first, elements: typedErasedFirstSectionOldVal),
-            ArraySection(model: .second, elements: typedErasedSecondSectionOldVal)
-        ]
-        
-        let group = DispatchGroup()
-        var firstSectionNewVal: [LeaderBoardFirstSectionCellViewModel] = []
-        group.enter()
-        self.firstListVM.getFirstSectionVMOld(ofCollection: .moono) {
-            group.leave()
-            firstSectionOldVal.append($0)
-            firstSectionNewVal.append($0)
-        }
-        
-        var secondSectionNewVal: [LeaderBoardSecondSectionCellViewModel] = []
-        group.enter()
-        self.secondListVM.getAddressSectionVMOld {
-            group.leave()
-            secondSectionOldVal = $0
-            secondSectionNewVal = $0
-        }
-        
-        group.notify(queue: .main) { [weak self] in
-            
-            guard let `self` = self else { return }
-            let typedErasedFirstSectionNewVal = firstSectionNewVal.map {
-                AnyDifferentiable($0)
-            }
-            
-            let typedErasedSecondSectionNewVal = secondSectionNewVal.map {
-                return AnyDifferentiable($0)
-            }
-            
-            let target: [ArraySection<SectionID, AnyDifferentiable>] = [
-                ArraySection(model: .first, elements: typedErasedFirstSectionNewVal),
-                ArraySection(model: .second, elements: typedErasedSecondSectionNewVal)
-            ]
-
-            self.changeset.value = StagedChangeset(source: self.source, target: target)
-            self.delegate?.dataFetched()
-        }
-    }
-     */
-    
+ 
 }
 

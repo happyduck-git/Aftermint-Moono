@@ -8,13 +8,17 @@
 import UIKit.UIImage
 
 final class YouCellViewModel {
+
+    let currentUser: Box<Address?> = Box(nil)
+    let nftRankViewModels: Box<[NftRankCellViewModel]> = Box([])
+    let isLoaded: Box<Bool> = Box(false)
     
-    enum YouCellViewModelError: Error {
-        case rankCellFetchError
+    func numberOfRowsAt() -> Int {
+        return nftRankViewModels.value?.count ?? 0
     }
-    
-    var currentUser: Box<Address?> = Box(nil)
-    var nftRankViewModels: Box<[NftRankCellViewModel]> = Box([])
-    var isLoaded: Box<Bool> = Box(false)
+
+    func viewModelAt(_ indexPath: IndexPath) -> NftRankCellViewModel? {
+        return nftRankViewModels.value?[indexPath.row]
+    }
     
 }

@@ -31,7 +31,10 @@ final class GameViewViewModel: GameViewViewModelProtocol {
         { [weak self] nfts in
             guard let `self` = self else { return }
             self.ownedNftTokenIds.value = nfts.compactMap { nft in
-                nft.tokenId
+                let tokenId = nft.tokenId
+                let convertedId = String(tokenId.convertToDecimal() ?? 0)
+           
+                return convertedId
             }
         }
     }

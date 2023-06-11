@@ -63,7 +63,7 @@ final class SettingViewControllerViewModel {
         
         Task {
             let addressList = try await self.fireStoreRepository
-                .getGameActionScoreFromGroup(
+                .getAllInitialAddress(
                     gameType: gameType,
                     currentUserAddress: mockUser.address
                 )
@@ -85,6 +85,7 @@ final class SettingViewControllerViewModel {
                 )
             }
             self.usersCellViewModel.usersList.value = vmList
+            self.usersCellViewModel.isLoaded.value = true
         }
         
     }
@@ -137,7 +138,7 @@ final class SettingViewControllerViewModel {
         
         Task {
             let results = try await self.fireStoreRepository
-                .getAllCollectionFieldsOrdered(gameType: .popgame)
+                .getAllCollections(gameType: .popgame)
             guard let nftCollectionList = results else { return }
             let vmList = nftCollectionList.map { collection in
                 return ProjectPopScoreCellViewModel(
@@ -164,11 +165,7 @@ final class SettingViewControllerViewModel {
                 let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
                 guard let totalNumberOfNFTs = contractInfoResult?.totalSupply.convertToDecimal() else { return }
                 projectsCellViewModel.totalNumberOfMintedNFTs.value = totalNumberOfNFTs
-                
-                fireStoreRepository.saveNumberOfHoldersAndMintedNfts(
-                    totalHolders: Int64(holders?.totalHolder ?? 0),
-                    totalMintedNFTs: Int64(totalNumberOfNFTs)
-                )
+         
             } catch {
                 print(error.localizedDescription)
             }

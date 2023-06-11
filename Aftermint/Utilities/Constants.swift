@@ -67,7 +67,8 @@ struct K {
         static let tokenIdField: String = "token_id"
         static let scoreField: String = "score"
         static let countField: String = "count"
-        static let walletField: String = "wallet_address"
+        static let walletAddressField: String = "wallet_address"
+        static let noOwnerFound: String = "owner not found."
     }
     
 }
@@ -111,6 +112,8 @@ enum LeaderBoardAsset: String {
     case secondPlace = "2nd_place_medal"
     case thirdPlace = "3rd_place_medal"
     case moonoImage = "game_moono_mock"
+    case userImagePlaceHolder = "https://i.seadn.io/gcs/files/7bd1fdd19f346c3bae6c084b6ffa5735.png?auto=format&dpr=1&w=200"
+    case usernamePlaceHolder = "no username"
 }
 
 /// GameScene related constants

@@ -9,6 +9,11 @@ import UIKit
 
 final class YouCell: UICollectionViewCell {
     
+    private var viewModel: YouCellViewModel? {
+        didSet {
+            self.bind()
+        }
+    }
     private var nftsList: [NftRankCellViewModel] = []
     
     //MARK: - UI Elements
@@ -160,9 +165,10 @@ final class YouCell: UICollectionViewCell {
         super.prepareForReuse()
     }
     
-    //MARK: - Public
-    
-    public func configure(with vm: YouCellViewModel) {
+    private func bind() {
+        guard let vm = self.viewModel else {
+            return
+        }
         
         vm.currentUser.bind { [weak self] address in
             guard let address = address,
@@ -180,7 +186,7 @@ final class YouCell: UICollectionViewCell {
             }
             DispatchQueue.main.async {
                 self.walletAddressStack.bottomLabelText = address?.ownerAddress.cutOfRange(length: 15) ?? "N/A"
-                self.usernameStack.bottomLabelText = address?.username ?? "N/A"
+                self.usernameStack.bottomLabelText = address?.username ?? LeaderBoardAsset.usernamePlaceHolder.rawValue
                 self.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
                 self.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
             }
@@ -207,6 +213,12 @@ final class YouCell: UICollectionViewCell {
         }
     }
     
+    //MARK: - Public
+    
+    public func configure(with vm: YouCellViewModel) {
+        self.viewModel = vm
+    }
+    
 }
 
 extension YouCell: UITableViewDelegate, UITableViewDataSource {
@@ -221,7 +233,8 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.nftsList.count
+//        return self.nftsList.count
+        return self.viewModel?.numberOfRowsAt() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -230,7 +243,12 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.switchRankImageToLabel()
         
-        let vm = self.nftsList[indexPath.row]
+//        let vm = self.nftsList[indexPath.row]
+        
+        guard let vm = self.viewModel?.viewModelAt(indexPath) else {
+            return UITableViewCell()
+        }
+        
         vm.setRankNumberWithIndexPath(indexPath.row + 1)
         cell.configure(vm: vm)
         return cell
@@ -240,31 +258,6 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
         return 70
     }
     
-    private func imageStringToImage(with urlString: String, completion: @escaping (Result<UIImage?, Error>) -> ()) {
-        let url = URL(string: urlString)
-        NukeImageLoader.loadImageUsingNuke(url: url) { image in
-            completion(.success(image))
-        }
-    }
-    
-//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-//        guard let headerView = view as? UITableViewHeaderFooterView else { return }
-//        var config = headerView.defaultContentConfiguration()
-//        config.attributedText = NSAttributedString(
-//            string: SettingAsset.tableHeaderTitle.rawValue,
-//            attributes: [
-//                .foregroundColor: UIColor.white
-//            ])
-//        headerView.contentConfiguration = config
-//
-        /*
-         content.attributedText = NSAttributedString(string: "Text", attributes: [
-         .font: UIFont.systemFont(ofSize: 20, weight: .bold),
-         .foregroundColor: UIColor.systemBlue
-         ])
-         */
-//    }
-
     /// Determine cell image
     private func cellRankImageAt(_ indexPathRow: Int) -> UIImage? {
         switch indexPathRow {
@@ -280,56 +273,3 @@ extension YouCell: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
-
-
-
-//OG Code
-/*
- extension YouCell: UITableViewDelegate, UITableViewDataSource {
-     
-     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-         return SettingAsset.tableHeaderTitle.rawValue
-     }
-     
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         guard let numberOfRows = vm.nftRankViewModels.value?.count else { return 0 }
-         return numberOfRows
-     }
-     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-         guard let cell = tableView.dequeueReusableCell(withIdentifier: NftRankCell.identifier) as? NftRankCell,
-               let nftRankCellViewModel = vm.nftRankViewModels.value?[indexPath.row]
-         else { return UITableViewCell() }
-         nftRankCellViewModel.setRankNumberWithIndexPath(indexPath.row + 1)
-         cell.configure(vm: nftRankCellViewModel)
-         return cell
-     }
-     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-         return 70
-     }
-     
-     private func fetchTableViewData() {
-         self.vm.getAllOwnedNft(collectionType: .moono, completion: { result in
-             switch result {
-             case .success(let viewModels):
-                 self.vm.nftRankViewModels.value = viewModels
-             case .failure(let failure):
-                 print(failure.localizedDescription)
-             }
-         })
-     }
- }
-
- extension YouCell {
-     
-     private func bind() {
-         vm.nftRankViewModels.bind { [weak self] _ in
-             DispatchQueue.main.async {
-                 self?.nftsTableView.reloadData()
-             }
-         }
-     }
-     
- }
- */

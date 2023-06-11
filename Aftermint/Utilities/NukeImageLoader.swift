@@ -21,7 +21,7 @@ struct NukeImageLoader {
                 }
                 return
             case .failure(let failure):
-                print("Nuke load image failed: \(failure)")
+                print("Nuke load image failed: \(failure.localizedDescription) -- \(url.absoluteString)")
             }
         }
     }
