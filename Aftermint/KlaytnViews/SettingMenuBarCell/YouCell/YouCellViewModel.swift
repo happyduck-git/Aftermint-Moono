@@ -21,4 +21,40 @@ final class YouCellViewModel {
         return nftRankViewModels.value?[indexPath.row]
     }
     
+    func getCurrentUserCards(
+        address: String,
+        gameType: GameType,
+        nftsOwned: [String: String]
+    ) async {
+        
+        do {
+            guard let cards = try await FirestoreRepository.shared.getCurrentUserCards(
+                address: address,
+                gameType: gameType,
+                nftsOwned: nftsOwned
+            ) else {
+                return
+            }
+            
+            let vmList = cards.map { card in
+                
+                let vm = NftRankCellViewModel(
+                    rank: 0,
+                    rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+                    nftImageUrl: card.imageUrl,
+                    nftName: "Moono #\(card.tokenId)",
+                    score: card.popScore,
+                    ownerAddress: card.ownerAddress
+                )
+                return vm
+            }
+            nftRankViewModels.value = vmList
+            isLoaded.value = true
+        }
+        catch {
+            print("Error getting current users cards --- \(error.localizedDescription)")
+        }
+     
+    }
+    
 }

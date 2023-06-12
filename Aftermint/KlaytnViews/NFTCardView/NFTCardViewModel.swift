@@ -67,7 +67,7 @@ class NFTCardViewModel {
         let newNfts = await result.tokens.sorted()
         let oldNfts = try await recordedNftSet.sorted()
         
-        async let check = self.checkChangesInOwnedNfts(newNfts: newNfts, oldNfts: oldNfts)
+        async let _ = self.checkChangesInOwnedNfts(newNfts: newNfts, oldNfts: oldNfts)
         
         /// Set owned NFTs to related variable.
         self.nftCardCellViewModel.value = await result.vms
@@ -107,6 +107,20 @@ class NFTCardViewModel {
         initialScore: Int64,
         ownedNftList: [String]
     ) async {
+        
+        /// Save current user's nft info to UserDefaults
+        var nftDictionary: [String: String] = [:]
+        for i in 0..<ownedNftList.count {
+            let tokenId = ownedNftList[i]
+            let convertedId = tokenId.convertToHex() ?? "0x219"
+            async let imageUri = KlaytnNftRequester.requestMoonoNftImageUrl(
+                contractAddress: CollectionType.moono.address,
+                tokenId: convertedId
+            )
+            
+            nftDictionary[tokenId] = await imageUri
+        }
+        UserDefaults.standard.setValue(nftDictionary, forKey: "owned-nft-token-ids")
         
         /// Set initial NFT scores for games for a new user.
         let isOldUser = await self.fireStoreRepository.checkIfSavedUserNew(

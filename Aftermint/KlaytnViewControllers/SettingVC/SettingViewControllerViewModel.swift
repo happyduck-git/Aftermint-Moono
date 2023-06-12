@@ -107,7 +107,7 @@ final class SettingViewControllerViewModel {
         Task {
          
             let results = try await self.fireStoreRepository
-                .getAllCards(
+                .getPaginatedCards(
                     gameType: .popgame
                 )
 
@@ -138,8 +138,8 @@ final class SettingViewControllerViewModel {
                 
                 return vm
             }
-            self.youCellViewModel.nftRankViewModels.value = currentUserCardList
-            self.youCellViewModel.isLoaded.value = true
+//            self.youCellViewModel.nftRankViewModels.value = currentUserCardList
+//            self.youCellViewModel.isLoaded.value = true
             self.nftsCellViewModel.nftsList.value = vmList
         }
         

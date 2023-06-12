@@ -286,29 +286,68 @@ extension FirestoreRepository {
         return cards
     }
     
-    /// Get all the nft information
+    func getCurrentUserCards(
+        address: String,
+        gameType: GameType,
+        nftsOwned: [String: String]
+    ) async throws -> [Card]? {
+        
+        var cards: [Card] = []
+        
+        let popgameDocs = try await db.collectionGroup(K.FStore.nftScoreSetField)
+            .order(by: K.FStore.scoreField, descending: true)
+            .getDocuments()
+            .documents
+
+        for doc in popgameDocs {
+            guard let docId = doc.reference.parent.parent?.documentID,
+                  nftsOwned.keys.contains(docId),
+                  let imageUrl = nftsOwned[docId]
+            else {
+                continue
+            }
+            
+            let data = doc.data()
+            let score = data[K.FStore.scoreField] as? Int64 ?? 0
+            
+            let card = Card(
+                tokenId: docId,
+                ownerAddress: address,
+                popScore: score,
+                actionCount: 0, // TODO: DELETE this property if it is not needed.
+                imageUrl: imageUrl
+            )
+            cards.append(card)
+        }
+        
+        return cards
+    }
+    
+    /// Get paginated nfts information
     /// - Parameter collectionType: NFT Collection type
     /// - Returns: Array of Cards
-    func getAllCards(
+    func getPaginatedCards(
         gameType: GameType
     ) async throws -> (cards: [Card]?, lastDoc: QueryDocumentSnapshot?) {
+        
+        let start = CFAbsoluteTimeGetCurrent()
         
         var cards: [Card] = []
         
         /* nft 별 점수 Dictionary 생성 */
         var addressDictionary: [String: String] = [:]
-        
+
         let nftDocuments = try await baseDBPath.document(self.type.rawValue)
             .collection(K.FStore.nftSetField)
             .getDocuments()
             .documents
-        
+
         for doc in nftDocuments {
-            
+
             let tokenId = doc.documentID
             let ownerAddress = doc.data()[K.FStore.cachedWalletAddress] as? String ?? K.FStore.noOwnerFound
             addressDictionary[tokenId] = ownerAddress
-            
+
         }
         
         let groupDocuments = try await self.db
@@ -323,7 +362,9 @@ extension FirestoreRepository {
             addressList: addressDictionary,
             gameType: gameType
         )
-
+        
+        let end = CFAbsoluteTimeGetCurrent()
+        print("TIme consumed: \(end - start)")
         return (cards, groupDocuments.last)
     }
     

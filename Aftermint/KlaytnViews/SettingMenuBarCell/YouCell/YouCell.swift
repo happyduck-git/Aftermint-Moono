@@ -15,6 +15,8 @@ final class YouCell: UICollectionViewCell {
         }
     }
     
+    private let mockUser = MoonoMockUserData().getOneUserData()
+    
     //MARK: - UI Elements
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -155,6 +157,26 @@ final class YouCell: UICollectionViewCell {
     private func bind() {
         guard let vm = self.viewModel else {
             return
+        }
+        
+        Task {
+            guard let nftsOwned = UserDefaults.standard.dictionary(forKey: "owned-nft-token-ids") else {
+                return
+            }
+            var convertedDictionary: [String: String] = [:]
+
+            for (key, value) in nftsOwned {
+                if let stringValue = value as? String {
+                    convertedDictionary[key] = stringValue
+                } else {
+                    print("Value `\(value)` cannot be casted to String.")
+                }
+            }
+            await vm.getCurrentUserCards(
+                address: mockUser.address,
+                gameType: .popgame,
+                nftsOwned: convertedDictionary
+            )
         }
         
         vm.currentUser.bind { [weak self] address in
