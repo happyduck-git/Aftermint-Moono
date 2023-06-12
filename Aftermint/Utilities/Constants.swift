@@ -104,6 +104,10 @@ enum GameAsset: String {
     case actionCountLabel = "Action Count"
 }
 
+enum GameAssetNumber: CGFloat {
+    case alpha = 0.3
+}
+
 /// GameViewController Bottom LeaderBoard related constants
 enum LeaderBoardAsset: String {
     case title = "Leader board"

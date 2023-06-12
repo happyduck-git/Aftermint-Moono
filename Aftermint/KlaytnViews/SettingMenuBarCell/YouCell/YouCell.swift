@@ -14,7 +14,6 @@ final class YouCell: UICollectionViewCell {
             self.bind()
         }
     }
-    private var nftsList: [NftRankCellViewModel] = []
     
     //MARK: - UI Elements
     private let profileImageView: UIImageView = {
@@ -98,19 +97,7 @@ final class YouCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    override func layoutIfNeeded() {
-//        super.layoutIfNeeded()
-//        let width = self.profileImageView.frame.size.width
-//        self.profileImageView.layer.cornerRadius = width / 2
-//    }
-//
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        let width = self.profileImageView.frame.size.width
-//        self.profileImageView.layer.cornerRadius = width / 2
-//    }
-//
+
     //MARK: - Private
     
     private func setUI() {
@@ -190,12 +177,6 @@ final class YouCell: UICollectionViewCell {
                 self.popScoreStack.bottomLabelText = "\(address?.popScore ?? 0)"
                 self.actionCountStack.bottomLabelText = "\(address?.actionCount ?? 0)"
             }
-        }
-        
-        vm.nftRankViewModels.bind { [weak self] viewModels in
-            guard let `self` = self
-            else { return }
-            self.nftsList = viewModels ?? []
         }
         
         vm.isLoaded.bind { [weak self] isLoaded in

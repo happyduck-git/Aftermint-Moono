@@ -193,7 +193,7 @@ extension FirestoreRepository {
         nftList: [String]
     ) async throws {
         
-        async let _ = try self.saveNFTScores(
+        async let saved = self.saveNFTScores(
             of: .popgame,
             actionCount: initialScore,
             nftTokenId: nftList,
@@ -240,17 +240,62 @@ extension FirestoreRepository {
     
     // MARK: - Get Cards
     
+    private func convertToCard(
+        _ snapshots: [QueryDocumentSnapshot],
+        addressList: [String: String],
+        gameType: GameType
+    ) async throws -> [Card] {
+        
+        var cards: [Card] = []
+        
+        for doc in snapshots {
+            
+            guard doc.documentID == gameType.rawValue else {
+                throw FirestoreError.gameTypeNotFound
+            }
+            
+            let nftDocRef = doc.reference.parent.parent
+            
+            // 1. NFT Token id
+            let nftTokenId = nftDocRef?.documentID ?? "N/A"
+            
+            // 2. Score per NFT
+            let nftScoreData = doc.data()
+            let score = nftScoreData[K.FStore.scoreField] as? Int64 ?? 0
+            
+            // 3. NFT Image URL
+            let convertedId = nftTokenId.convertToHex() ?? "0x219"
+            async let imageUri = KlaytnNftRequester.requestMoonoNftImageUrl(
+                contractAddress: self.type.address,
+                tokenId: convertedId
+            )
+            let imageUrl = await imageUri ?? "N/A"
+            
+            // 4. Owner address
+            let ownerAddress = addressList[nftTokenId] ?? "N/A"
+            
+            let card = Card(
+                tokenId: nftTokenId,
+                ownerAddress: ownerAddress,
+                popScore: score,
+                actionCount: 0, // TODO: DELETE this property if it is not needed.
+                imageUrl: imageUrl
+            )
+            cards.append(card)
+        }
+        return cards
+    }
+    
     /// Get all the nft information
     /// - Parameter collectionType: NFT Collection type
     /// - Returns: Array of Cards
     func getAllCards(
         gameType: GameType
-    ) async throws -> [Card]? {
+    ) async throws -> (cards: [Card]?, lastDoc: QueryDocumentSnapshot?) {
         
         var cards: [Card] = []
         
         /* nft 별 점수 Dictionary 생성 */
-        let ownerAddStart = CFAbsoluteTimeGetCurrent()
         var addressDictionary: [String: String] = [:]
         
         let nftDocuments = try await baseDBPath.document(self.type.rawValue)
@@ -266,56 +311,63 @@ extension FirestoreRepository {
             
         }
         
-        let nftScoreSetColletion = self.db
+        let groupDocuments = try await self.db
             .collectionGroup(K.FStore.nftScoreSetField)
             .order(by: K.FStore.scoreField, descending: true)
             .limit(to: 7)
-        
-        let groupDocuments = try await nftScoreSetColletion
             .getDocuments()
             .documents
 
-        let ownerAddEnd = CFAbsoluteTimeGetCurrent()
+        cards = try await self.convertToCard(
+            groupDocuments,
+            addressList: addressDictionary,
+            gameType: gameType
+        )
 
-        for doc in groupDocuments {
-
-            guard doc.documentID == gameType.rawValue else {
-                throw FirestoreError.gameTypeNotFound
-            }
-
-            let nftDocRef = doc.reference.parent.parent
-
-            // 1. NFT Token id
-            let nftTokenId = nftDocRef?.documentID ?? "N/A"
-
-            // 2. Score per NFT
-            let nftScoreData = doc.data()
-            let score = nftScoreData[K.FStore.scoreField] as? Int64 ?? 0
-
-            // 3. NFT Image URL
-            let convertedId = nftTokenId.convertToHex() ?? "0x219"
-            async let imageUri = KlaytnNftRequester.requestMoonoNftImageUrl(
-                contractAddress: self.type.address,
-                tokenId: convertedId
-            )
-            let imageUrl = await imageUri ?? "N/A"
-
-            // 4. Owner address
-            let ownerAddress = addressDictionary[nftTokenId] ?? "N/A"
-
-            let card = Card(
-                tokenId: nftTokenId,
-                ownerAddress: ownerAddress,
-                popScore: score,
-                actionCount: 0, // TODO: DELETE this property if it is not needed.
-                imageUrl: imageUrl
-            )
-            cards.append(card)
-
+        return (cards, groupDocuments.last)
+    }
+    
+    func getAdditionalCards(
+        after lastDocumentSnapshot: QueryDocumentSnapshot?,
+        gameType: GameType
+    ) async throws -> (cards: [Card]?, lastDoc: QueryDocumentSnapshot?) {
+        
+        guard let lastSnapshot = lastDocumentSnapshot
+        else {
+            print("Last document found to be nil.")
+            throw FirestoreError.documentFoundToBeNil
         }
-        let end = CFAbsoluteTimeGetCurrent()
-
-        return cards
+        
+        var cards: [Card] = []
+        var addressDictionary: [String: String] = [:]
+        
+        let nftDocuments = try await baseDBPath.document(self.type.rawValue)
+            .collection(K.FStore.nftSetField)
+            .getDocuments()
+            .documents
+        
+        for doc in nftDocuments {
+            
+            let tokenId = doc.documentID
+            let ownerAddress = doc.data()[K.FStore.cachedWalletAddress] as? String ?? K.FStore.noOwnerFound
+            addressDictionary[tokenId] = ownerAddress
+            
+        }
+        
+        let nextDocuments = try await self.db.collectionGroup(K.FStore.nftScoreSetField)
+            .order(by: K.FStore.scoreField, descending: true)
+            .start(afterDocument: lastSnapshot)
+            .limit(to: 7)
+            .getDocuments()
+            .documents
+        
+        cards = try await self.convertToCard(
+            nextDocuments,
+            addressList: addressDictionary,
+            gameType: gameType
+        )
+        
+        return (cards, nextDocuments.last)
     }
     
     // MARK: - Get Collections
@@ -359,30 +411,29 @@ extension FirestoreRepository {
                 .document(gameType.rawValue)
                 .getDocument()
             
-            let actionCount = try await cachedTotalActionData?[K.FStore.totalCountField] as? Int64 ?? 0
-            
             // collection
             async let collectionData = collectionRef?
                 .getDocument()
                 .data()
             
             let contractAddress = try await collectionData?[K.FStore.contractAddressField] as? String ?? "N/A"
-            let imageUrl = try await collectionData?[K.FStore.profileImageField] as? String ?? "N/A"
-            let profileName = try await collectionData?[K.FStore.profileNameField] as? String ?? "N/A"
             
             // number of nfts
             async let numberOfIssuedNfts = KlaytnNftRequester
                 .getNumberOfIssuedNFTs(ofCollection: contractAddress)?
                 .totalSupply
                 .convertToDecimal()
-            guard let numberOfNfts = try await numberOfIssuedNfts else { return nil }
             
             // number of total holders
             async let numberOfTotalHolders = KlaytnNftRequester
                 .getNumberOfHolders(ofCollection: contractAddress)?
                 .totalHolder
-            guard let numberOfHolders = try await numberOfTotalHolders else { return nil }
             
+            let actionCount = try await cachedTotalActionData?[K.FStore.totalCountField] as? Int64 ?? 0
+            let imageUrl = try await collectionData?[K.FStore.profileImageField] as? String ?? "N/A"
+            let profileName = try await collectionData?[K.FStore.profileNameField] as? String ?? "N/A"
+            guard let numberOfNfts = try await numberOfIssuedNfts else { return nil }
+            guard let numberOfHolders = try await numberOfTotalHolders else { return nil }
             
             let nftCollection = NftCollection(
                 name: profileName,
@@ -410,22 +461,23 @@ extension FirestoreRepository {
         async let nftCollectionDocData = docRefForNftCollection
             .getDocument()
             .data()
-        let imageUrl = try await nftCollectionDocData?[K.FStore.profileImageField] as? String ?? "N/A"
-        let collectionName = try await nftCollectionDocData?[K.FStore.profileNameField] as? String ?? "N/A"
-        let collectionAddress = try await nftCollectionDocData?[K.FStore.contractAddressField] as? String ?? "N/A"
         
         // total action count
         async let totalActionCountData = docRefForNftCollection
             .collection(K.FStore.cachedTotalActionCountSetField)
             .document(gameType.rawValue)
             .getDocument()
-        let totalCount = try await totalActionCountData[K.FStore.totalCountField] as? Int64 ?? 0
         
         // total pop count
         async let totalNftScoreData = docRefForNftCollection
             .collection(K.FStore.cachedTotalNftScoreSetField)
             .document(gameType.rawValue)
             .getDocument()
+        
+        let imageUrl = try await nftCollectionDocData?[K.FStore.profileImageField] as? String ?? "N/A"
+        let collectionName = try await nftCollectionDocData?[K.FStore.profileNameField] as? String ?? "N/A"
+        let collectionAddress = try await nftCollectionDocData?[K.FStore.contractAddressField] as? String ?? "N/A"
+        let totalCount = try await totalActionCountData[K.FStore.totalCountField] as? Int64 ?? 0
         let nftTotalScore = try await totalNftScoreData[K.FStore.totalScoreField] as? Int64 ?? 0
         
         let nftCollection = NftCollection(
@@ -782,6 +834,7 @@ extension FirestoreRepository {
         case gameTypeNotFound
         case documentFieldNotFound
         case walletNotFound
-        case collectionTypeNotFoynd
+        case collectionTypeNotFound
+        case documentFoundToBeNil
     }
 }

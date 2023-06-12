@@ -66,7 +66,8 @@ class NFTCardViewModel {
         
         let newNfts = await result.tokens.sorted()
         let oldNfts = try await recordedNftSet.sorted()
-        async let _ = self.checkChangesInOwnedNfts(newNfts: newNfts, oldNfts: oldNfts)
+        
+        async let check = self.checkChangesInOwnedNfts(newNfts: newNfts, oldNfts: oldNfts)
         
         /// Set owned NFTs to related variable.
         self.nftCardCellViewModel.value = await result.vms

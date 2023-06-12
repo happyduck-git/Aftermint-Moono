@@ -45,10 +45,10 @@ final class GameViewController: UIViewController {
     // MARK: - UI Elements
     private let userImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .tertiarySystemFill
+        imageView.backgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
-        imageView.layer.borderWidth = 1.0
+//        imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
+//        imageView.layer.borderWidth = 1.0
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -64,7 +64,9 @@ final class GameViewController: UIViewController {
     private let walletAddressLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.text = " "
         label.font = BellyGomFont.header08
+        label.backgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -73,6 +75,8 @@ final class GameViewController: UIViewController {
         let label = UILabel()
         label.text = self.nickNameLabelText
         label.textColor = .white
+        label.text = " "
+        label.backgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         label.font = BellyGomFont.header04
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -83,8 +87,8 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "Pop Rank"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-        stack.bottomLabelText = "12" // TODO: TEMPORARY VALUE
         stack.bottomLabelFont = BellyGomFont.header09
+        stack.bottomLabelBackgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -94,8 +98,8 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "Pop Score"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-//        stack.bottomLabelText = "358,732"
         stack.bottomLabelFont = BellyGomFont.header09
+        stack.bottomLabelBackgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -105,8 +109,8 @@ final class GameViewController: UIViewController {
         stack.topLabelText = "NFTs"
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
-//        stack.bottomLabelText = "17"
         stack.bottomLabelFont = BellyGomFont.header05
+        stack.bottomLabelBackgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -117,6 +121,7 @@ final class GameViewController: UIViewController {
         stack.topLabelFont = BellyGomFont.header05
         stack.topLabelTextColor = AftermintColor.bellyGreen
         stack.bottomLabelFont = BellyGomFont.header05
+        stack.bottomLabelBackgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -345,31 +350,55 @@ final class GameViewController: UIViewController {
                     )
                     print("Touch saved: \(self.touchCount)")
                     self.touchCount = 0
+                    
+                    // Retrive game score from db
+                    try await self.bottomSheetVM.getCachedItems(of: .moono, gameType: .popgame)
                 }
-                // Retrive game score from db
-                self.bottomSheetVM.getCachedItems(of: .moono, gameType: .popgame)
+                
             })
     }
     
     /// Get viewModel for current user information at the top right corner of the vc
     private func getCurrentUserViewModel() {
+        
         let currentUserViewModel = self.bottomSheetVM.secondListVM.currentUserViewModel()
+        
         self.numberOfOwnedNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") ?? 0
+        
         DispatchQueue.main.async {
-            /// User information part
-            let url = URL(string: currentUserViewModel?.userProfileImage ?? LeaderBoardAsset.userImagePlaceHolder.rawValue)
-            NukeImageLoader.loadImageUsingNuke(url: url) { image in
-                self.userImageView.image = image
+            
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) { [weak self] in
+                
+                guard let `self` = self else {
+                    return
+                }
+                
+                self.walletAddressLabel.backgroundColor = .clear
+                self.nickNameLabel.backgroundColor = .clear
+                self.popScoreStack.bottomLabelBackgroundColor = .clear
+                self.popRankStack.bottomLabelBackgroundColor = .clear
+                self.nftsStack.bottomLabelBackgroundColor = .clear
+                self.actionCountStack.bottomLabelBackgroundColor = .clear
+                self.userImageView.layer.borderColor = UIColor(ciColor: .white).cgColor
+                self.userImageView.layer.borderWidth = 1.0
+                
+                /// User information part
+                let url = URL(string: currentUserViewModel?.userProfileImage ?? LeaderBoardAsset.userImagePlaceHolder.rawValue)
+                NukeImageLoader.loadImageUsingNuke(url: url) { image in
+                    self.userImageView.image = image
+                }
+                self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
+                self.nickNameLabel.text = "NFTs \(currentUserViewModel?.bottomLabelText ?? "0")"
+                
+                /// Scoreboard part
+                self.nftsStack.bottomLabelText = currentUserViewModel?.bottomLabelText ?? "0"
+                self.popRankStack.bottomLabelText = "12" // TODO: TEMPORARY VALUE
+                self.popScoreFromDB = currentUserViewModel?.popScore ?? 0
+                self.actionCountFromDB = currentUserViewModel?.actionCount ?? 0
+                self.popScoreStack.bottomLabelText = String(describing: self.popScoreFromDB)
+                self.actionCountStack.bottomLabelText = String(describing: self.actionCountFromDB)
+                
             }
-
-            self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
-            self.nickNameLabel.text = "NFTs \(currentUserViewModel?.bottomLabelText ?? "0")"
-            /// Scoreboard part
-            self.nftsStack.bottomLabelText = currentUserViewModel?.bottomLabelText ?? "0"
-            self.popScoreFromDB = currentUserViewModel?.popScore ?? 0
-            self.actionCountFromDB = currentUserViewModel?.actionCount ?? 0
-            self.popScoreStack.bottomLabelText = String(describing: self.popScoreFromDB)
-            self.actionCountStack.bottomLabelText = String(describing: self.actionCountFromDB)
         }
     }
 

@@ -7,11 +7,22 @@
 
 import UIKit
 
+protocol DashBoardNftCellDelegate: AnyObject {
+    func loadMoreCards()
+}
+
 final class DashBoardNftCell: UICollectionViewCell {
     
-    private var nftsList: [NftRankCellViewModel] = []
-    private var highestScoreVM: NftRankCellViewModel?
+//    private var highestScoreVM: NftRankCellViewModel?
     private let mockUser = MoonoMockUserData().getOneUserData()
+    
+    private var viewModel: DashBoardNftCellViewModel? {
+        didSet {
+            self.bind()
+        }
+    }
+    
+    weak var delegate: DashBoardNftCellDelegate?
     
     //MARK: - UI Elements
     private let nftScoreTableView: UITableView = {
@@ -55,26 +66,32 @@ final class DashBoardNftCell: UICollectionViewCell {
     
     //MARK: - Public
     
-    /// Bind function - Test
-    public func configure(with vm: DashBoardNftCellViewModel) {
+    private func bind() {
+        guard let vm = viewModel else {
+            return
+        }
         
         vm.nftsList.bind { [weak self] nfts in
             guard let `self` = self else { return }
-            self.nftsList = nfts ?? []
+            
             vm.getTheHighestScoreNftOfCurrentUser()
+            
             DispatchQueue.main.async {
                 self.nftScoreTableView.reloadData()
             }
         }
         
-        vm.highestNft.bind { [weak self] rankCellVM in
-            guard let `self` = self,
-                  let vm = rankCellVM
-            else { return }
-                    
-            self.highestScoreVM = vm
-        }
-        
+//        vm.highestNft.bind { [weak self] rankCellVM in
+//            guard let `self` = self,
+//                  let vm = rankCellVM
+//            else { return }
+//
+//            self.highestScoreVM = vm
+//        }
+    }
+
+    public func configure(with vm: DashBoardNftCellViewModel) {
+        self.viewModel = vm
     }
     
 }
@@ -101,11 +118,11 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return self.nftsList.count
+        guard let vm = viewModel else {
+            return 0
         }
+        
+        return vm.numberOfRowsAt(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -114,32 +131,31 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
         cell.resetCell()
         cell.switchRankImageToLabel()
         
-        if indexPath.section == 0 {
-            guard let vm = self.highestScoreVM else { return UITableViewCell() }
+        guard let vm = viewModel,
+              let cellVM = vm.viewModelAt(indexPath)
+        else {
+            return UITableViewCell()
+        }
+        
+        /// Find current user owned nfts and highlight those cells
+        if self.checkCurrentUserOwnedNfts(vm: cellVM) {
             cell.showStarBadge()
             cell.nftImageBorderColor = AftermintColor.moonoBlue.cgColor
             cell.nftNameLabelColor = AftermintColor.moonoBlue
             cell.rankLabelColor = AftermintColor.moonoBlue
             cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.2)
-            cell.configure(vm: vm)
-            return cell
-            
-        } else {
-            let vm = nftsList[indexPath.row]
-            vm.setRankNumberWithIndexPath(indexPath.row + 1)
-            
-            /// Find current user owned nfts and highlight those cells
-            if self.checkCurrentUserOwnedNfts(vm: vm) {
-                cell.showStarBadge()
-                cell.nftImageBorderColor = AftermintColor.moonoBlue.cgColor
-                cell.nftNameLabelColor = AftermintColor.moonoBlue
-                cell.rankLabelColor = AftermintColor.moonoBlue
-                cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.2)
-            }
-            
-            cell.configure(vm: vm)
-            return cell
         }
+        
+        if indexPath.section != 0 {
+            cellVM.setRankNumberWithIndexPath(indexPath.row + 1)
+        }
+        
+        print("Section#0 rank: \(cellVM.rank)")
+        
+        cell.configure(vm: cellVM)
+        
+        return cell
+       
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -147,11 +163,31 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func checkCurrentUserOwnedNfts(vm: NftRankCellViewModel) -> Bool {
-//        print(vm.ownerAddress)
+
         if vm.ownerAddress == mockUser.address {
             return true
         }
         return false
+    }
+    
+}
+
+extension DashBoardNftCell: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let offset = scrollView.contentOffset.y
+        let totalContentHeight = scrollView.contentSize.height
+        let totalScrollViewFixedHeight = scrollView.frame.size.height
+        
+        let loadMore = viewModel?.isLoadingMorePosts ?? false
+        
+        if offset >= (totalContentHeight - totalScrollViewFixedHeight - 120) &&
+            viewModel?.lastDoc != nil &&
+            !loadMore
+        {
+            delegate?.loadMoreCards()
+        }
     }
     
 }

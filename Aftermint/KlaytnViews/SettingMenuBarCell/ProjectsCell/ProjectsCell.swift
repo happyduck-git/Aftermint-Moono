@@ -9,7 +9,12 @@ import UIKit
 
 final class ProjectsCell: UICollectionViewCell {
     
-    private var currentCollection: ProjectPopScoreCellViewModel?
+    private var viewModel: ProjectsCellViewModel? {
+        didSet {
+            self.bind()
+        }
+    }
+    
     private var nftCollectionList: [ProjectPopScoreCellViewModel] = []
     
     /// Bool property to check which view should the segmentedControl show
@@ -225,9 +230,10 @@ final class ProjectsCell: UICollectionViewCell {
         }
     }
     
-    //MARK: - Public
-
-    public func configure(with vm: ProjectsCellViewModel) {
+    private func bind() {
+        guard let vm = viewModel else {
+            return
+        }
         
         vm.getCurrentNftCollection(ofType: .moono)
         
@@ -244,21 +250,20 @@ final class ProjectsCell: UICollectionViewCell {
             self.collectionTitleLabel.text = vm?.nftCollectionName
             self.popScoreLabel.text = "\(vm?.popScore ?? 0)"
             self.actionCountLabel.text = "\(vm?.actioncount ?? 0)"
+            self.totalHoldersLabel.text = "\(vm?.totalHolders ?? 0)"
+            self.totalNftsLabel.text = "\(vm?.totalNfts ?? 0)"
             
             let imageUrl = URL(string: vm?.nftImageUrl ?? "N/A")
             NukeImageLoader.loadImageUsingNuke(url: imageUrl) { image in
                 self.nftImageView.image = image
             }
         }
-        
-        vm.totalNumberOfHolders.bind { [weak self] numberOfHolder in
-            guard let `self` = self else { return }
-            self.totalHoldersLabel.text = "\(numberOfHolder ?? 0)"
-        }
-        vm.totalNumberOfMintedNFTs.bind { [weak self] numberOfNFTs in
-            guard let `self` = self else { return }
-            self.totalNftsLabel.text = "\(numberOfNFTs ?? 0)"
-        }
+    }
+    
+    //MARK: - Public
+
+    public func configure(with vm: ProjectsCellViewModel) {
+        self.viewModel = vm
     }
 
 }
@@ -281,26 +286,33 @@ extension ProjectsCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return self.nftCollectionList.count
+        return viewModel?.numberOfRowsAt() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProjectPopScoreCell.identifier, for: indexPath) as? ProjectPopScoreCell else { return UITableViewCell() }
+        
         cell.selectionStyle = .none
         
-        let vm = self.nftCollectionList[indexPath.row]
-        vm.setRankNumberWithIndexPath(indexPath.row + 1)
+        guard let vm = viewModel,
+              let cellVM = vm.viewModelAt(indexPath)
+        else {
+            return UITableViewCell()
+        }
         
-        if vm.nftCollectionName == K.FStore.nftCollectionDocumentName {
+        cellVM.setRankNumberWithIndexPath(indexPath.row + 1)
+        
+        if cellVM.nftCollectionName == K.FStore.nftCollectionDocumentName {
             cell.contentView.backgroundColor = AftermintColor.moonoYellow.withAlphaComponent(0.2)
         }
         
         if tableView == self.popScoreTableView {
-            cell.configureRankScoreCell(with: vm)
-            return cell
+            cell.configureRankScoreCell(with: cellVM)
         } else if tableView == self.actionCountTableView {
-            cell.configureActionCountCell(with: vm)
+            cell.configureActionCountCell(with: cellVM)
         }
+        
         return cell
     }
     

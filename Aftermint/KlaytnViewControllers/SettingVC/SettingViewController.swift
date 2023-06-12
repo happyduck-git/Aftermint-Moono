@@ -60,6 +60,7 @@ final class SettingViewController: UIViewController {
         self.vm = vm
         super.init(nibName: nil, bundle: nil)
         dashBoardStackView.bottomLabelText = collectionType.rawValue
+        
     }
     
     required init?(coder: NSCoder) {
@@ -73,8 +74,6 @@ final class SettingViewController: UIViewController {
         setUI()
         setLayout()
         setDelegate()
-        
-        vm.getHolderAndNumberOfNFTs()
         
         vm.getAllAddressFields(gameType: .popgame)
         vm.getNftData(gameType: .popgame)
@@ -165,7 +164,7 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
             
         case .nfts:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DashBoardNftCell.identifier, for: indexPath) as? DashBoardNftCell else { return UICollectionViewCell() }
-
+            cell.delegate = self
             cell.configure(with: vm.nftsCellViewModel)
             return cell
             
@@ -190,3 +189,8 @@ extension SettingViewController: SettingMenuBarDelegate {
     }
 }
 
+extension SettingViewController: DashBoardNftCellDelegate {
+    func loadMoreCards() {
+        vm.getAdditionalCards()
+    }
+}

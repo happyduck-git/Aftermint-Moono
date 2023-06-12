@@ -6,6 +6,7 @@
 //
 
 import UIKit.UIImage
+import FirebaseFirestore
 
 final class SettingViewControllerViewModel {
     
@@ -18,6 +19,8 @@ final class SettingViewControllerViewModel {
     
     let fireStoreRepository = FirestoreRepository.shared
     let mockUser = MoonoMockUserData().getOneUserData()
+    
+    var lastDoc: QueryDocumentSnapshot?
     
     // MARK: - Cell ViewModels
     var youCellViewModel: YouCellViewModel
@@ -108,8 +111,16 @@ final class SettingViewControllerViewModel {
                     gameType: .popgame
                 )
 
-            guard let cards = results else { return }
             var currentUserCardList: [NftRankCellViewModel] = []
+            guard let cards = results.cards,
+            let lastDoc = results.lastDoc
+            else {
+                return
+            }
+            
+            self.lastDoc = lastDoc // Might not be needed.
+            self.nftsCellViewModel.lastDoc = lastDoc
+            
             let vmList = cards.map { card in
                 
                 let vm = NftRankCellViewModel(
@@ -130,6 +141,58 @@ final class SettingViewControllerViewModel {
             self.youCellViewModel.nftRankViewModels.value = currentUserCardList
             self.youCellViewModel.isLoaded.value = true
             self.nftsCellViewModel.nftsList.value = vmList
+        }
+        
+    }
+    
+    func getAdditionalCards() {
+        
+        nftsCellViewModel.isLoadingMorePosts = true
+        
+        Task {
+            do {
+                let results = try await self.fireStoreRepository
+                    .getAdditionalCards(
+                        after: nftsCellViewModel.lastDoc,
+                        gameType: .popgame
+                    )
+                
+                var currentUserCardList: [NftRankCellViewModel] = []
+                guard let cards = results.cards,
+                let lastDoc = results.lastDoc
+                else {
+                    return
+                }
+                
+                self.lastDoc = lastDoc // Might not be needed.
+                self.nftsCellViewModel.lastDoc = lastDoc
+                
+                let vmList = cards.map { card in
+                    
+                    let vm = NftRankCellViewModel(
+                        rank: 0,
+                        rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+                        nftImageUrl: card.imageUrl,
+                        nftName: "Moono #\(card.tokenId)",
+                        score: card.popScore,
+                        ownerAddress: card.ownerAddress
+                    )
+                    
+                    if card.ownerAddress == self.mockUser.address {
+                        currentUserCardList.append(vm)
+                    }
+                    
+                    return vm
+                }
+                self.youCellViewModel.nftRankViewModels.value?.append(contentsOf: currentUserCardList)
+                self.youCellViewModel.isLoaded.value = true
+                
+                self.nftsCellViewModel.nftsList.value?.append(contentsOf: vmList)
+                nftsCellViewModel.isLoadingMorePosts = false
+            }
+            catch (let error) {
+                print("Error getting additional cards - \(error.localizedDescription)")
+            }
         }
         
     }
@@ -156,21 +219,5 @@ final class SettingViewControllerViewModel {
  
     }
     
-    func getHolderAndNumberOfNFTs() {
-        Task {
-            do {
-                let holders = try await KlaytnNftRequester.getNumberOfHolders(ofCollection: K.ContractAddress.moono)
-                projectsCellViewModel.totalNumberOfHolders.value = holders?.totalHolder
-                
-                let contractInfoResult = try await KlaytnNftRequester.getNumberOfIssuedNFTs(ofCollection: K.ContractAddress.moono)
-                guard let totalNumberOfNFTs = contractInfoResult?.totalSupply.convertToDecimal() else { return }
-                projectsCellViewModel.totalNumberOfMintedNFTs.value = totalNumberOfNFTs
-         
-            } catch {
-                print(error.localizedDescription)
-            }
-         
-        }
-    }
-    
 }
+
