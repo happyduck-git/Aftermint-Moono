@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LeaderBoardTableViewCell: UITableViewCell {
+final class LeaderBoardSecondSectionCell: UITableViewCell {
     
     // MARK: - UI Elements
     private let rankImageView: UIImageView = {
@@ -131,8 +131,8 @@ final class LeaderBoardTableViewCell: UITableViewCell {
     public func configure(with vm: LeaderBoardSecondSectionCellViewModel) {
         rankImageView.image = vm.rankImage
         rankLabel.text = String(describing: vm.rank)
-        nftInfoStackView.topLabelText = vm.topLabelText.cutOfRange(length: 15)
-        nftInfoStackView.bottomLabelText = "NFTs \(vm.bottomLabelText)"
+        nftInfoStackView.topLabelText = vm.ownerAddress.cutOfRange(length: 15)
+        nftInfoStackView.bottomLabelText = "NFTs \(vm.numberOfNfts)"
         popScoreLabel.text = String(describing: vm.popScore)
 
         self.imageStringToImage(with: vm.userProfileImage) { result in

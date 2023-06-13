@@ -150,7 +150,7 @@ extension DashBoardNftCell: UITableViewDelegate, UITableViewDataSource {
             cellVM.setRankNumberWithIndexPath(indexPath.row + 1)
         }
         
-        print("Section#0 rank: \(cellVM.rank)")
+//        print("Section#\(indexPath.section) row no.\(indexPath.row) rank: \(cellVM.rank)")
         
         cell.configure(vm: cellVM)
         

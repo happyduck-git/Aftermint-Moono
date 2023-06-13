@@ -75,7 +75,7 @@ final class SettingViewController: UIViewController {
         setLayout()
         setDelegate()
         
-        vm.getAllAddressFields(gameType: .popgame)
+        vm.getAllUsers(gameType: .popgame)
         vm.getNftData(gameType: .popgame)
         vm.getAllCards()
         vm.getAllCollectionFields()

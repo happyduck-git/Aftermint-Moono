@@ -140,16 +140,12 @@ class BenefitViewController: UIViewController {
     }
     
     @objc private func bookmarkTapped() {
-        let reactor = BookmarkViewReactor()
-        /// NOTE: DELETE IF NOT NEEDED
-//        let benefitTabBottomVC = BenefitTabBottomViewController()
         let bookmarkVC = BookmarkViewController(reactor: bookmarkVCDependency.reactor(),
                                                 bottomSheetVC: bookmarkVCDependency.bottomSheetVC)
         self.navigationController?.pushViewController(bookmarkVC, animated: true)
     }
     
     @objc private func calendarTapped() {
-        let reactor = CalendarViewReactor()
         let calendarVC = CalendarViewController(reactor: calendarVCDependency.reactor(),
                                                 bottomSheetVC: calendarVCDependency.bottomSheetVC)
         self.navigationController?.pushViewController(calendarVC, animated: true)

@@ -68,7 +68,12 @@ struct K {
         static let scoreField: String = "score"
         static let countField: String = "count"
         static let walletAddressField: String = "wallet_address"
+        static let cachedNftCount: String = "cached_nft_count"
         static let noOwnerFound: String = "owner not found."
+    }
+    
+    struct BasicInfo {
+        static let ownedNfts = "owned_nft_token_ids"
     }
     
 }

@@ -9,7 +9,7 @@ import UIKit.UIImage
 import DifferenceKit
 
 protocol LeaderBoardSecondSectionCellListViewModelDelegate: AnyObject {
-    func dataFetched()
+    func currentUserDataFetched(_ vm: LeaderBoardSecondSectionCellViewModel)
 }
 
 final class LeaderBoardSecondSectionCellListViewModel {
@@ -19,11 +19,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
     let mockUser = MoonoMockUserData().getOneUserData()
     
     private let fireStoreRepository = FirestoreRepository.shared
-    var leaderBoardVMList: Box<[LeaderBoardSecondSectionCellViewModel]> = Box([])
-
-    var secondSection: ArraySection<SectionID, AnyDifferentiable> = ArraySection(model: .second, elements: [])
-    
-    var touchCount: Box<Int> = Box(0)
+    let leaderBoardVMList: Box<[LeaderBoardSecondSectionCellViewModel]> = Box([])
     
     // MARK: - Init
     init() {}
@@ -36,14 +32,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
     func modelAt(_ indexPath: IndexPath) -> LeaderBoardSecondSectionCellViewModel? {
         return self.leaderBoardVMList.value?[indexPath.row]
     }
-    
-    func currentUserViewModel() -> LeaderBoardSecondSectionCellViewModel? {
-        let currentUserViewModel = self.leaderBoardVMList.value?.filter({ viewModel in
-            return viewModel.topLabelText == mockUser.address
-        })
-        return currentUserViewModel?.first
-    }
-    
     
     /// Get initial address section view model.
     func getInitialAddressSectionVM(of collectionType: CollectionType, gameType: GameType) async throws -> [LeaderBoardSecondSectionCellViewModel]? {
@@ -72,11 +60,15 @@ final class LeaderBoardSecondSectionCellListViewModel {
                 actionCount: address.actionCount,
                 popScore: address.popScore
             )
+            print("\(#function) -- Popscore: \(address.popScore), ActionCount: \(address.actionCount)")
+            if address.ownerAddress == mockUser.address {
+                self.delegate?.currentUserDataFetched(viewModel)
+            }
+      
             return viewModel
         }
        
         self.leaderBoardVMList.value = viewModels
-        self.delegate?.dataFetched()
         
         return viewModels
     }
@@ -112,7 +104,6 @@ final class LeaderBoardSecondSectionCellListViewModel {
         }
        
         self.leaderBoardVMList.value = viewModels
-        self.delegate?.dataFetched()
         
         return viewModels
     }
@@ -151,7 +142,7 @@ final class LeaderBoardSecondSectionCellViewModel {
     var rank: Int
     let userProfileImage: String
     let topLabelText: String
-    let bottomLabelText: String
+    let numberOfNfts: String
     let actionCount: Int64
     let popScore: Int64
     
@@ -169,8 +160,8 @@ final class LeaderBoardSecondSectionCellViewModel {
         self.rankImage = rankImage
         self.rank = rank
         self.userProfileImage = userProfileImage
-        self.topLabelText = topLabelText
-        self.bottomLabelText = bottomLabelText
+        self.topLabelText = topLabelText // TODO: username 으로 변경
+        self.numberOfNfts = bottomLabelText
         self.actionCount = actionCount
         self.popScore = popScore
     }

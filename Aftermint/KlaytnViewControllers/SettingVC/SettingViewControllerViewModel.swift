@@ -62,7 +62,7 @@ final class SettingViewControllerViewModel {
         }
     }
 
-    func getAllAddressFields(gameType: GameType) {
+    func getAllUsers(gameType: GameType) {
         
         Task {
             let addressList = try await self.fireStoreRepository
@@ -121,10 +121,12 @@ final class SettingViewControllerViewModel {
             self.lastDoc = lastDoc // Might not be needed.
             self.nftsCellViewModel.lastDoc = lastDoc
             
+            var rank: Int = 1
+            
             let vmList = cards.map { card in
                 
                 let vm = NftRankCellViewModel(
-                    rank: 0,
+                    rank: rank,
                     rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
                     nftImageUrl: card.imageUrl,
                     nftName: "Moono #\(card.tokenId)",
@@ -136,10 +138,10 @@ final class SettingViewControllerViewModel {
                     currentUserCardList.append(vm)
                 }
                 
+                rank += 1
+                
                 return vm
             }
-//            self.youCellViewModel.nftRankViewModels.value = currentUserCardList
-//            self.youCellViewModel.isLoaded.value = true
             self.nftsCellViewModel.nftsList.value = vmList
         }
         
@@ -184,9 +186,7 @@ final class SettingViewControllerViewModel {
                     
                     return vm
                 }
-                self.youCellViewModel.nftRankViewModels.value?.append(contentsOf: currentUserCardList)
-                self.youCellViewModel.isLoaded.value = true
-                
+      
                 self.nftsCellViewModel.nftsList.value?.append(contentsOf: vmList)
                 nftsCellViewModel.isLoadingMorePosts = false
             }

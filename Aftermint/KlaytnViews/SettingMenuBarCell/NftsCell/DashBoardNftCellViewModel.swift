@@ -50,7 +50,7 @@ final class DashBoardNftCellViewModel {
               let result = value else {
             return
         }
-        print("Highest: \(result)")
+        print("Highest: \(result.rank)")
     }
     
 }

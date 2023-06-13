@@ -393,7 +393,7 @@
 		36A8CEE72983B5FC007BF65A /* KlaytnRawNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEE62983B5FC007BF65A /* KlaytnRawNft.swift */; };
 		36A8CEED2983C238007BF65A /* KlaytnNftRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */; };
 		36A8CEF02983CB9C007BF65A /* LLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A8CEEF2983CB9C007BF65A /* LLog.swift */; };
-		9300BB1B29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */; };
+		9300BB1B29C3FFE600C67A29 /* LeaderBoardSecondSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1A29C3FFE600C67A29 /* LeaderBoardSecondSectionCell.swift */; };
 		9300BB1F29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB1E29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift */; };
 		9300BB2829C44AD400C67A29 /* MoonoGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */; };
 		9300BB2B29C44C6400C67A29 /* SparkParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9300BB2929C44C6400C67A29 /* SparkParticle.sks */; };
@@ -829,7 +829,7 @@
 		36A8CEE62983B5FC007BF65A /* KlaytnRawNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnRawNft.swift; sourceTree = "<group>"; };
 		36A8CEEC2983C238007BF65A /* KlaytnNftRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlaytnNftRequester.swift; sourceTree = "<group>"; };
 		36A8CEEF2983CB9C007BF65A /* LLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLog.swift; sourceTree = "<group>"; };
-		9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardTableViewCell.swift; sourceTree = "<group>"; };
+		9300BB1A29C3FFE600C67A29 /* LeaderBoardSecondSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardSecondSectionCell.swift; sourceTree = "<group>"; };
 		9300BB1E29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardSecondSectionCellViewModel.swift; sourceTree = "<group>"; };
 		9300BB2729C44AD400C67A29 /* MoonoGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonoGameScene.swift; sourceTree = "<group>"; };
 		9300BB2929C44C6400C67A29 /* SparkParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SparkParticle.sks; sourceTree = "<group>"; };
@@ -2314,7 +2314,7 @@
 		9300BB1929C3FFAE00C67A29 /* LeaderBoardCell */ = {
 			isa = PBXGroup;
 			children = (
-				9300BB1A29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift */,
+				9300BB1A29C3FFE600C67A29 /* LeaderBoardSecondSectionCell.swift */,
 				9300BB1E29C4057200C67A29 /* LeaderBoardSecondSectionCellViewModel.swift */,
 				245A4DCB29DE491C004B28A2 /* LeaderBoardFirstSectionCell.swift */,
 				245A4DCD29DE4AC2004B28A2 /* LeaderBoardFirstSectionCellViewModel.swift */,
@@ -3013,7 +3013,7 @@
 				3619B1FD29790AC60051C387 /* FilesManager.swift in Sources */,
 				3690783C297A6FEF0066530D /* HomeViewController2.swift in Sources */,
 				245A4DC829DC169E004B28A2 /* ProjectsCell.swift in Sources */,
-				9300BB1B29C3FFE600C67A29 /* LeaderBoardTableViewCell.swift in Sources */,
+				9300BB1B29C3FFE600C67A29 /* LeaderBoardSecondSectionCell.swift in Sources */,
 				2481E1D5297A998F00187BB9 /* CollectNewNFTButton.swift in Sources */,
 				3619B0E129790AC50051C387 /* ImageTemplate.swift in Sources */,
 				3619B11529790AC60051C387 /* NFTCellReactor.swift in Sources */,

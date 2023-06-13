@@ -67,7 +67,7 @@ final class BottomSheetView: PassThroughView {
         table.backgroundColor = AftermintColor.backgroundNavy
         table.alpha = 0.0
         table.register(LeaderBoardFirstSectionCell.self, forCellReuseIdentifier: LeaderBoardFirstSectionCell.identifier)
-        table.register(LeaderBoardTableViewCell.self, forCellReuseIdentifier: LeaderBoardTableViewCell.identifier)
+        table.register(LeaderBoardSecondSectionCell.self, forCellReuseIdentifier: LeaderBoardSecondSectionCell.identifier)
         table.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10.0, right: 0)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -317,13 +317,13 @@ extension BottomSheetView: UITableViewDelegate, UITableViewDataSource {
             return cell
             
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardTableViewCell.identifier) as? LeaderBoardTableViewCell,
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderBoardSecondSectionCell.identifier) as? LeaderBoardSecondSectionCell,
                   let vm = self.bottomSheetVM.secondListVM.modelAt(indexPath)
             else { return UITableViewCell()}
             cell.selectionStyle = .none
             cell.resetCell()
             
-            if vm.topLabelText == MoonoMockUserData().getOneUserData().address {
+            if vm.ownerAddress == MoonoMockUserData().getOneUserData().address {
                 cell.contentView.backgroundColor = .systemPurple.withAlphaComponent(0.2)
                 self.currentUserScoreUpdateHandler = { count in
                     cell.popScoreLabel.text = "\(count)"
@@ -429,15 +429,3 @@ extension BottomSheetView {
     }
 }
 
-//TEMP
-extension BottomSheetView {
-    private func fetchTouchCount(with viewModelList: [LeaderBoardSecondSectionCellViewModel]) -> [String: Int64] {
-        var result: [String: Int64] = [:]
-//        viewModelList.forEach { vm in
-//            let key = vm.nftName
-//            let value = vm.touchScore
-//            result[key] = value
-//        }
-        return result
-    }
-}

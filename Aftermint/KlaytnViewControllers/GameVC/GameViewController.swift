@@ -358,50 +358,6 @@ final class GameViewController: UIViewController {
             })
     }
     
-    /// Get viewModel for current user information at the top right corner of the vc
-    private func getCurrentUserViewModel() {
-        
-        let currentUserViewModel = self.bottomSheetVM.secondListVM.currentUserViewModel()
-        
-        self.numberOfOwnedNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") ?? 0
-        
-        DispatchQueue.main.async {
-            
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) { [weak self] in
-                
-                guard let `self` = self else {
-                    return
-                }
-                
-                self.walletAddressLabel.backgroundColor = .clear
-                self.nickNameLabel.backgroundColor = .clear
-                self.popScoreStack.bottomLabelBackgroundColor = .clear
-                self.popRankStack.bottomLabelBackgroundColor = .clear
-                self.nftsStack.bottomLabelBackgroundColor = .clear
-                self.actionCountStack.bottomLabelBackgroundColor = .clear
-                self.userImageView.layer.borderColor = UIColor(ciColor: .white).cgColor
-                self.userImageView.layer.borderWidth = 1.0
-                
-                /// User information part
-                let url = URL(string: currentUserViewModel?.userProfileImage ?? LeaderBoardAsset.userImagePlaceHolder.rawValue)
-                NukeImageLoader.loadImageUsingNuke(url: url) { image in
-                    self.userImageView.image = image
-                }
-                self.walletAddressLabel.text = currentUserViewModel?.topLabelText.cutOfRange(length: 10)
-                self.nickNameLabel.text = "NFTs \(currentUserViewModel?.bottomLabelText ?? "0")"
-                
-                /// Scoreboard part
-                self.nftsStack.bottomLabelText = currentUserViewModel?.bottomLabelText ?? "0"
-                self.popRankStack.bottomLabelText = "12" // TODO: TEMPORARY VALUE
-                self.popScoreFromDB = currentUserViewModel?.popScore ?? 0
-                self.actionCountFromDB = currentUserViewModel?.actionCount ?? 0
-                self.popScoreStack.bottomLabelText = String(describing: self.popScoreFromDB)
-                self.actionCountStack.bottomLabelText = String(describing: self.actionCountFromDB)
-                
-            }
-        }
-    }
-
 }
 
 // MARK: - Set GameScene
@@ -423,14 +379,12 @@ extension GameViewController {
 extension GameViewController: MoonoGameSceneDelegate {
     
     func didReceiveTouchCount(number: Int64) {
-        let currentUserViewModel = self.bottomSheetVM.secondListVM.currentUserViewModel()
-        guard let numberOfNfts = Int64(currentUserViewModel?.bottomLabelText ?? "0") else { return }
-
+        
         self.touchCountToShow += number
         self.totalTouchCount += number
         self.touchCount += number
         
-        self.popScoreFromDB += (number * Int64(numberOfNfts))
+        self.popScoreFromDB += (number * self.numberOfOwnedNfts)
         self.actionCountFromDB += number
         
         self.popScoreStack.bottomLabelText = "\(self.popScoreFromDB)"
@@ -444,7 +398,45 @@ extension GameViewController: MoonoGameSceneDelegate {
 
 // TODO: NO4. BottomSheetVMDelegate으로 이동
 extension GameViewController: LeaderBoardSecondSectionCellListViewModelDelegate {
-    func dataFetched() {
-        self.getCurrentUserViewModel()
+    func currentUserDataFetched(_ vm: LeaderBoardSecondSectionCellViewModel) {
+        
+        DispatchQueue.main.async {
+            
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) { [weak self] in
+                
+                guard let `self` = self else {
+                    return
+                }
+                
+                self.numberOfOwnedNfts = Int64(vm.numberOfNfts) ?? 0
+                
+                self.walletAddressLabel.backgroundColor = .clear
+                self.nickNameLabel.backgroundColor = .clear
+                self.popScoreStack.bottomLabelBackgroundColor = .clear
+                self.popRankStack.bottomLabelBackgroundColor = .clear
+                self.nftsStack.bottomLabelBackgroundColor = .clear
+                self.actionCountStack.bottomLabelBackgroundColor = .clear
+                self.userImageView.layer.borderColor = UIColor(ciColor: .white).cgColor
+                self.userImageView.layer.borderWidth = 1.0
+                
+                /// User information part
+                let url = URL(string: vm.userProfileImage)
+                NukeImageLoader.loadImageUsingNuke(url: url) { image in
+                    self.userImageView.image = image
+                }
+                self.walletAddressLabel.text = vm.ownerAddress.cutOfRange(length: 10)
+                self.nickNameLabel.text = "NFTs \(vm.numberOfNfts)"
+                
+                /// Scoreboard part
+                self.nftsStack.bottomLabelText = vm.numberOfNfts
+                self.popRankStack.bottomLabelText = "12" // TODO: TEMPORARY VALUE
+                self.popScoreFromDB = vm.popScore
+                self.actionCountFromDB = vm.actionCount
+                self.popScoreStack.bottomLabelText = String(describing: self.popScoreFromDB)
+                self.actionCountStack.bottomLabelText = String(describing: self.actionCountFromDB)
+                
+//                print("Popscore: \(vm.popScore), ActionCount: \(vm.actionCount)")
+            }
+        }
     }
 }

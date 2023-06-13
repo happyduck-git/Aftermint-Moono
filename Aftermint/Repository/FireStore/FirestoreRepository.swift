@@ -186,21 +186,45 @@ extension FirestoreRepository {
         
     }
     
+    func saveNumberOfNftsOwned(
+        ownerAddress: String,
+        numberOfNfts: Int64
+    ) async {
+        
+        let userDoc = baseDBPath
+            .document(self.type.rawValue)
+            .collection(K.FStore.walletAccountSetField)
+            .document(ownerAddress)
+        
+        do {
+            try await userDoc
+                .setData(
+                    [
+                        K.FStore.cachedNftCount: numberOfNfts
+                    ], merge: true
+                )
+            
+        }
+        catch {
+            print("Error saving number of nfts of the current user --- \(error.localizedDescription)")
+        }
+    }
+    
     func saveNewUserInitialData(
         ownerAddress: String,
         gameType: GameType,
         initialScore: Int64,
         nftList: [String]
-    ) async throws {
+    ) async {
         
-        async let saved = self.saveNFTScores(
+        async let _ = self.saveNFTScores(
             of: .popgame,
             actionCount: initialScore,
             nftTokenId: nftList,
             ownerAddress: ownerAddress
         )
         
-        await withThrowingTaskGroup(of: Void.self, body: { group in
+        await withTaskGroup(of: Void.self, body: { group in
             
             let userDoc = baseDBPath
                 .document(self.type.rawValue)
@@ -353,7 +377,7 @@ extension FirestoreRepository {
         let groupDocuments = try await self.db
             .collectionGroup(K.FStore.nftScoreSetField)
             .order(by: K.FStore.scoreField, descending: true)
-            .limit(to: 7)
+//            .limit(to: 50) // Currently NOT In use.
             .getDocuments()
             .documents
 
@@ -535,11 +559,8 @@ extension FirestoreRepository {
     }
     // MARK: - Get Address
     
-    /// Get all the owner(address) information.
-    /// - Parameters:
-    ///   - collectionType: Collection type.
-    ///   - gameType: Game type.
-    /// - Returns: An array of Address objects.
+    /* Currently NOT In Use. */
+    /*
     func getAllAddress(
         gameType: GameType
     ) async throws -> [Address]? {
@@ -603,7 +624,13 @@ extension FirestoreRepository {
         }
         return addressList
     }
+    */
     
+    /// Get all the owner(address) information from cache.
+    /// - Parameters:
+    ///   - collectionType: Collection type.
+    ///   - gameType: Game type.
+    /// - Returns: An array of Address objects.
     func getAllCachedAddress(
         gameType: GameType
     ) async throws -> [Address]? {
@@ -644,13 +671,19 @@ extension FirestoreRepository {
                 .data()
             let actionCount = try await cachedTotalScoreData?[K.FStore.countField] as? Int64 ?? 0
             
+            print("Cached Popscore: \(totalScore), ActionCount: \(actionCount)")
+            
             // 4. number of owned nfts
             let numberOfNfts = await withCheckedContinuation({ continuation in
                 let _ = KlaytnNftRequester.requestToGetNfts(
                     contractAddress: self.type.address,
                     walletAddress: walletAddress) { nfts, error in
-                        guard let nfts = nfts else { return }
-                        continuation.resume(returning: nfts.items.count)
+                        let filteredNfts = nfts?.items.filter({ nft in
+                            nft.tokenUri != ""
+                        })
+                        guard let nfts = filteredNfts else { return }
+                        
+                        continuation.resume(returning: nfts.count)
                     }
             })
   
@@ -670,6 +703,11 @@ extension FirestoreRepository {
         return addressList
     }
  
+    /// Get all the initial owner(address) information.
+    /// - Parameters:
+    ///   - collectionType: Collection type.
+    ///   - gameType: Game type.
+    /// - Returns: An array of Address objects.
     func getAllInitialAddress(
         gameType: GameType,
         currentUserAddress: String
@@ -745,7 +783,7 @@ extension FirestoreRepository {
             let score = popgameData?[K.FStore.scoreField] as? Int64 ?? 0
             currentUserScore += score
         }
-        
+        print("Current user score : \(currentUserScore)")
         var addressList: [Address] = []
         
         async let snapshots = db
@@ -786,8 +824,12 @@ extension FirestoreRepository {
                 let _ = KlaytnNftRequester.requestToGetNfts(
                     contractAddress: self.type.address,
                     walletAddress: walletAddress) { nfts, error in
-                        guard let nfts = nfts else { return }
-                        continuation.resume(returning: nfts.items.count)
+                        let filteredNfts = nfts?.items.filter({ nft in
+                            nft.tokenUri != ""
+                        })
+                        guard let nfts = filteredNfts else { return }
+                        
+                        continuation.resume(returning: nfts.count)
                     }
             })
             
@@ -799,6 +841,8 @@ extension FirestoreRepository {
                 username: username,
                 ownedNFTs: Int64(numberOfNfts)
             )
+            
+            print("Popscore: \(totalScore), ActionCount: \(actionCount)")
             
             addressList.append(address)
             

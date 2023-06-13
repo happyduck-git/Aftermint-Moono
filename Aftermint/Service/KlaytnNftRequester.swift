@@ -222,8 +222,7 @@ class KlaytnNftRequester {
     ///   - contractAddress: Contract adress of the collection
     ///   - tokenId: NFT token id
     ///   - completion: Call back
-    // TODO: private으로 변경하기
-    public static func requestToGetNftInfo(
+    private static func requestToGetNftInfo(
         contractAddress: String,
         tokenId: String
     ) async throws -> KlaytnNft? {
@@ -283,7 +282,7 @@ class KlaytnNftRequester {
         if let cachedData = cacheManager.getDataCache(for: .allNFTsInfo(walletAddress), url: url),
            let cachedUrlResponse = cacheManager.getResponseCache(for: .allNFTsInfo(walletAddress), url: url)
         {
-//            print("Using cached API Response")
+            print("Using cached API Response")
             completionHandler(cachedData, cachedUrlResponse, nil)
             return true
         }
@@ -295,7 +294,6 @@ class KlaytnNftRequester {
         return true
     }
     
-    // TODO: Leverage this function to get numbers of NFTs owned by a particular wallet address!
     public static func requestToGetNfts(
         contractAddress: String,
         walletAddress: String,
@@ -323,6 +321,27 @@ class KlaytnNftRequester {
         }
     }
     
+    public static func getNumberOfNftsOwned(
+        contractAddress: String,
+        walletAddress: String,
+        completion: @escaping (Int) -> Void
+    ) {
+        let _ = requestToGetNfts(
+            contractAddress: contractAddress,
+            walletAddress: walletAddress) { nfts, error in
+                guard error == nil,
+                      let nfts = nfts else {
+                    return
+                }
+                
+                let filteredNfts = nfts.items.filter { nft in
+                    nft.tokenUri != ""
+                }
+                
+                completion(filteredNfts.count)
+            }
+    }
+    
     // MARK: - for Moono
     public static func requestToGetMoonoNfts(
         walletAddress: String,
@@ -332,6 +351,7 @@ class KlaytnNftRequester {
             contractAddress: KlaytnNftRequester.CONTRACT_ADDRESS__MOONO,
             walletAddress: walletAddress
         ) { nfts, error in
+            
             guard let rawNfts = nfts else {
                 LLog.w("rawNfts is nil : error: \(String(describing: error)).")
                 return

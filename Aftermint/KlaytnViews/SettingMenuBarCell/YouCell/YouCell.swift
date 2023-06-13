@@ -160,7 +160,7 @@ final class YouCell: UICollectionViewCell {
         }
         
         Task {
-            guard let nftsOwned = UserDefaults.standard.dictionary(forKey: "owned-nft-token-ids") else {
+            guard let nftsOwned = UserDefaults.standard.dictionary(forKey: K.BasicInfo.ownedNfts) else {
                 return
             }
             var convertedDictionary: [String: String] = [:]
