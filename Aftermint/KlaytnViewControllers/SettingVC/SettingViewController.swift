@@ -77,7 +77,6 @@ final class SettingViewController: UIViewController {
         
         vm.getAllUsers(gameType: .popgame)
         vm.getNftData(gameType: .popgame)
-        vm.getAllCards()
         vm.getAllCollectionFields()
         
     }

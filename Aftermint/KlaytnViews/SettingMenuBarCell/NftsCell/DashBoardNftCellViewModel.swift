@@ -11,6 +11,7 @@ import FirebaseFirestore
 final class DashBoardNftCellViewModel {
     
     let mockUser = MoonoMockUserData().getOneUserData()
+    let fireStoreRepository = FirestoreRepository.shared
     
     var highestNft: Box<NftRankCellViewModel?> = Box(nil)
     var nftsList: Box<[NftRankCellViewModel]> = Box([])
@@ -51,6 +52,49 @@ final class DashBoardNftCellViewModel {
             return
         }
         print("Highest: \(result.rank)")
+    }
+    
+    /// Get all NFT cards.
+    func getAllCards() {
+        
+        Task {
+         
+            let results = try await self.fireStoreRepository
+                .getPaginatedCards(
+                    gameType: .popgame
+                )
+
+            var currentUserCardList: [NftRankCellViewModel] = []
+            guard let cards = results.cards,
+            let lastDoc = results.lastDoc
+            else {
+                return
+            }
+            
+            var rank: Int = 1
+            
+            let vmList = cards.map { card in
+                
+                let vm = NftRankCellViewModel(
+                    rank: rank,
+                    rankImage: UIImage(contentsOfFile: LeaderBoardAsset.firstPlace.rawValue),
+                    nftImageUrl: card.imageUrl,
+                    nftName: "Moono #\(card.tokenId)",
+                    score: card.popScore,
+                    ownerAddress: card.ownerAddress
+                )
+                
+                if card.ownerAddress == self.mockUser.address {
+                    currentUserCardList.append(vm)
+                }
+                
+                rank += 1
+                
+                return vm
+            }
+            self.nftsList.value = vmList
+        }
+        
     }
     
 }
