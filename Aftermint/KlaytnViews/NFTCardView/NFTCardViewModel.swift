@@ -108,7 +108,7 @@ class NFTCardViewModel {
             for change in diff {
                 switch change {
                 case .remove(_, let element, _):
-                    await self.fireStoreRepository.updateNftOwner(of: element, to: K.FStore.noOwnerFound)
+                    await self.fireStoreRepository.removeNftOwner(of: element, ownerAddress: mockUser.address)
                 case .insert(_, let element, _):
                     await self.fireStoreRepository.updateNftOwner(of: element, to: mockUser.address)
                 }

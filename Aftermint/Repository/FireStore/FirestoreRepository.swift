@@ -886,6 +886,45 @@ extension FirestoreRepository {
 
 extension FirestoreRepository {
     
+    /// Remove the owner of a certain NFT.
+    /// - Parameters:
+    ///   - tokenId: NFT token id.
+    ///   - newOwnerddress: New owner's wallet address.
+    func removeNftOwner(
+        of tokenId: String,
+        ownerAddress: String
+    ) async {
+        do {
+            let nftDoc = baseDBPath
+                .document(self.type.rawValue)
+                .collection(K.FStore.nftSetField)
+                .document(tokenId)
+            
+            let nft = try await nftDoc
+                .getDocument()
+                .data()
+            
+            let currentOwner = nft?[K.FStore.cachedWalletAddress] as? String ?? K.FStore.noOwnerFound
+            
+            if currentOwner == ownerAddress {
+                try await baseDBPath
+                    .document(self.type.rawValue)
+                    .collection(K.FStore.nftSetField)
+                    .document(tokenId)
+                    .setData(
+                        [K.FStore.cachedWalletAddress: K.FStore.noOwnerFound],
+                        merge: true
+                    )
+            } else {
+                return
+            }
+            
+        }
+        catch {
+            print("Error updating the owner of the token to \(K.FStore.nftSetField) - \(error)")
+        }
+    }
+    
     /// Update the owner of a certain NFT.
     /// - Parameters:
     ///   - tokenId: NFT token id.
