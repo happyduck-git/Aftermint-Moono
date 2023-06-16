@@ -71,6 +71,8 @@ final class DashBoardNftCell: UICollectionViewCell {
             return
         }
         
+        vm.getAllCards()
+        
         vm.nftsList.bind { [weak self] nfts in
             guard let `self` = self else { return }
             

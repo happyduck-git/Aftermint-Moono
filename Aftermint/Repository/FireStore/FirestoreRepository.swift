@@ -315,7 +315,7 @@ extension FirestoreRepository {
         gameType: GameType,
         nftsOwned: [String: String]
     ) async throws -> [Card]? {
-        
+        print("Nfts owned: \(nftsOwned)")
         var cards: [Card] = []
         
         let popgameDocs = try await db.collectionGroup(K.FStore.nftScoreSetField)

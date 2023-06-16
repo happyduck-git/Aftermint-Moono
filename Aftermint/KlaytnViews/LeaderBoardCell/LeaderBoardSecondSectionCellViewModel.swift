@@ -60,7 +60,7 @@ final class LeaderBoardSecondSectionCellListViewModel {
                 actionCount: address.actionCount,
                 popScore: address.popScore
             )
-            print("\(#function) -- Popscore: \(address.popScore), ActionCount: \(address.actionCount)")
+            
             if address.ownerAddress == mockUser.address {
                 self.delegate?.currentUserDataFetched(viewModel)
             }
