@@ -47,8 +47,6 @@ final class GameViewController: UIViewController {
         let imageView = UIImageView()
         imageView.backgroundColor = AftermintColor.backgroundNavy.withAlphaComponent(GameAssetNumber.alpha.rawValue)
         imageView.contentMode = .scaleAspectFill
-//        imageView.layer.borderColor = UIColor(ciColor: .white).cgColor
-//        imageView.layer.borderWidth = 1.0
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -435,8 +433,11 @@ extension GameViewController: LeaderBoardSecondSectionCellListViewModelDelegate 
                 self.popScoreStack.bottomLabelText = String(describing: self.popScoreFromDB)
                 self.actionCountStack.bottomLabelText = String(describing: self.actionCountFromDB)
                 
-//                print("Popscore: \(vm.popScore), ActionCount: \(vm.actionCount)")
             }
         }
+    }
+    
+    func differentFunction() {
+        print("Different delegate function.")
     }
 }

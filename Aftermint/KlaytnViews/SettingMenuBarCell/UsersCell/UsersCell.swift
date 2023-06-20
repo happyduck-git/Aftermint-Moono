@@ -207,7 +207,7 @@ final class UsersCell: UICollectionViewCell {
             }
         }
         
-        vm.usersList.bind { [weak self] viewModels in
+        vm.usersList.bind { viewModels in
           
             let filteredList = vm.usersList.value?.filter({ vm in
                 vm.ownerAddress == MoonoMockUserData().getOneUserData().address

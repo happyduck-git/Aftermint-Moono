@@ -10,6 +10,7 @@ import DifferenceKit
 
 protocol LeaderBoardSecondSectionCellListViewModelDelegate: AnyObject {
     func currentUserDataFetched(_ vm: LeaderBoardSecondSectionCellViewModel)
+    func differentFunction()
 }
 
 final class LeaderBoardSecondSectionCellListViewModel {

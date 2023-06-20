@@ -15,6 +15,7 @@ final class DashBoardNftCellViewModel {
     
     var highestNft: Box<NftRankCellViewModel?> = Box(nil)
     var nftsList: Box<[NftRankCellViewModel]> = Box([])
+    var isLoaded: Box<Bool> = Box(false)
     
     var lastDoc: QueryDocumentSnapshot?
     var isLoadingMorePosts: Bool = false
@@ -46,12 +47,6 @@ final class DashBoardNftCellViewModel {
             return vm.ownerAddress == mockUser.address
         })
             .first
-        
-        guard let value = highestNft.value,
-              let result = value else {
-            return
-        }
-        print("Highest: \(result.rank)")
     }
     
     /// Get all NFT cards.
@@ -65,8 +60,7 @@ final class DashBoardNftCellViewModel {
                 )
 
             var currentUserCardList: [NftRankCellViewModel] = []
-            guard let cards = results.cards,
-            let lastDoc = results.lastDoc
+            guard let cards = results.cards
             else {
                 return
             }
@@ -93,6 +87,7 @@ final class DashBoardNftCellViewModel {
                 return vm
             }
             self.nftsList.value = vmList
+            self.isLoaded.value = true
         }
         
     }

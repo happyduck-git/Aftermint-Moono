@@ -35,29 +35,39 @@ class NFTCardViewModel {
             let _ = KlaytnNftRequester.requestToGetMoonoNfts(
                 walletAddress: wallet
             ) { nfts in
+                
+                var nftDictionary: [String: String] = [:]
+                var tokenIds = Array<String>()
+                
+                let viewModels = nfts.map { nft in
+                    let viewModel: NftCardCellViewModel = NftCardCellViewModel(
+                        accDesc: nft.traits.accessories,
+                        backgroundDesc: nft.traits.background,
+                        bodyDesc: nft.traits.body,
+                        dayDesc: nft.traits.day,
+                        effectDesc: nft.traits.accessories,
+                        expressionDesc: nft.traits.expression,
+                        hairDesc: nft.traits.hair,
+                        name: nft.name,
+                        updatedAt: nft.updateAt,
+                        imageUrl: nft.imageUrl
+                    )
                     
-                    var tokenIds = Array<String>()
+                    let tokenId = String(nft.tokenId.convertToDecimal() ?? 0)
+                    tokenIds.append(tokenId)
                     
-                    let viewModels = nfts.map { nft in
-                        let viewModel: NftCardCellViewModel = NftCardCellViewModel(
-                            accDesc: nft.traits.accessories,
-                            backgroundDesc: nft.traits.background,
-                            bodyDesc: nft.traits.body,
-                            dayDesc: nft.traits.day,
-                            effectDesc: nft.traits.accessories,
-                            expressionDesc: nft.traits.expression,
-                            hairDesc: nft.traits.hair,
-                            name: nft.name,
-                            updatedAt: nft.updateAt,
-                            imageUrl: nft.imageUrl
-                        )
-                        tokenIds.append(String(nft.tokenId.convertToDecimal() ?? 0))
-                        return viewModel
-                    }
+                    /// Save to UserDefaults
+                    let convertedId = tokenId.convertToHex() ?? "0x219"
+                    let imageUri = nft.imageUrl
+                    nftDictionary[tokenId] = imageUri
                     
+                    return viewModel
+                }
+                
+                UserDefaults.standard.setValue(nftDictionary, forKey: K.BasicInfo.ownedNfts)
                 continuation.resume(returning: (vms: viewModels, tokens: tokenIds))
                 
-                }
+            }
         })
         
         /// Check if there is any change in owned NFTs.
@@ -87,13 +97,6 @@ class NFTCardViewModel {
                     ownedNftList: newNfts
                 )
             }
-            
-            group.addTask {
-                async let _ = self.saveUserNftsInfo(
-                    ownerAddress: self.mockUser.address,
-                    ownedNftList: newNfts
-                )
-            }
         }
 
     }
@@ -116,28 +119,6 @@ class NFTCardViewModel {
         } else {
             return
         }
-    }
-    
-    private func saveUserNftsInfo(
-        ownerAddress: String,
-        ownedNftList: [String]
-    ) async {
-        
-        /// Save current user's nft info to UserDefaults
-        var nftDictionary: [String: String] = [:]
-        for i in 0..<ownedNftList.count {
-            let tokenId = ownedNftList[i]
-            let convertedId = tokenId.convertToHex() ?? "0x219"
-            async let imageUri = KlaytnNftRequester.requestMoonoNftImageUrl(
-                contractAddress: CollectionType.moono.address,
-                tokenId: convertedId
-            )
-            
-            nftDictionary[tokenId] = await imageUri
-        }
-        
-        UserDefaults.standard.setValue(nftDictionary, forKey: K.BasicInfo.ownedNfts)
-        
     }
     
     private func saveUserInitialInfoToFirestore(

@@ -315,7 +315,7 @@ extension FirestoreRepository {
         gameType: GameType,
         nftsOwned: [String: String]
     ) async throws -> [Card]? {
-        print("Nfts owned: \(nftsOwned)")
+        
         var cards: [Card] = []
         
         let popgameDocs = try await db.collectionGroup(K.FStore.nftScoreSetField)
@@ -714,11 +714,13 @@ extension FirestoreRepository {
     ) async throws -> [Address]? {
         let start = CFAbsoluteTimeGetCurrent()
         
+        /*
         let cachedData = firestoreCacheManager.getAddressCache(for: .getAllAddress, key: "AddressList")
         if cachedData != nil {
             LLog.i("Using address cache...")
             return cachedData
         }
+         */
         
         /* wallet address dictionary */
         async let walletDocs = baseDBPath.document(self.type.rawValue)
@@ -783,7 +785,7 @@ extension FirestoreRepository {
             let score = popgameData?[K.FStore.scoreField] as? Int64 ?? 0
             currentUserScore += score
         }
-        print("Current user score : \(currentUserScore)")
+        
         var addressList: [Address] = []
         
         async let snapshots = db
@@ -841,8 +843,6 @@ extension FirestoreRepository {
                 username: username,
                 ownedNFTs: Int64(numberOfNfts)
             )
-            
-            print("Popscore: \(totalScore), ActionCount: \(actionCount)")
             
             addressList.append(address)
             

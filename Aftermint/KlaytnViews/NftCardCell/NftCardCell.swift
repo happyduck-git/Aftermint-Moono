@@ -26,7 +26,7 @@ class NftCardCell: UICollectionViewCell {
     
     internal let cardFrontView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "bellygom_test")
+        imageView.backgroundColor = .secondarySystemFill
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20.0

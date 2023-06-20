@@ -71,14 +71,12 @@ class KlaytnHomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("KHVC will appear")
         nftCardView.prefetcher.isPaused = false
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("KHVC will disappear")
         nftCardView.prefetcher.isPaused = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }

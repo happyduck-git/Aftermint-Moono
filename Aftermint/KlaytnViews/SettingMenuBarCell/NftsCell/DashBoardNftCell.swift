@@ -28,9 +28,17 @@ final class DashBoardNftCell: UICollectionViewCell {
     private let nftScoreTableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .black
+        table.alpha = 0.0
         table.register(NftRankCell.self, forCellReuseIdentifier: NftRankCell.identifier)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
+    }()
+    
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.hidesWhenStopped = true
+        return spinner
     }()
     
     //MARK: - Init
@@ -39,6 +47,8 @@ final class DashBoardNftCell: UICollectionViewCell {
         setUI()
         setLayout()
         setDelegate()
+        
+        spinner.startAnimating()
     }
     
     required init?(coder: NSCoder) {
@@ -48,14 +58,22 @@ final class DashBoardNftCell: UICollectionViewCell {
     //MARK: - Private
     private func setUI() {
         self.contentView.addSubview(self.nftScoreTableView)
+        self.contentView.addSubview(self.spinner)
     }
     
     private func setLayout() {
+        let spinnerHeight: CGFloat = 50
+        
         NSLayoutConstraint.activate([
             self.nftScoreTableView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             self.nftScoreTableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             self.nftScoreTableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            self.nftScoreTableView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            self.nftScoreTableView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            
+            self.spinner.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            self.spinner.heightAnchor.constraint(equalToConstant: spinnerHeight),
+            self.spinner.widthAnchor.constraint(equalTo: self.spinner.heightAnchor)
         ])
     }
     
@@ -77,19 +95,23 @@ final class DashBoardNftCell: UICollectionViewCell {
             guard let `self` = self else { return }
             
             vm.getTheHighestScoreNftOfCurrentUser()
-            
-            DispatchQueue.main.async {
-                self.nftScoreTableView.reloadData()
-            }
+
         }
         
-//        vm.highestNft.bind { [weak self] rankCellVM in
-//            guard let `self` = self,
-//                  let vm = rankCellVM
-//            else { return }
-//
-//            self.highestScoreVM = vm
-//        }
+        vm.isLoaded.bind { [weak self] isLoaded in
+            guard let `self` = self,
+                  isLoaded != nil,
+                  isLoaded == true else {
+                return
+            }
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.3) {
+                    self.spinner.stopAnimating()
+                    self.nftScoreTableView.alpha = 1.0
+                    self.nftScoreTableView.reloadData()
+                }
+            }
+        }
     }
 
     public func configure(with vm: DashBoardNftCellViewModel) {
